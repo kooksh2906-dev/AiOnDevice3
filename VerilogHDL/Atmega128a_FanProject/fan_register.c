@@ -1,5 +1,5 @@
-#include "01_fan_config.h"
-#include "02_fan_register.h"
+#include "fan_config.h"
+#include "fan_register.h"
 
 void register_init(void) {
     // ---------------------------------------------------
