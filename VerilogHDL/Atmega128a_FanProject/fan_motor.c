@@ -1,4 +1,4 @@
-#include "01_fan_config.h"
+#include "fan_config.h"
 
 // 풍속에 따른 PWM 값 매핑 테이블 (이사 옴)
 static uint16_t fanSpeedTable[] = {0, 2500, 4000, 4999};
