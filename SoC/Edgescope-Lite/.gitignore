@@ -1,0 +1,23 @@
+build/
+work/
+.Xil/
+clockInfo.txt
+*.jou
+*.log
+*.pb
+*.str
+*.wdb
+*.vcd
+*.fst
+!artifacts/waves/*.vcd
+*.bit
+*.bin
+*.cache/
+*.gen/
+*.hw/
+*.ip_user_files/
+
+# Vivado Block Memory Generator products are reproducible from the Tcl script.
+# Keep only the compact configuration needed to recreate the IP.
+ip/capture_bram/*
+!ip/capture_bram/capture_bram.xci
