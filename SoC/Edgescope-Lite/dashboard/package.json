@@ -11,7 +11,8 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "tsc -b --pretty false"
+    "lint": "tsc -b --pretty false",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "typescript": "^7.0.2",

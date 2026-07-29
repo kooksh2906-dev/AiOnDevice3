@@ -14,6 +14,8 @@ Byte는 `ProtocolBridge` 경계를 통해 검증된 Semantic Event가 된 뒤에
 ## 실행
 
 Node.js 20.19+, 22.12+ 또는 24+를 사용합니다.
+이 구현을 검증한 기준은 Node.js 24.16.0과 npm 11.13.0이며,
+`dashboard/.node-version`에 Node 버전을 기록했습니다.
 
 ```bash
 cd dashboard
@@ -30,6 +32,24 @@ Chrome에서 `http://127.0.0.1:4173`을 엽니다. Mock 사용 순서는 다음�
 4. `GO`에서만 표시되는 Trigger 조작 안내를 확인합니다.
 5. `WAIT_FREEZE`에서 `Freeze 완료 (f)`을 누릅니다.
 6. 검증된 Capture가 파형과 Validation 카드에 표시되는지 확인합니다.
+
+### 다른 Windows PC와 VS Code
+
+PR #5가 `main`에 병합되기 전에는 Clone 후
+`git switch --track origin/feature/web-dashboard`를 먼저 실행합니다.
+Windows PowerShell에서 `npm.ps1` 서명 오류가 발생하면 전역 정책을 바꾸지
+말고 `npm.cmd ci`, `npm.cmd run dev`처럼 `npm.cmd`를 사용합니다.
+
+VS Code에서는 저장소 루트를 열고 `Terminal > Run Task`의
+`Dashboard: ...` Task를 사용할 수 있습니다. 반드시 데스크톱 Chrome에서
+`http://127.0.0.1:4173`을 열며 `index.html` 직접 열기, Simple Browser와
+Live Server는 사용하지 않습니다. port 4173이 이미 사용 중이면
+`strictPort` 설정 때문에 실행이 종료되므로 기존 Dashboard 프로세스를
+먼저 닫습니다.
+
+전체 이관 절차와 복사하지 않아도 되는 파일은
+[역할 B VS Code 이관 체크리스트](../docs/role_b_vscode_migration.md)에
+정리했습니다.
 
 Scenario에서 Timeout 또는 `검증 거부 · CRC 모의`를 선택하면 역할 C
 Parser 없이도 Capture 거부 Event가 발생했을 때 이전 정상 파형을 유지하는
@@ -68,8 +88,8 @@ flow control none
 `s`, `f`, `?`는 CR/LF가 없는 정확한 단일 Byte로 전송됩니다. 최초 연결과
 같은 페이지 Session의 재연결 모두 Reader를 먼저 시작한 뒤 `?`를 자동
 전송해 현재 HELLO/STATE를 요청합니다. Web Serial은 데스크톱 Chrome의
-Secure Context(HTTPS 또는 localhost)에서 사용해야 하며, 다른 Serial
-Terminal과 Port를 동시에 열 수 없습니다.
+Secure Context(HTTPS 또는 localhost/loopback)에서 사용해야 하며, 다른
+Serial Terminal과 Port를 동시에 열 수 없습니다.
 
 ## 역할 C Parser 연결점
 
@@ -110,6 +130,7 @@ Byte를 Hash하므로 같은 값으로 표시하거나 비교하면 안 됩니�
 npm run lint
 npm test
 npm run build
+npm run preview
 ```
 
 역할 B 단위시험은 소유 경계를 지키기 위해 `src/**/*.test.ts`에
@@ -126,6 +147,10 @@ co-locate했습니다. `dashboard/tests/`, `dashboard/tests/fixtures/`,
 - `[448,576)` Trigger 확대와 정확한 x 경계
 - Mock 정상/Timeout/CRC 거부 Event/재연결 Workflow
 - Web Serial 9,600 8N1, 정확한 단일 Byte Command와 종료 순서
+
+`npm run lint`는 style lint가 아니라 `tsc -b --pretty false`로 수행하는
+TypeScript typecheck입니다. `npm run preview`는 build 결과를 동일한
+`http://127.0.0.1:4173`에서 확인합니다.
 
 실제 `@ESL1` Chunk 분할/CRC/FNV/누락/중복/순서 시험과 Basys3 인수시험은
 Protocol v1 승인 및 역할 A/C 구현 병합 뒤 수행합니다.

@@ -43,6 +43,7 @@ Logic Analysis/
 │   └── vectors/    scoreboard 입력/기대값
 ├── constraints/    XDC
 ├── scripts/        simulation, lint, build
+├── dashboard/      역할 B Mock/Web Serial 파형 Dashboard
 └── sw/
     └── include/    Vitis register header
 ```
@@ -50,6 +51,26 @@ Logic Analysis/
 일반 generated output과 Vivado cache는 Git에 포함하지 않습니다. 보드에서
 즉시 실행할 수 있는 검증된 A/B/C Bootable Bitstream과
 `artifacts/waves/*.vcd`만 예외로 공유합니다.
+
+## 역할 B — Chrome Web Serial Dashboard
+
+역할 B의 TypeScript/Vite Dashboard는 [dashboard/README.md](dashboard/README.md)에
+기능과 실행법이 정리되어 있습니다. PR #5가 `main`에 병합되기 전 새 PC에서는
+`feature/web-dashboard` Branch를 체크아웃해야 합니다.
+
+```bash
+cd dashboard
+npm ci
+npm run lint
+npm test
+npm run build
+npm run dev
+```
+
+Windows PowerShell에서는 `npm.cmd`를 사용할 수 있습니다. 다른 PC의
+VS Code로 옮기는 전체 절차, 검증한 Node/npm 버전과 Live Parser 경계는
+[역할 B VS Code 이관 체크리스트](docs/role_b_vscode_migration.md)를
+참조합니다.
 
 ## 비교군 A — CPU Polling Reference
 
