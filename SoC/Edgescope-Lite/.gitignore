@@ -12,10 +12,19 @@ clockInfo.txt
 !artifacts/waves/*.vcd
 *.bit
 *.bin
+*.elf
+*.elf.size
+*.xsa
+*.o
+*.d
 *.cache/
 *.gen/
 *.hw/
 *.ip_user_files/
+_ide/
+export/
+compile_commands.json
+app.yaml
 
 # Vivado Block Memory Generator products are reproducible from the Tcl script.
 # Keep only the compact configuration needed to recreate the IP.
