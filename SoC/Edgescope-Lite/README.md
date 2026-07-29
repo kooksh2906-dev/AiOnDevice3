@@ -64,6 +64,24 @@ MicroBlaze V가 AXI GPIO를 반복해서 읽는 Software Polling 기준군은
 [docs/team_a_cpu_polling_comparison_conditions.md](docs/team_a_cpu_polling_comparison_conditions.md)를
 참조합니다.
 
+## 비교군 B — Vivado ILA Reference
+
+100 MHz FPGA 클록에서 8-bit probe를 병렬 캡처하는 Vivado ILA 기준군은
+[comparison/ila_reference/README.md](comparison/ila_reference/README.md)에
+구현·실기기 캡처·검증 절차를 정리했습니다.
+
+- 1,024 sample capture와 Rising/Falling/Masked Pattern trigger 검증
+- Basys3 실기기 캡처 및 10 ns~1 µs pulse stress 결과 포함
+- 공통 Base SoC와 Test Pattern Generator를 사용한 동일 조건 비교
+- Step 1~10 자동화 스크립트, 원본 CSV/ILA, 체크섬, 발표용 SVG 포함
+- 현재 상태: `PASS_WITH_TEAM_INPUT_PENDING`
+
+ILA 자체 검증은 완료됐지만 Custom Full-System 최종 측정 7종이 아직 없어
+공식 Custom 대비 절감률은 확정하지 않았습니다. 현재 결론과 팀 인수인계는
+[Step 10 요약](comparison/ila_reference/results/step10/final_summary.md)과
+[team_handoff.md](comparison/ila_reference/results/step10/team_handoff.md)에서
+확인할 수 있습니다.
+
 ## 회귀 테스트
 
 ```bash

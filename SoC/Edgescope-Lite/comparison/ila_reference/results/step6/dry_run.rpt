@@ -1,0 +1,21 @@
+# EdgeScope-Lite Step 6 machine-readable evidence
+pair_kind=STEP6_UART_RUNTIME
+bit_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+bit_sha256=cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ltx_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ltx_sha256=ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+ila_instance=base_soc_i/ila_reference_0
+ila_uuid=4FB82E5963D554A68B9EF3ACD537453F
+ila_spec=labtools_ila_v6
+probe_name=probe0
+probe_id=0
+probe_direction=IN
+probe_left_index=0
+probe_right_index=7
+probe_width=8
+probe_port=0
+probe_net=base_soc_i/test_pattern_generator_gpio_adapter_0_probe_test_o
+STEP=6
+ACTION=dry_run
+RESULT=PASS
+HARDWARE_TOUCHED=0

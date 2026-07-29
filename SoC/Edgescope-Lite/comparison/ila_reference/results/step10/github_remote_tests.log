@@ -1,0 +1,323 @@
+EdgeScope-Lite common package: PASS
+PASS: reset and ARM
+PASS: sample_valid gating
+PASS: PREFILL and 512th-sample triggers were ignored
+PASS: PREFILL wrote 512 samples to addresses 0..511
+PASS: pre_ready asserted after exactly 512 samples
+PASS: ARMED continued writes through address 514
+tb_circular_trace_buffer_basic: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_basic.sv:198: $finish called at 10370000 (1ps)
+PASS: trigger accepted only with sample_valid
+PASS: trigger sample stored at physical address 519
+PASS: trigger sample counted as post sample #1
+PASS: exactly 511 samples stored after trigger
+PASS: start_addr=7, last_write_addr=6
+PASS: logical index 512 maps to trigger address
+PASS: all 1,024 retained samples are time ordered
+PASS: DONE stopped further BRAM writes
+tb_circular_trace_buffer_trigger: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_trigger.sv:261: $finish called at 20750000 (1ps)
+PASS: trigger_addr=0 start_addr=512 last_addr=511 writes=1536
+PASS: trigger_addr=1 start_addr=513 last_addr=512 writes=1537
+PASS: trigger_addr=1022 start_addr=510 last_addr=509 writes=1534
+PASS: trigger_addr=1023 start_addr=511 last_addr=510 writes=1535
+PASS: trigger addresses 0, 1, 1022 and 1023
+PASS: all wrap-around buffers retained 1,024 ordered samples
+tb_circular_trace_buffer_wrap: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_wrap.sv:249: $finish called at 122990000 (1ps)
+PASS: abort blocked write and overrode arm/clear/trigger
+PASS: re-arm after abort restarted at address zero
+PASS: arm/clear were ignored while busy without losing sample
+PASS: DONE, IRQ and addresses remained latched
+PASS: clear_done had priority over simultaneous arm
+PASS: direct re-arm from DONE started a clean PREFILL
+tb_circular_trace_buffer_control: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_control.sv:286: $finish called at 41570000 (1ps)
+PASS: AXI read mux and CAPTURE_INFO
+PASS: W1P CONTROL and WSTRB behavior
+PASS: independent AW-first and W-first transactions
+PASS: AXI B/R response backpressure stability
+PASS: reset discarded partial AW/W transactions
+PASS: ARM, ABORT and CLEAR_DONE through AXI
+PASS: STATUS transitions 0x1 -> 0x3 -> 0x7 -> 0xE
+PASS: START/TRIGGER/WRITE address registers
+PASS: writes to RO registers had no effect
+tb_circular_trace_buffer_axi: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_axi.sv:450: $finish called at 21480000 (1ps)
+PASS: packaged top clock/reset and BRAM interface wiring
+PASS: Port A word-to-byte address conversion
+PASS: 1,024 x 32-bit true dual-port BRAM behavior
+PASS: synchronous Port B reads
+PASS: CPU byte address = physical word index * 4
+PASS: 1,024 samples read in logical time order
+PASS: logical trigger index 512 mapped to physical 519
+tb_circular_trace_buffer_bram: PASS
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_bram.sv:332: $finish called at 41270000 (1ps)
+PASS: 7 SystemVerilog tests and C register-header check
+VCD info: dumpfile tb_basic_trigger_engine.vcd opened for output.
+
+============================================================
+ Basic Trigger Engine Verilog Testbench Start
+============================================================
+
+[TEST 1] Reset state
+[16000] PASS: Reset clears armed_o
+[16000] PASS: Reset clears triggered_o
+[16000] PASS: Reset keeps trigger_pulse_o low
+[16000] PASS: Reset clears trigger_count_o
+
+[TEST 2] No trigger before ARM
+[27000] PASS: Matching pattern before ARM does not trigger
+[31000] PASS: Trigger pulse remains stable until capture edge
+[36000] PASS: Non-triggering sample does not change trigger_count_o
+[37000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 3] First valid edge sample after ARM
+[47000] PASS: ARM command suppresses trigger_pulse_o
+[56000] PASS: ARM sets armed_o
+[56000] PASS: ARM clears triggered_o
+[56000] PASS: ARM does not change trigger_count_o
+[67000] PASS: First valid sample after ARM does not cause rising trigger
+[71000] PASS: Trigger pulse remains stable until capture edge
+[76000] PASS: Non-triggering sample does not change trigger_count_o
+[77000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[87000] PASS: CLEAR command suppresses trigger_pulse_o
+[96000] PASS: CLEAR clears armed_o
+[96000] PASS: CLEAR clears triggered_o
+[96000] PASS: CLEAR preserves cumulative trigger_count_o
+
+[TEST 4] Selected-channel rising trigger
+[107000] PASS: ARM command suppresses trigger_pulse_o
+[116000] PASS: ARM sets armed_o
+[116000] PASS: ARM clears triggered_o
+[116000] PASS: ARM does not change trigger_count_o
+[127000] PASS: Rising test captures first baseline sample
+[131000] PASS: Trigger pulse remains stable until capture edge
+[136000] PASS: Non-triggering sample does not change trigger_count_o
+[137000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[147000] PASS: Unselected channel 1 rising edge is ignored
+[151000] PASS: Trigger pulse remains stable until capture edge
+[156000] PASS: Non-triggering sample does not change trigger_count_o
+[157000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[167000] PASS: Selected channel 0 rising edge triggers
+[167000] PASS: Trigger is aligned with sample_valid_i
+[167000] PASS: Trigger is aligned with the expected current sample
+[171000] PASS: Trigger pulse remains stable until capture edge
+[176000] PASS: Trigger event sets triggered_o
+[176000] PASS: Trigger event increments trigger_count_o once
+[176000] PASS: Trigger pulse deasserts after capture edge
+[177000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[187000] PASS: No additional trigger before CLEAR
+[191000] PASS: Trigger pulse remains stable until capture edge
+[196000] PASS: Non-triggering sample does not change trigger_count_o
+[197000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[207000] PASS: Repeated rising condition is blocked before CLEAR
+[211000] PASS: Trigger pulse remains stable until capture edge
+[216000] PASS: Non-triggering sample does not change trigger_count_o
+[217000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 5] Selected-channel falling trigger
+[227000] PASS: CLEAR command suppresses trigger_pulse_o
+[236000] PASS: CLEAR clears armed_o
+[236000] PASS: CLEAR clears triggered_o
+[236000] PASS: CLEAR preserves cumulative trigger_count_o
+[247000] PASS: ARM command suppresses trigger_pulse_o
+[256000] PASS: ARM sets armed_o
+[256000] PASS: ARM clears triggered_o
+[256000] PASS: ARM does not change trigger_count_o
+[267000] PASS: Falling test captures first baseline sample
+[271000] PASS: Trigger pulse remains stable until capture edge
+[276000] PASS: Non-triggering sample does not change trigger_count_o
+[277000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[287000] PASS: Unselected channel 0 falling edge is ignored
+[291000] PASS: Trigger pulse remains stable until capture edge
+[296000] PASS: Non-triggering sample does not change trigger_count_o
+[297000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[307000] PASS: Selected channel 1 falling edge triggers
+[307000] PASS: Trigger is aligned with sample_valid_i
+[307000] PASS: Trigger is aligned with the expected current sample
+[311000] PASS: Trigger pulse remains stable until capture edge
+[316000] PASS: Trigger event sets triggered_o
+[316000] PASS: Trigger event increments trigger_count_o once
+[316000] PASS: Trigger pulse deasserts after capture edge
+[317000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 6] Invalid sample does not update history
+[327000] PASS: CLEAR command suppresses trigger_pulse_o
+[336000] PASS: CLEAR clears armed_o
+[336000] PASS: CLEAR clears triggered_o
+[336000] PASS: CLEAR preserves cumulative trigger_count_o
+[347000] PASS: ARM command suppresses trigger_pulse_o
+[356000] PASS: ARM sets armed_o
+[356000] PASS: ARM clears triggered_o
+[356000] PASS: ARM does not change trigger_count_o
+[367000] PASS: Valid zero establishes the rising-edge baseline
+[371000] PASS: Trigger pulse remains stable until capture edge
+[376000] PASS: Non-triggering sample does not change trigger_count_o
+[377000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[387000] PASS: Invalid high sample causes no trigger and no history update
+[391000] PASS: Trigger pulse remains stable until capture edge
+[396000] PASS: Non-triggering sample does not change trigger_count_o
+[397000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[407000] PASS: Next valid high sample still detects zero-to-one transition
+[407000] PASS: Trigger is aligned with sample_valid_i
+[407000] PASS: Trigger is aligned with the expected current sample
+[411000] PASS: Trigger pulse remains stable until capture edge
+[416000] PASS: Trigger event sets triggered_o
+[416000] PASS: Trigger event increments trigger_count_o once
+[416000] PASS: Trigger pulse deasserts after capture edge
+[417000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 7] Masked pattern-entry trigger
+[427000] PASS: CLEAR command suppresses trigger_pulse_o
+[436000] PASS: CLEAR clears armed_o
+[436000] PASS: CLEAR clears triggered_o
+[436000] PASS: CLEAR preserves cumulative trigger_count_o
+[447000] PASS: ARM command suppresses trigger_pulse_o
+[456000] PASS: ARM sets armed_o
+[456000] PASS: ARM clears triggered_o
+[456000] PASS: ARM does not change trigger_count_o
+[467000] PASS: Nonmatching masked pattern does not trigger
+[471000] PASS: Trigger pulse remains stable until capture edge
+[476000] PASS: Non-triggering sample does not change trigger_count_o
+[477000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[487000] PASS: Only masked upper nibble is compared
+[487000] PASS: Trigger is aligned with sample_valid_i
+[487000] PASS: Trigger is aligned with the expected current sample
+[491000] PASS: Trigger pulse remains stable until capture edge
+[496000] PASS: Trigger event sets triggered_o
+[496000] PASS: Trigger event increments trigger_count_o once
+[496000] PASS: Trigger pulse deasserts after capture edge
+[497000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[507000] PASS: Maintained pattern match causes no additional trigger
+[511000] PASS: Trigger pulse remains stable until capture edge
+[516000] PASS: Non-triggering sample does not change trigger_count_o
+[517000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[527000] PASS: Pattern remains one-shot until CLEAR
+[531000] PASS: Trigger pulse remains stable until capture edge
+[536000] PASS: Non-triggering sample does not change trigger_count_o
+[537000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 8] Pattern trigger on first valid sample
+[547000] PASS: CLEAR command suppresses trigger_pulse_o
+[556000] PASS: CLEAR clears armed_o
+[556000] PASS: CLEAR clears triggered_o
+[556000] PASS: CLEAR preserves cumulative trigger_count_o
+[567000] PASS: ARM command suppresses trigger_pulse_o
+[576000] PASS: ARM sets armed_o
+[576000] PASS: ARM clears triggered_o
+[576000] PASS: ARM does not change trigger_count_o
+[587000] PASS: First valid matching pattern sample triggers
+[587000] PASS: Trigger is aligned with sample_valid_i
+[587000] PASS: Trigger is aligned with the expected current sample
+[591000] PASS: Trigger pulse remains stable until capture edge
+[596000] PASS: Trigger event sets triggered_o
+[596000] PASS: Trigger event increments trigger_count_o once
+[596000] PASS: Trigger pulse deasserts after capture edge
+[597000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 9] Zero pattern mask
+[607000] PASS: CLEAR command suppresses trigger_pulse_o
+[616000] PASS: CLEAR clears armed_o
+[616000] PASS: CLEAR clears triggered_o
+[616000] PASS: CLEAR preserves cumulative trigger_count_o
+[627000] PASS: ARM command suppresses trigger_pulse_o
+[636000] PASS: ARM sets armed_o
+[636000] PASS: ARM clears triggered_o
+[636000] PASS: ARM does not change trigger_count_o
+[647000] PASS: Zero mask prevents trigger for all-zero sample
+[651000] PASS: Trigger pulse remains stable until capture edge
+[656000] PASS: Non-triggering sample does not change trigger_count_o
+[657000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[667000] PASS: Zero mask prevents trigger for all-one sample
+[671000] PASS: Trigger pulse remains stable until capture edge
+[676000] PASS: Non-triggering sample does not change trigger_count_o
+[677000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 10] Disabled trigger mode
+[687000] PASS: CLEAR command suppresses trigger_pulse_o
+[696000] PASS: CLEAR clears armed_o
+[696000] PASS: CLEAR clears triggered_o
+[696000] PASS: CLEAR preserves cumulative trigger_count_o
+[707000] PASS: ARM command suppresses trigger_pulse_o
+[716000] PASS: ARM sets armed_o
+[716000] PASS: ARM clears triggered_o
+[716000] PASS: ARM does not change trigger_count_o
+[727000] PASS: Disabled mode accepts baseline without trigger
+[731000] PASS: Trigger pulse remains stable until capture edge
+[736000] PASS: Non-triggering sample does not change trigger_count_o
+[737000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[747000] PASS: Disabled mode ignores edge and pattern conditions
+[751000] PASS: Trigger pulse remains stable until capture edge
+[756000] PASS: Non-triggering sample does not change trigger_count_o
+[757000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+
+[TEST 11] CLEAR followed by re-ARM
+[767000] PASS: CLEAR command suppresses trigger_pulse_o
+[776000] PASS: CLEAR clears armed_o
+[776000] PASS: CLEAR clears triggered_o
+[776000] PASS: CLEAR preserves cumulative trigger_count_o
+[787000] PASS: ARM command suppresses trigger_pulse_o
+[796000] PASS: ARM sets armed_o
+[796000] PASS: ARM clears triggered_o
+[796000] PASS: ARM does not change trigger_count_o
+[807000] PASS: First run captures channel 2 low baseline
+[811000] PASS: Trigger pulse remains stable until capture edge
+[816000] PASS: Non-triggering sample does not change trigger_count_o
+[817000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[827000] PASS: First run detects channel 2 rising edge
+[827000] PASS: Trigger is aligned with sample_valid_i
+[827000] PASS: Trigger is aligned with the expected current sample
+[831000] PASS: Trigger pulse remains stable until capture edge
+[836000] PASS: Trigger event sets triggered_o
+[836000] PASS: Trigger event increments trigger_count_o once
+[836000] PASS: Trigger pulse deasserts after capture edge
+[837000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[847000] PASS: CLEAR command suppresses trigger_pulse_o
+[856000] PASS: CLEAR clears armed_o
+[856000] PASS: CLEAR clears triggered_o
+[856000] PASS: CLEAR preserves cumulative trigger_count_o
+[867000] PASS: ARM command suppresses trigger_pulse_o
+[876000] PASS: ARM sets armed_o
+[876000] PASS: ARM clears triggered_o
+[876000] PASS: ARM does not change trigger_count_o
+[887000] PASS: Re-armed run captures a new low baseline
+[891000] PASS: Trigger pulse remains stable until capture edge
+[896000] PASS: Non-triggering sample does not change trigger_count_o
+[897000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[907000] PASS: Re-armed run detects another rising edge
+[907000] PASS: Trigger is aligned with sample_valid_i
+[907000] PASS: Trigger is aligned with the expected current sample
+[911000] PASS: Trigger pulse remains stable until capture edge
+[916000] PASS: Trigger event sets triggered_o
+[916000] PASS: Trigger event increments trigger_count_o once
+[916000] PASS: Trigger pulse deasserts after capture edge
+[917000] PASS: sample_valid_i=0 suppresses trigger_pulse_o
+[917000] PASS: Final trigger_count_o equals total accepted triggers
+
+============================================================
+ ALL TESTS PASSED: 213 checks, 7 trigger events
+============================================================
+
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_basic_trigger_engine.v:484: $finish called at 927000 (1ps)
+TEST: divider 1
+TEST: divider 2
+TEST: divider 4
+TEST: divider 8
+TEST: run-time divider change 8 -> 2
+PASS: tb_probe_sampler (246 checks)
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_probe_sampler.sv:216: $finish called at 980000 (1ps)
+make: Entering directory '<REMOTE_MAIN_SNAPSHOT>/comparison/cpu_polling/sw'
+cc -std=c11 -O2 -Wall -Wextra -Werror -pedantic -o test_cpu_polling_engine cpu_polling_engine.c test_cpu_polling_engine.c
+./test_cpu_polling_engine
+cpu_polling_engine: all tests passed
+make: Leaving directory '<REMOTE_MAIN_SNAPSHOT>/comparison/cpu_polling/sw'
+<REMOTE_MAIN_SNAPSHOT>/final_demo_snapshot/sw/vitis_app/src/edge_scope_lite_control.c:25:2: error: #error "Sampler BASEADDR: xparameters.h의 실제 매크로 이름으로 수정하세요."
+   25 | #error "Sampler BASEADDR: xparameters.h의 실제 매크로 이름으로 수정하세요."
+      |  ^~~~~
+<REMOTE_MAIN_SNAPSHOT>/final_demo_snapshot/sw/vitis_app/src/edge_scope_lite_control.c:35:2: error: #error "Trigger BASEADDR: xparameters.h의 실제 매크로 이름으로 수정하세요."
+   35 | #error "Trigger BASEADDR: xparameters.h의 실제 매크로 이름으로 수정하세요."
+      |  ^~~~~
+<REMOTE_MAIN_SNAPSHOT>/final_demo_snapshot/sw/vitis_app/src/edge_scope_lite_control.c:76:2: error: #error "AXI Timer clock: xparameters.h의 실제 매크로 이름으로 수정하세요."
+   76 | #error "AXI Timer clock: xparameters.h의 실제 매크로 이름으로 수정하세요."
+      |  ^~~~~

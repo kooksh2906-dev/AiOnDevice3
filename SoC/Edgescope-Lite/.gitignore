@@ -4,12 +4,17 @@ work/
 clockInfo.txt
 *.jou
 *.log
+!comparison/ila_reference/results/step8/hardware_session.log
+!comparison/ila_reference/results/step9/baseline_raw/baseline_build.log
+!comparison/ila_reference/results/step10/github_remote_tests.log
 *.pb
 *.str
 *.wdb
 *.vcd
 *.fst
 !artifacts/waves/*.vcd
+__pycache__/
+*.py[cod]
 
 # Verified Team A CPU Polling deliverables are intentionally versioned so the
 # Basys3 measurement can be reproduced without rebuilding the toolchain.
@@ -22,6 +27,16 @@ clockInfo.txt
 *.gen/
 *.hw/
 *.ip_user_files/
+
+# The Step 5 ILA routed checkpoint, bitstream, and probe map are checksum-bound
+# verification evidence. Other Vivado build products remain ignored.
+!comparison/ila_reference/build/
+comparison/ila_reference/build/*
+!comparison/ila_reference/build/step5/
+comparison/ila_reference/build/step5/*
+!comparison/ila_reference/build/step5/edgescope_ila_reference_routed.dcp
+!comparison/ila_reference/build/step5/edgescope_ila_reference.bit
+!comparison/ila_reference/build/step5/debug_nets.ltx
 
 # Vivado Block Memory Generator products are reproducible from the Tcl script.
 # Keep only the compact configuration needed to recreate the IP.

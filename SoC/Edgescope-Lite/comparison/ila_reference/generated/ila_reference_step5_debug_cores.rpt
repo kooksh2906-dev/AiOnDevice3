@@ -1,0 +1,46 @@
+EdgeScope-Lite Vivado ILA Reference - Step 5 Debug Core Readback
+================================================================
+Synthesized ILA Debug Core
+------------------------------------------------------------------------------
+ALL_PROBE_SAME_MU                                  true
+ALL_PROBE_SAME_MU_CNT                              1
+CLASS                                              debug_core
+C_ADV_TRIGGER                                      false
+C_DATA_DEPTH                                       1024
+C_EN_STRG_QUAL                                     false
+C_INPUT_PIPE_STAGES                                0
+C_TRIGIN_EN                                        false
+C_TRIGOUT_EN                                       false
+NAME                                               base_soc_i/ila_reference_0
+UUID                                               4fb82e5963d554a68b9ef3acd537453f
+
+Synthesized ILA Probe0
+------------------------------------------------------------------------------
+CLASS                                              debug_port
+NAME                                               base_soc_i/ila_reference_0/probe0
+PORT_WIDTH                                         8
+PROBE_TYPE                                         DATA_AND_TRIGGER
+
+Synthesized Debug Hub Configuration
+------------------------------------------------------------------------------
+CLASS                                              debug_core
+C_CLK_INPUT_FREQ_HZ                                100000000
+C_ENABLE_CLK_DIVIDER                               false
+C_USER_SCAN_CHAIN                                  1
+NAME                                               dbg_hub
+UUID                                               00000000000000000000000000000000
+
+Implemented Debug Hub generation
+------------------------------------------------------------------------------
+Stub: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/common/build/base_soc/edgescope_comparison_base.runs/impl_1/{/home/user4/workspace_ondevice_3/Logic Analysis/comparison/common/build/base_soc/edgescope_comparison_base.cache/ip}/2024.2/9/e/9edd999f38149306/dbg_hub_stub.v
+C_CLK_INPUT_FREQ_HZ=100000000
+C_ENABLE_CLK_DIVIDER=0
+
+ILA clock pins
+------------------------------------------------------------------------------
+base_soc_i/ila_reference_0/clk
+base_soc_i/ila_reference_0/inst/clk
+
+ILA clock objects
+------------------------------------------------------------------------------
+clk_out1_base_soc_clk_wiz_0 PERIOD=10.000
