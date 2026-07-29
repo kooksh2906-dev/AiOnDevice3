@@ -46,6 +46,24 @@ Logic Analysis/
 일반 generated output, Vivado cache와 bitstream은 Git에 포함하지 않습니다.
 최종 검증 증거인 `artifacts/waves/*.vcd`만 예외로 공유합니다.
 
+## 비교군 A — CPU Polling Reference
+
+MicroBlaze V가 AXI GPIO를 반복해서 읽는 Software Polling 기준군은
+[comparison/cpu_polling/README.md](comparison/cpu_polling/README.md)에 정리되어
+있습니다.
+
+- Basys3 실측 대표 처리량: `1,666,666 observations/s`
+- Rising/Falling/Masked Pattern/Zero Mask 시험: 모두 PASS
+- 10 ns·100 ns Pulse: `0/10`
+- 1 µs 이상 Pulse: `10/10`
+- 재현 가능한 Vivado/Vitis 스크립트, XSA, ELF, Bootable Bitstream 포함
+- UART 원본 로그, Utilization/Timing/DRC 보고서 포함
+
+세 비교군의 공통 입력 Generator와 Base SoC는 `comparison/common/`에 있으며,
+동결 조건은
+[docs/team_a_cpu_polling_comparison_conditions.md](docs/team_a_cpu_polling_comparison_conditions.md)를
+참조합니다.
+
 ## 회귀 테스트
 
 ```bash
