@@ -28,6 +28,19 @@ proc assert_equal {label actual expected} {
   puts "ASSERT PASS: $label = $actual"
 }
 
+proc append_unique_path {list_name candidate} {
+  upvar 1 $list_name paths
+  if {$candidate eq ""} {
+    return
+  }
+  if {[catch {set normalized [file normalize $candidate]}]} {
+    return
+  }
+  if {[lsearch -exact $paths $normalized] < 0} {
+    lappend paths $normalized
+  }
+}
+
 proc count_ip {vlnv} {
   set count 0
   foreach cell [get_bd_cells -hier -quiet] {
@@ -72,14 +85,96 @@ if {[string first $required_vivado_version $current_vivado_version] != 0} {
 # The submitted XSA used Basys 3 board metadata 1.1.  The installed 1.2 board
 # definition targets the same xc7a35tcpg236-1 device and the same sys_clock,
 # reset, and usb_uart interfaces.
-set user_home_dir [file normalize ~]
-set board_repo [file join \
-  $user_home_dir .Xilinx Vivado 2024.2 xhub board_store \
-  xilinx_board_store XilinxBoardStore Vivado 2024.2 boards]
-if {![file isdirectory $board_repo]} {
-  fail "Basys 3 board repository was not found at $board_repo"
+set board_part_matches [get_board_parts -quiet $required_board_part]
+if {[llength $board_part_matches] > 1} {
+  fail "Required board part $required_board_part resolved more than once: $board_part_matches"
 }
-set_param board.repoPaths [list $board_repo]
+
+if {[llength $board_part_matches] == 1} {
+  puts "BASE_SOC_BOARD: using already registered board part $required_board_part"
+} else {
+  set original_board_repos [get_param board.repoPaths]
+  set board_repo_candidates {}
+
+  if {[info exists ::env(EDGESCOPE_BOARD_REPO)] &&
+      $::env(EDGESCOPE_BOARD_REPO) ne ""} {
+    set override_repo [file normalize $::env(EDGESCOPE_BOARD_REPO)]
+    if {![file isdirectory $override_repo]} {
+      fail "EDGESCOPE_BOARD_REPO is not a directory: $override_repo"
+    }
+    append_unique_path board_repo_candidates $override_repo
+  } else {
+    set user_home_dir [file normalize ~]
+    append_unique_path board_repo_candidates [file join \
+      $user_home_dir .Xilinx Vivado $required_vivado_version xhub \
+      board_store xilinx_board_store XilinxBoardStore Vivado \
+      $required_vivado_version boards]
+    append_unique_path board_repo_candidates [file join \
+      $user_home_dir .Xilinx xhub board_store xilinx_board_store \
+      XilinxBoardStore Vivado $required_vivado_version boards]
+
+    set vivado_install_roots {}
+    if {[info exists ::env(XILINX_VIVADO)] &&
+        $::env(XILINX_VIVADO) ne ""} {
+      append_unique_path vivado_install_roots $::env(XILINX_VIVADO)
+    }
+    append_unique_path vivado_install_roots \
+      [file join / tools Xilinx Vivado $required_vivado_version]
+    append_unique_path vivado_install_roots \
+      [file join / opt Xilinx Vivado $required_vivado_version]
+    append_unique_path vivado_install_roots \
+      [file join C:/ Xilinx Vivado $required_vivado_version]
+
+    if {![catch {set executable_dir \
+        [file dirname [file normalize [info nameofexecutable]]]}]} {
+      for {set level 0} {$level < 6} {incr level} {
+        append_unique_path vivado_install_roots $executable_dir
+        set parent_dir [file dirname $executable_dir]
+        if {$parent_dir eq $executable_dir} {
+          break
+        }
+        set executable_dir $parent_dir
+      }
+    }
+
+    foreach install_root $vivado_install_roots {
+      append_unique_path board_repo_candidates [file join \
+        $install_root data xhub boards XilinxBoardStore boards]
+      append_unique_path board_repo_candidates [file join \
+        $install_root data boards board_files]
+    }
+  }
+
+  set selected_board_repo {}
+  set searched_board_repos {}
+  foreach board_repo $board_repo_candidates {
+    lappend searched_board_repos $board_repo
+    if {![file isdirectory $board_repo]} {
+      continue
+    }
+
+    set configured_board_repos [list $board_repo]
+    foreach existing_repo $original_board_repos {
+      append_unique_path configured_board_repos $existing_repo
+    }
+    set_param board.repoPaths $configured_board_repos
+
+    set board_part_matches [get_board_parts -quiet $required_board_part]
+    if {[llength $board_part_matches] > 1} {
+      fail "Required board part $required_board_part resolved more than once: $board_part_matches"
+    }
+    if {[llength $board_part_matches] == 1} {
+      set selected_board_repo $board_repo
+      break
+    }
+  }
+
+  if {$selected_board_repo eq ""} {
+    set_param board.repoPaths $original_board_repos
+    fail "Required board part $required_board_part was not found; searched: [join $searched_board_repos {, }]. Set EDGESCOPE_BOARD_REPO to its board-files directory"
+  }
+  puts "BASE_SOC_BOARD_REPO: $selected_board_repo"
+}
 
 if {[llength [get_board_parts -quiet $required_board_part]] != 1} {
   fail "Required board part $required_board_part is not installed"

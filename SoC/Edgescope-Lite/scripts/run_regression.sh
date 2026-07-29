@@ -15,19 +15,32 @@ elif [[ $# -ne 0 ]]; then
   exit 2
 fi
 
-for tool in iverilog vvp cc; do
-  if ! command -v "$tool" >/dev/null 2>&1; then
-    echo "Required tool not found: $tool" >&2
-    exit 1
-  fi
-done
+if command -v iverilog >/dev/null 2>&1 &&
+   command -v vvp >/dev/null 2>&1; then
+  sv_simulator="icarus"
+elif command -v xvlog >/dev/null 2>&1 &&
+     command -v xelab >/dev/null 2>&1 &&
+     command -v xsim >/dev/null 2>&1; then
+  sv_simulator="xsim"
+else
+  echo "No supported SystemVerilog simulator found." >&2
+  echo "Install iverilog+vvp or provide xvlog+xelab+xsim." >&2
+  exit 1
+fi
+
+if ! command -v cc >/dev/null 2>&1; then
+  echo "Required tool not found: cc" >&2
+  exit 1
+fi
 
 mkdir -p "$build_dir"
 if [[ $emit_waves -eq 1 ]]; then
   mkdir -p "$wave_dir"
 fi
 
-run_sv_test() {
+echo "SystemVerilog simulator: $sv_simulator"
+
+run_sv_test_icarus() {
   local top="$1"
   shift
   local executable="$build_dir/$top.vvp"
@@ -42,6 +55,49 @@ run_sv_test() {
     ) | tee "$log_file"
   else
     vvp "$executable" | tee "$log_file"
+  fi
+}
+
+run_sv_test_xsim() {
+  local top="$1"
+  shift
+  local test_dir="$build_dir/xsim/$top"
+  local snapshot="${top}_sim"
+  local log_file="$build_dir/$top.log"
+  local generated_vcd="$test_dir/$top.vcd"
+
+  mkdir -p "$test_dir"
+  (
+    cd -- "$test_dir"
+    xvlog -sv "$@"
+    xelab "$top" -s "$snapshot"
+  )
+
+  if [[ $emit_waves -eq 1 && "$top" != "tb_common_pkg" ]]; then
+    rm -f -- "$generated_vcd"
+    (
+      cd -- "$test_dir"
+      xsim "$snapshot" -runall -testplusarg VCD
+    ) | tee "$log_file"
+
+    if [[ ! -s "$generated_vcd" ]]; then
+      echo "XSim did not create the expected waveform: $generated_vcd" >&2
+      return 1
+    fi
+    cp -f -- "$generated_vcd" "$wave_dir/$top.vcd"
+  else
+    (
+      cd -- "$test_dir"
+      xsim "$snapshot" -runall
+    ) | tee "$log_file"
+  fi
+}
+
+run_sv_test() {
+  if [[ "$sv_simulator" == "icarus" ]]; then
+    run_sv_test_icarus "$@"
+  else
+    run_sv_test_xsim "$@"
   fi
 }
 
