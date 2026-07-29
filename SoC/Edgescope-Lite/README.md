@@ -26,6 +26,7 @@ Basys3의 MicroBlaze SoC에서 사용하는 8-channel standalone logic analyzer
 | RTL 담당자 | `rtl/include/logic_analyzer_pkg.sv` |
 | Vitis C 담당자 | `sw/include/logic_analyzer_regs.h` |
 | 최종 보드 시연 | `sw/vitis_app/README.md` |
+| GUI 공동 작업 | [docs/gui_collaboration_plan.md](docs/gui_collaboration_plan.md) |
 
 ## 폴더 구조
 
@@ -62,6 +63,24 @@ Logic Analysis/
 BRAM Freeze, One-shot, IRQ 해제와 재Capture 준비 상태를 자동 검증합니다.
 상세 조작법과 Vitis 전제조건은
 [sw/vitis_app/README.md](sw/vitis_app/README.md)를 참고하십시오.
+
+## 비교군 A — CPU Polling Reference
+
+MicroBlaze V가 AXI GPIO를 반복해서 읽는 Software Polling 기준군은
+[comparison/cpu_polling/README.md](comparison/cpu_polling/README.md)에 정리되어
+있습니다.
+
+- Basys3 실측 대표 처리량: `1,666,666 observations/s`
+- Rising/Falling/Masked Pattern/Zero Mask 시험: 모두 PASS
+- 10 ns·100 ns Pulse: `0/10`
+- 1 µs 이상 Pulse: `10/10`
+- 재현 가능한 Vivado/Vitis 스크립트, XSA, ELF, Bootable Bitstream 포함
+- UART 원본 로그, Utilization/Timing/DRC 보고서 포함
+
+세 비교군의 공통 입력 Generator와 Base SoC는 `comparison/common/`에 있으며,
+동결 조건은
+[docs/team_a_cpu_polling_comparison_conditions.md](docs/team_a_cpu_polling_comparison_conditions.md)를
+참조합니다.
 
 ## 회귀 테스트
 

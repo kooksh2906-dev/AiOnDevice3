@@ -10,7 +10,13 @@ clockInfo.txt
 *.vcd
 *.fst
 !artifacts/waves/*.vcd
+
+# Verified Team A CPU Polling deliverables are intentionally versioned so the
+# Basys3 measurement can be reproduced without rebuilding the toolchain.
+!comparison/cpu_polling/results/uart_capture.log
 *.bit
+!comparison/cpu_polling/hw/cpu_polling_reference.bit
+!comparison/cpu_polling/vitis_artifacts/cpu_polling_app.bit
 *.bin
 *.elf
 *.elf.size

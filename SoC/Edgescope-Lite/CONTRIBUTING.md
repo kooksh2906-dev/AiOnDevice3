@@ -24,6 +24,9 @@ Request를 사용합니다.
 | `dashboard/` | GUI 담당 | Firmware 담당 |
 | `sw/include/logic_analyzer_regs.h` | 공용 사양 담당 | RTL + Firmware |
 
+GUI 역할, 단계, Protocol 초기 제안과 완료 조건은
+[docs/gui_collaboration_plan.md](docs/gui_collaboration_plan.md)를 따릅니다.
+
 `sw/include/logic_analyzer_regs.h`는 RTL과 Software 사이의 ABI입니다.
 Offset, Bit, Depth 또는 Trigger Index 변경은 반드시 공통 명세와 RTL/C
 검증을 함께 갱신해야 합니다.

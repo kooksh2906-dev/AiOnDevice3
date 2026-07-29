@@ -92,10 +92,7 @@ Demo 1과 2는 Logical 508~516만 출력하고, Demo 3은 시간순 전체
 Frame과 Chrome Web Serial Dashboard는 아직 포함하지 않으며, Firmware
 Protocol과 Web UI를 독립 PR로 병렬 개발한 뒤 통합합니다.
 
-## 공동작업 브랜치 권장
-
-- `feature/firmware-protocol`: Compact Hex `@ESL` Protocol
-- `feature/web-dashboard`: Chrome Web Serial Dashboard
-- `feature/gui-integration`: 실제 보드 통합과 재접속/Retry 처리
-
-기능별 브랜치에서 작업하고 `main` 대상 Pull Request로 상호검토하십시오.
+상세 역할, 작업 단계와 공통 규격 초기 제안은
+[GUI 공동작업 계획](../../docs/gui_collaboration_plan.md)을 참고하십시오.
+브랜치와 Pull Request의 일반 규칙은
+[CONTRIBUTING.md](../../CONTRIBUTING.md)를 따릅니다.
