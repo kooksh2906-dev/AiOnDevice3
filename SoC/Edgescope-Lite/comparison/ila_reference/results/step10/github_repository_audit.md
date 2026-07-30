@@ -2,10 +2,10 @@
 
 - 저장소: `yoon3226/EdgeScope-Lite-SoC`
 - 감사 Ref: `HEAD`
-- 감사 Commit: `c41254682dee66bbb5cea763641ba20aebd94e58`
-- 작성자/시각: `YOON HYEONG UK` / `2026-07-30T10:22:28+09:00`
-- 제목: `Resolve ILA evidence merge and restore provenance`
-- 로컬 HEAD: `c41254682dee66bbb5cea763641ba20aebd94e58` (`agent/publish-ila-step10`)
+- 감사 Commit: `5d6a82decb82fada349c9b9ec44e3fb0aa2b0beb`
+- 작성자/시각: `YOON HYEONG UK` / `2026-07-30T10:24:54+09:00`
+- 제목: `Merge remote-tracking branch 'origin/main' into agent/publish-ila-step10`
+- 로컬 HEAD: `5d6a82decb82fada349c9b9ec44e3fb0aa2b0beb` (`agent/publish-ila-step10`)
 - 로컬과 원격 차이: behind 0, ahead 0
 - 로컬 작업 트리 변경 존재: `YES`
 

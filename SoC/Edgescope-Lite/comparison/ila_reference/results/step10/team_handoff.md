@@ -7,7 +7,7 @@
 - Pulse Stress 60/60 원본·정규화·ILA Session Checksum
 - Common / CPU / ILA 전체 Routed 자원·Timing 표
 - 발표용 SVG 2개와 안전한 발표 문안
-- GitHub 원격 Commit `c41254682dee66bbb5cea763641ba20aebd94e58` 감사 결과
+- GitHub 원격 Commit `5d6a82decb82fada349c9b9ec44e3fb0aa2b0beb` 감사 결과
 
 ## 최종 완료에 필요한 팀 입력
 
