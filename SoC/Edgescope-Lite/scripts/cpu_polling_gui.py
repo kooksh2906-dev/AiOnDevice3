@@ -33,6 +33,8 @@ VIVADO_ILA_CAPTURE_DIR = VIVADO_ILA_ROOT / "results/captures"
 REQUIRED_VIVADO_VERSION = "2024.2"
 DEFAULT_ILA_TIMEOUT_SECONDS = 60
 MAX_ILA_TIMEOUT_SECONDS = 3600
+MAX_CAPTURE_DEPTH = 65_536
+SUPPORTED_UART_COMMANDS = frozenset("brfphzs")
 VIVADO_INSTALL_ROOTS = (
     Path("/tools/Xilinx/Vivado"),
     Path("/opt/Xilinx/Vivado"),
@@ -119,6 +121,7 @@ def _empty_dataset(key: str) -> dict:
         "representative": None,
         "ready": False,
         "zero_mask_pass": False,
+        "zero_mask_tests": 0,
         "simulated": False,
         "evidence": "LIVE UART",
     }
@@ -412,6 +415,12 @@ def _append_capture(
         "OBSERVATIONS",
         meta.get("DEPTH", meta.get("CAPTURE_DEPTH", inferred_depth)),
     )
+    if depth <= 0 or depth > MAX_CAPTURE_DEPTH:
+        dataset["warnings"].append(
+            "캡처 무결성 오류: "
+            f"depth {depth}는 지원 범위 1..{MAX_CAPTURE_DEPTH} 밖입니다."
+        )
+        return
     missing_count = sum(index not in sample_rows for index in range(depth))
     out_of_range_count = sum(index >= depth for index in sample_rows)
     if duplicate_count or missing_count or out_of_range_count:
@@ -542,6 +551,7 @@ def parse_uart(text: str) -> dict:
                 or last_ready_analyzer
                 or "cpu_polling"
             )
+            current_analyzer = key
             datasets[key]["pulses"].append({
                 "cycles": _integer(values.get("PULSE_WIDTH_CYCLES")),
                 "detected": _integer(values.get("DETECTED")),
@@ -624,9 +634,11 @@ def parse_uart(text: str) -> dict:
                 duplicate_count,
             )
             i -= 1
-        elif line.startswith("P-05_PASS=NO_TRIGGER"):
+        elif line.startswith(("P-05_PASS=", "P-05_FAIL=")):
             key = current_analyzer or last_ready_analyzer or "cpu_polling"
-            datasets[key]["zero_mask_pass"] = True
+            datasets[key]["zero_mask_tests"] += 1
+            if line.startswith("P-05_PASS=NO_TRIGGER"):
+                datasets[key]["zero_mask_pass"] = True
         i += 1
 
     active_key = current_analyzer or last_ready_analyzer
@@ -714,7 +726,14 @@ class SerialManager:
     transcript: str = ""
     error: str | None = None
     lock: threading.Lock = field(default_factory=threading.Lock)
+    parse_lock: threading.Lock = field(default_factory=threading.Lock)
     stop_event: threading.Event = field(default_factory=threading.Event)
+    reader_thread: threading.Thread | None = field(
+        default=None, init=False, repr=False
+    )
+    transcript_revision: int = 0
+    parsed_revision: int = -1
+    parsed_data: dict | None = field(default=None, init=False, repr=False)
 
     def ports(self) -> list[str]:
         try:
@@ -731,7 +750,7 @@ class SerialManager:
                     and (port.location or "").endswith(".0")
                 )
             ]
-            return usb_ports or [port.device for port in ports]
+            return usb_ports
         except ImportError:
             return []
 
@@ -742,60 +761,125 @@ class SerialManager:
             connection = serial.Serial(port, baudrate=baud, timeout=0.1)
         except Exception as exc:
             raise RuntimeError(f"UART 연결 실패: {exc}") from exc
+        stop_event = threading.Event()
+        reader = threading.Thread(
+            target=self._reader,
+            args=(connection, stop_event),
+            daemon=True,
+        )
         with self.lock:
             self.serial = connection
             self.port = port
             self.transcript = ""
             self.error = None
-            self.stop_event.clear()
-        threading.Thread(target=self._reader, daemon=True).start()
+            self.stop_event = stop_event
+            self.reader_thread = reader
+            self.transcript_revision += 1
+            self.parsed_revision = -1
+            self.parsed_data = None
+        reader.start()
 
-    def _reader(self) -> None:
-        while not self.stop_event.is_set():
+    def _reader(
+        self,
+        connection: object,
+        stop_event: threading.Event,
+    ) -> None:
+        while not stop_event.is_set():
             try:
-                data = self.serial.read(4096) if self.serial else b""
+                data = connection.read(4096)
                 if data:
                     with self.lock:
+                        if self.serial is not connection:
+                            return
                         self.transcript = (
                             self.transcript + data.decode("ascii", errors="replace")
                         )[-2_000_000:]
+                        self.transcript_revision += 1
             except Exception as exc:
+                if stop_event.is_set():
+                    return
                 with self.lock:
-                    self.error = str(exc)
-                break
+                    if self.serial is connection:
+                        self.error = str(exc)
+                        self.serial = None
+                        self.port = None
+                        self.reader_thread = None
+                stop_event.set()
+                try:
+                    connection.close()
+                except Exception:
+                    pass
+                return
 
     def command(self, value: str) -> None:
-        if value not in "brfphzs":
+        if len(value) != 1 or value not in SUPPORTED_UART_COMMANDS:
             raise ValueError("지원하지 않는 명령입니다.")
         with self.lock:
             if not self.serial:
                 raise RuntimeError("먼저 UART를 연결하세요.")
-            self.serial.write(value.encode("ascii"))
-            self.serial.flush()
-
-    def disconnect(self) -> None:
-        self.stop_event.set()
-        with self.lock:
-            if self.serial:
+            connection = self.serial
+            try:
+                connection.write(value.encode("ascii"))
+                connection.flush()
+            except Exception as exc:
+                self.error = str(exc)
+                self.serial = None
+                self.port = None
+                self.stop_event.set()
                 try:
-                    self.serial.close()
+                    connection.close()
                 except Exception:
                     pass
+                raise RuntimeError(f"UART 명령 전송 실패: {exc}") from exc
+
+    def disconnect(self) -> None:
+        with self.lock:
+            stop_event = self.stop_event
+            connection = self.serial
+            reader = self.reader_thread
+            stop_event.set()
             self.serial = None
             self.port = None
+            self.reader_thread = None
+            self.error = None
+        if connection:
+            try:
+                connection.close()
+            except Exception:
+                pass
+        if reader and reader is not threading.current_thread():
+            reader.join(timeout=0.5)
+
+    def _parse_snapshot(self, transcript: str, revision: int) -> dict:
+        with self.parse_lock:
+            with self.lock:
+                if (
+                    self.parsed_data is not None
+                    and self.parsed_revision == revision
+                ):
+                    return self.parsed_data
+            parsed = parse_uart(transcript)
+            with self.lock:
+                if self.transcript_revision == revision:
+                    self.parsed_data = parsed
+                    self.parsed_revision = revision
+            return parsed
 
     def state(self) -> dict:
         with self.lock:
             transcript = self.transcript
+            revision = self.transcript_revision
             connected = self.serial is not None
             port = self.port
             error = self.error
+        data = self._parse_snapshot(transcript, revision)
         return {
             "connected": connected,
+            "board_ready": data["active_analyzer"] is not None,
             "port": port,
             "error": error,
             "transcript_tail": transcript[-12000:],
-            "data": parse_uart(transcript),
+            "data": data,
         }
 
 
@@ -1139,6 +1223,7 @@ class IlaCaptureManager:
 HTML = r"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:,">
 <title>EdgeScope-Lite · A/B/C Analyzer Console</title>
 <style>
 :root{
@@ -1238,7 +1323,7 @@ canvas{
 .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .comparebox{background:#0a1621;border:1px solid var(--line);padding:9px;border-radius:8px;min-width:0}
 .comparebox small{display:block;color:var(--muted);font-size:9px;white-space:nowrap}
-.comparebox strong{display:block;font-size:15px;margin:3px 0;white-space:nowrap}
+.comparebox strong{display:block;font-size:clamp(11px,1.1vw,15px);margin:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .comparebox.active{border-color:#16718b}
 .speedup{margin:9px 0 7px;padding:7px;text-align:center;border:1px solid #145369;background:#0b2936;border-radius:7px;color:var(--cyan)}
 .pulse-seq{font:10px/1.5 ui-monospace,monospace;color:var(--muted);word-break:break-word}
@@ -1267,6 +1352,10 @@ canvas{
   .grid{grid-template-columns:minmax(0,1fr) 290px}
   canvas{height:400px}
 }
+@media(max-width:1050px){
+  .grid,.summary-grid{grid-template-columns:1fr}
+  .side{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 @media(max-width:820px){
   .shell{padding:8px}
   .top{gap:8px}
@@ -1287,7 +1376,20 @@ canvas{
   .toolbar button,.toolbar .filebtn{flex:1 1 44%}
   .legend{flex-wrap:wrap}
   #cursor{width:100%;margin-left:0}
-  canvas{height:330px;min-width:620px}
+  canvas{height:330px;min-width:0}
+  .compare{gap:4px}
+  .comparebox{padding:6px 5px}
+  .comparebox .hint{font-size:9px}
+}
+@media(min-width:1051px) and (max-height:760px){
+  .head{min-height:38px}
+  .side{gap:8px}
+  .metric{padding:8px 12px}
+  .metric b{font-size:16px}
+  .io{padding:8px 10px}
+  .barrow{margin:4px 0}
+  .addrline{padding:6px 10px}
+  canvas{height:350px}
 }
 </style></head><body><div class="shell">
 <header class="top">
@@ -1320,7 +1422,7 @@ canvas{
    <button data-cmd="b">Benchmark</button><button data-cmd="s">Pulse Stress</button><button data-cmd="z">Zero Mask</button>
    <button id="savePng">PNG 저장</button><label class="filebtn">UART/CSV 불러오기<input id="captureFile" type="file" accept=".log,.txt,.csv,text/plain,text/csv"></label>
   </div><div class="wavewrap"><canvas id="wave"></canvas></div>
-  <div class="legend"><span><i class="swatch"></i>Logic High / Low</span><span id="triggerLegend"><i class="swatch trigger"></i>Trigger @ 512</span><span id="cursor">마우스를 파형 위로 이동하세요</span></div>
+  <div class="legend"><span><i class="swatch"></i>Logic High / Low</span><span id="triggerLegend"><i class="swatch trigger"></i>Trigger @ 512</span><span id="cursor">파형 위에서 위치를 확인하세요</span></div>
  </section>
  <aside class="side">
   <section class="panel"><div class="head">Capture Metrics <small id="evidence"></small></div><div class="metrics">
@@ -1347,7 +1449,10 @@ canvas{
 <script>
 let demoData=null, rootData=null, activeAnalyzer='cpu_polling', captureIndices={cpu_polling:0,edgescope_lite:0,vivado_ila:0};
 let live=false, poller=null, liveDetectedAnalyzer=null, lastIlaStatus='idle', lastIlaError=null;
-const requestedAnalyzer=new URLSearchParams(location.search).get('analyzer');
+let sourceMode='demo',pollEpoch=0,pollBusy=false,connectionProbeTimer=null,commandPending=null;
+const analyzerKeys=['cpu_polling','edgescope_lite','vivado_ila'];
+const requestedValue=new URLSearchParams(location.search).get('analyzer');
+const requestedAnalyzer=analyzerKeys.includes(requestedValue)?requestedValue:null;
 const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function toast(s){$('toast').textContent=s;$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),1800)}
 async function api(path,options){let r=await fetch(path,options);let j=await r.json();if(!r.ok)throw Error(j.error||r.statusText);return j}
@@ -1362,17 +1467,19 @@ function representativeRate(d){
  return rates.length?Math.min(...rates):0
 }
 function selectAnalyzer(key, renderNow=true){
+ if(!analyzerKeys.includes(key))key='cpu_polling';
  activeAnalyzer=key;
  document.querySelectorAll('[data-analyzer]').forEach(b=>b.classList.toggle('active',b.dataset.analyzer===key));
  $('analyzerTag').textContent={cpu_polling:'CPU POLLING REFERENCE',edgescope_lite:'EDGESCOPE-LITE REFERENCE',vivado_ila:'VIVADO ILA REFERENCE'}[key];
- if(!live&&rootData===demoData)$('status').textContent=key==='cpu_polling'?'DEMO · RECORDED UART':`DEMO · SYNTHETIC ${key==='edgescope_lite'?'B':'C'} PREVIEW`;
+ if(sourceMode==='demo')$('status').textContent=key==='cpu_polling'?'DEMO · RECORDED UART':`DEMO · SYNTHETIC ${key==='edgescope_lite'?'B':'C'} PREVIEW`;
  if(renderNow&&rootData)render(rootData);
 }
 function render(root,preferred){
  rootData=root;let d=selected(root);
  if(!d)return;
  let index=captureIndices[activeAnalyzer]||0;
- if(preferred){let n=d.captures.findIndex(c=>c.mode===preferred);if(n>=0)index=n}
+ if(sourceMode==='live'&&d.captures.length)index=d.captures.length-1;
+ if(preferred){for(let n=d.captures.length-1;n>=0;n--){if(d.captures[n].mode===preferred){index=n;break}}}
  if(index>=d.captures.length)index=0;captureIndices[activeAnalyzer]=index;
  let c=d.captures[index];
  let warning=(d.warnings||[]).slice(-1)[0];
@@ -1407,14 +1514,16 @@ function renderComparison(root){
  $('compareC').innerHTML=`<small>C · Vivado ILA</small><strong>${rateText(cr)}</strong><span class="hint">${cr?'sample clock':'데이터 대기'}${c?.simulated?' <i class="badge">DEMO</i>':''}</span>`;
  $('speedup').textContent=ar&&(br||cr)?`B ${br?(br/ar).toFixed(1):'—'}× · C ${cr?(cr/ar).toFixed(1):'—'}× vs A`:'A/B/C 데이터 대기 중';
  let pulse=d=>(d?.pulses||[]).map(x=>x.detected).join(' / ')||'—';
- $('comparePulse').innerHTML=`Pulse hit (1 → 100000 cyc)<br>A ${a?.simulated?'DEMO':'실제'} · ${pulse(a)}<br>B ${b?.simulated?'DEMO 예상':'실제'} · ${pulse(b)}<br>C ${c?.simulated?'DEMO 예상':'실제'} · ${pulse(c)}`;
+ let evidence=d=>!d||!(d.ready||d.captures.length||d.benchmarks.length||d.pulses.length)?'데이터 없음':d.simulated?'DEMO 예상':'실제';
+ $('comparePulse').innerHTML=`Pulse hit (1 → 100000 cyc)<br>A ${evidence(a)} · ${pulse(a)}<br>B ${evidence(b)} · ${pulse(b)}<br>C ${evidence(c)} · ${pulse(c)}`;
 }
 function renderImplementation(payload){
  let builds=payload.builds||{},order=[['cpu_polling','A'],['edgescope_lite','B'],['vivado_ila','C']];
- let cell=(value,digits=0)=>Number.isFinite(Number(value))?Number(value).toFixed(digits):'—';
+ let numeric=value=>value!==null&&value!==undefined&&value!==''&&Number.isFinite(Number(value));
+ let cell=(value,digits=0)=>numeric(value)?Number(value).toFixed(digits):'—';
  let rows=order.map(([key,label])=>{let d=builds[key]||{};return `<tr><td>${label}</td><td>${cell(d.luts)}</td><td>${cell(d.registers)}</td><td>${cell(d.bram_tiles,1)}</td><td>${cell(d.wns_ns,3)}</td></tr>`}).join('');
- let b=builds.edgescope_lite||{},c=builds.vivado_ila||{},pct=(bv,cv)=>Number.isFinite(Number(bv))&&Number(cv)>0?((Number(cv)-Number(bv))/Number(cv)*100).toFixed(1):'—';
- let bramDelta=Number(b.bram_tiles)-Number(c.bram_tiles),bramText=Number.isFinite(bramDelta)?(bramDelta===0?'BRAM 동일':`B가 BRAM ${Math.abs(bramDelta).toFixed(1)} tile ${bramDelta>0?'더 사용':'덜 사용'}`):'BRAM 비교 대기';
+ let b=builds.edgescope_lite||{},c=builds.vivado_ila||{},pct=(bv,cv)=>numeric(bv)&&numeric(cv)&&Number(cv)>0?((Number(cv)-Number(bv))/Number(cv)*100).toFixed(1):'—';
+ let bramDelta=numeric(b.bram_tiles)&&numeric(c.bram_tiles)?Number(b.bram_tiles)-Number(c.bram_tiles):NaN,bramText=Number.isFinite(bramDelta)?(bramDelta===0?'BRAM 동일':`B가 BRAM ${Math.abs(bramDelta).toFixed(1)} tile ${bramDelta>0?'더 사용':'덜 사용'}`):'BRAM 비교 대기';
  $('implementation').innerHTML=`<table class="impltable"><thead><tr><th>Build</th><th>LUT</th><th>FF</th><th>BRAM</th><th>WNS</th></tr></thead><tbody>${rows}</tbody></table><div class="implnote">B vs C · LUT ${pct(b.luts,c.luts)}% 절감 · FF ${pct(b.registers,c.registers)}% 절감 · ${bramText}<br>A는 baseline이며 공식 절감률에 포함하지 않습니다.</div>`;
 }
 async function loadImplementation(){
@@ -1426,16 +1535,17 @@ function waveHeight(){
 }
 function clearWave(){
  let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1,h=waveHeight();cv.width=rect.width*ratio;cv.height=h*ratio;
+ cv.onpointermove=null;cv.onpointerleave=null;$('cursor').textContent='파형 위에서 위치를 확인하세요';
  let x=cv.getContext('2d');x.scale(ratio,ratio);x.fillStyle='#09131d';x.fillRect(0,0,rect.width,h);x.fillStyle='#8298aa';x.textAlign='center';x.font='13px ui-monospace';x.fillText('CAPTURE DATA WAITING',rect.width/2,h/2)
 }
 function draw(c){
  let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1,h=waveHeight();cv.width=rect.width*ratio;cv.height=h*ratio;
- let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,left=54,right=14,top=12,bottom=38,row=(h-top-bottom)/8,plot=w-left-right;
+ let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,left=54,right=14,top=12,bottom=38,row=(h-top-bottom)/8,plot=w-left-right,denom=Math.max(1,c.samples.length-1);
  x.fillStyle='#09131d';x.fillRect(0,0,w,h);x.font='11px ui-monospace';x.textAlign='right';
  for(let ch=7;ch>=0;ch--){let ri=7-ch,y=top+ri*row,high=y+row*.18,low=y+row*.68;x.strokeStyle='#1b3042';x.beginPath();x.moveTo(left,y+row*.74);x.lineTo(w-right,y+row*.74);x.stroke();
   x.fillStyle='#8298aa';x.fillText('CH'+ch,left-10,y+row*.5);x.strokeStyle=ch===0?'#22d3ee':'#38bdf8';x.lineWidth=1.4;x.beginPath();
-  c.samples.forEach((v,i)=>{let px=left+i/(c.samples.length-1)*plot,py=(v>>ch)&1?high:low;if(i===0)x.moveTo(px,py);else{x.lineTo(px,py)}});x.stroke()}
- let tx=left+c.trigger_index/(c.samples.length-1)*plot;x.strokeStyle='#fb7185';x.lineWidth=1.5;x.beginPath();x.moveTo(tx,4);x.lineTo(tx,h-20);x.stroke();
+  let previousY=null;c.samples.forEach((v,i)=>{let px=left+i/denom*plot,py=(v>>ch)&1?high:low;if(i===0)x.moveTo(px,py);else{x.lineTo(px,previousY);x.lineTo(px,py)}previousY=py});x.stroke()}
+ let tx=left+c.trigger_index/denom*plot;x.strokeStyle='#fb7185';x.lineWidth=1.5;x.beginPath();x.moveTo(tx,4);x.lineTo(tx,h-20);x.stroke();
  x.fillStyle='#fb7185';x.textAlign='center';x.fillText('TRIGGER',tx,h-20);x.fillStyle='#8298aa';
  if(isHardware()&&c.sample_hz){
   let timeLabel=seconds=>{let us=seconds*1e6;return `${us>=0?'+':''}${us.toFixed(2)} µs`};
@@ -1445,52 +1555,152 @@ function draw(c){
  }else{
   x.textAlign='center';x.fillText('PRE-TRIGGER',left+plot*.25,h-6);x.fillText('POST-TRIGGER',left+plot*.75,h-6)
  }
- cv.onmousemove=e=>{let r=cv.getBoundingClientRect(),idx=Math.max(0,Math.min(c.samples.length-1,Math.round((e.clientX-r.left-left)/(r.width-left-right)*(c.samples.length-1))));
+ cv.onpointermove=e=>{let r=cv.getBoundingClientRect(),idx=Math.max(0,Math.min(c.samples.length-1,Math.round((e.clientX-r.left-left)/(r.width-left-right)*(c.samples.length-1))));
   let offset=idx-c.trigger_index,time=isHardware()&&c.sample_hz?` · ${(offset/c.sample_hz*1e9).toFixed(0)} ns`:` · ${offset} observations`;
-  $('cursor').textContent=`Index ${idx} · 0x${c.samples[idx].toString(16).padStart(2,'0').toUpperCase()}${time}`}
+  $('cursor').textContent=`Index ${idx} · 0x${c.samples[idx].toString(16).padStart(2,'0').toUpperCase()}${time}`};
+ cv.onpointerleave=()=>{$('cursor').textContent='파형 위에서 위치를 확인하세요'}
+}
+function stopPolling(){
+ pollEpoch++;clearInterval(poller);poller=null;pollBusy=false;clearTimeout(connectionProbeTimer);connectionProbeTimer=null
+}
+function syncCommandButtons(){
+ document.querySelectorAll('[data-cmd]').forEach(button=>{
+  let waiting=sourceMode==='live'&&live&&!liveDetectedAnalyzer&&button.dataset.cmd!=='b';
+  button.disabled=Boolean(commandPending)||waiting||(sourceMode==='live'&&!live)
+ })
+}
+function setDisconnected(message){
+ stopPolling();live=false;liveDetectedAnalyzer=null;commandPending=null;$('dot').className='dot';$('connect').textContent='보드 연결';
+ $('status').textContent=message||'보드 연결 끊김';syncCommandButtons()
+}
+function armProbeTimer(port,epoch){
+ clearTimeout(connectionProbeTimer);
+ connectionProbeTimer=setTimeout(()=>{
+  if(live&&epoch===pollEpoch&&!liveDetectedAnalyzer){
+   $('status').textContent=`UART 열림 · 보드 응답 없음 · ${port}`;
+   toast('보드 비트스트림과 UART 포트를 확인하세요')
+  }
+ },5000)
 }
 async function loadDemo(preferred='RISING'){
- let j=await api('/api/demo');demoData=j.data;rootData=demoData;live=false;liveDetectedAnalyzer=null;clearInterval(poller);$('dot').className='dot';
+ let initial=rootData&&analyzerKeys.includes(activeAnalyzer)?activeAnalyzer:(requestedAnalyzer||'cpu_polling');
+ stopPolling();let epoch=pollEpoch;sourceMode='demo';live=false;liveDetectedAnalyzer=null;commandPending=null;$('dot').className='dot';$('connect').textContent='보드 연결';syncCommandButtons();
+ let j=await api('/api/demo');if(epoch!==pollEpoch)return;
+ demoData=j.data;rootData=demoData;
  $('term').textContent='A는 저장된 Basys3 실측 UART 로그입니다.\\nB와 C는 동일 파형을 100 MHz 하드웨어 캡처 형식으로 변환한 DEMO이며 실측값이 아닙니다.';
- let initial=['cpu_polling','edgescope_lite','vivado_ila'].includes(requestedAnalyzer)?requestedAnalyzer:'cpu_polling';
  selectAnalyzer(initial,false);render(demoData,preferred)
 }
-async function refreshPorts(){let j=await api('/api/ports'),p=$('ports');p.innerHTML=j.ports.length?j.ports.map(x=>`<option>${esc(x)}</option>`).join(''):'<option value="">감지된 UART 없음</option>'}
-async function connect(){
- let p=$('ports').value;if(!p)return toast('UART 포트가 없습니다');
- try{await api('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({port:p})});live=true;liveDetectedAnalyzer=null;$('connect').textContent='연결됨';$('dot').className='dot live';$('status').textContent='LIVE · READY 마커 대기 · '+p;clearInterval(poller);poller=setInterval(poll,500);toast('UART 연결 완료')}catch(e){toast(e.message)}
+async function refreshPorts(){
+ let p=$('ports'),previous=p.value,j=await api('/api/ports');
+ p.innerHTML=j.ports.length?j.ports.map(x=>`<option>${esc(x)}</option>`).join(''):'<option value="">감지된 Basys3 UART 없음</option>';
+ if(j.ports.includes(previous))p.value=previous
 }
-async function poll(){
- if(!live)return;
- try{let [j,ila]=await Promise.all([api('/api/state'),api('/api/ila/status')]);
+async function disconnectBoard(showToast=true){
+ stopPolling();sourceMode='demo';live=false;liveDetectedAnalyzer=null;commandPending=null;
+ try{await api('/api/disconnect',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})}catch(e){}
+ $('dot').className='dot';$('connect').textContent='보드 연결';syncCommandButtons();
+ if(showToast)toast('보드 연결을 해제했습니다')
+}
+async function connect(){
+ if(live){await disconnectBoard();await loadDemo();return}
+ let p=$('ports').value;if(!p)return toast('Basys3 UART 포트가 없습니다');
+ stopPolling();let epoch=pollEpoch;
+ try{
+  await api('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({port:p})});
+  if(epoch!==pollEpoch){await api('/api/disconnect',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});return}
+  sourceMode='live';live=true;liveDetectedAnalyzer=null;commandPending=null;$('dot').className='dot';$('connect').textContent='연결 취소';
+  $('status').textContent='UART 연결됨 · 보드 응답 확인 중 · '+p;$('term').textContent='보드 응답 확인 중…';syncCommandButtons();
+  let j=await api('/api/state');if(epoch!==pollEpoch)return;rootData=j.data;render(j.data);
+  poller=setInterval(()=>poll(epoch),500);armProbeTimer(p,epoch);
+  await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:'b'})});
+  poll(epoch);toast('UART 연결 · 보드 응답 확인 중')
+ }catch(e){setDisconnected('연결 실패');toast(e.message)}
+}
+function completePending(data){
+ if(!commandPending)return;
+ let d=selected(data,commandPending.analyzer),done=false;
+ if(!d)return;
+ if(commandPending.kind==='capture')done=d.captures.length>commandPending.before;
+ else if(commandPending.kind==='benchmark')done=d.benchmarks.length>commandPending.before;
+ else if(commandPending.kind==='pulse')done=d.pulses.length>commandPending.before;
+ else if(commandPending.kind==='zero')done=d.zero_mask_tests>commandPending.before;
+ if(done){
+  let label=commandPending.label;commandPending=null;syncCommandButtons();toast(label+' 완료')
+ }else if(Date.now()-commandPending.started>commandPending.timeout){
+  commandPending=null;syncCommandButtons();toast('명령 응답 시간이 초과되었습니다')
+ }
+}
+async function poll(epoch=pollEpoch){
+ if(!live||epoch!==pollEpoch||pollBusy)return;
+ pollBusy=true;
+ try{
+  let [j,ila]=await Promise.all([api('/api/state'),api('/api/ila/status')]);
+  if(!live||epoch!==pollEpoch)return;
+  if(!j.connected){let message=j.error?`UART 오류 · ${j.error}`:'보드 연결 끊김';setDisconnected(message);toast(message);return}
   if(ila.data?.datasets?.vivado_ila)j.data.datasets.vivado_ila=ila.data.datasets.vivado_ila;
-  let terminalText=j.transcript_tail;
+  let terminalText=j.transcript_tail||'보드 응답 대기 중…';
   if(activeAnalyzer==='vivado_ila'&&ila.output_tail)terminalText+=`\\n\\n--- VIVADO ILA ---\\n${ila.output_tail}`;
   $('term').textContent=terminalText;$('term').scrollTop=$('term').scrollHeight;
-  let detected=j.data.active_analyzer;
-  if(detected&&detected!==liveDetectedAnalyzer){liveDetectedAnalyzer=detected;selectAnalyzer(detected,false);$('status').textContent=`LIVE · ${analyzerLabel(detected)} · ${j.port||''}`}
+  let detected=analyzerKeys.includes(j.data.active_analyzer)?j.data.active_analyzer:null;
+  if(detected&&detected!==liveDetectedAnalyzer){
+   let firstDetection=!liveDetectedAnalyzer;liveDetectedAnalyzer=detected;clearTimeout(connectionProbeTimer);$('dot').className='dot live';$('connect').textContent='연결 해제';
+   if(firstDetection)selectAnalyzer(detected,false);syncCommandButtons();toast(`${analyzerLabel(detected)} 응답 확인`)
+  }
+  rootData=j.data;render(j.data);completePending(j.data);
   if(ila.status==='arming'||ila.status==='capturing')$('status').textContent=`LIVE · C · ${ila.status==='arming'?'ILA ARMING':'CAPTURING'} · ${j.port||''}`;
-  if(ila.status==='complete'&&lastIlaStatus!=='complete'){$('status').textContent=`LIVE · C · MEASURED CSV · ${j.port||''}`;toast('Vivado ILA 캡처 완료')}
-  if(ila.status==='error'&&ila.error!==lastIlaError){lastIlaError=ila.error;$('status').textContent='C · ILA ERROR';toast(ila.error)}
-  lastIlaStatus=ila.status;
-  rootData=j.data;let d=selected(j.data);if(d&&(d.ready||d.captures.length||d.benchmarks.length||d.pulses.length))render(j.data)
- }catch(e){toast(e.message)}
+  else if(commandPending)$('status').textContent=`LIVE · ${analyzerLabel(commandPending.analyzer)} · ${commandPending.label} 진행 중`;
+  else if(detected)$('status').textContent=`LIVE · ${analyzerLabel(detected)} · ${j.port||''}`;
+  if(ila.status==='complete'&&lastIlaStatus!=='complete'){
+   if(commandPending?.kind==='ila'){commandPending=null;syncCommandButtons()}
+   $('status').textContent=`LIVE · C · MEASURED CSV · ${j.port||''}`;toast('Vivado ILA 캡처 완료')
+  }
+  if(ila.status==='error'&&ila.error!==lastIlaError){
+   if(commandPending?.kind==='ila'){commandPending=null;syncCommandButtons()}
+   lastIlaError=ila.error;$('status').textContent='C · ILA ERROR';toast(ila.error)
+  }
+  lastIlaStatus=ila.status
+ }catch(e){if(live&&epoch===pollEpoch)toast(e.message)}
+ finally{pollBusy=false}
 }
 document.querySelectorAll('[data-analyzer]').forEach(b=>b.onclick=()=>selectAnalyzer(b.dataset.analyzer));
 document.querySelectorAll('[data-cmd]').forEach(b=>b.onclick=async()=>{
  let cmd=b.dataset.cmd,map={r:'RISING',f:'FALLING',p:'PATTERN',h:'PATTERN'},wanted=cmd==='h'?'PATTERN HOLD':map[cmd];
- if(live){try{
-   if(activeAnalyzer==='vivado_ila'&&wanted){
+ if(sourceMode==='file'){
+  let d=selected(rootData);
+  if(wanted&&d?.captures?.some(c=>c.mode===wanted)){render(rootData,wanted);toast(wanted+' 파일 캡처 표시')}
+  else toast('불러온 파일에 해당 결과가 없습니다');
+  return
+ }
+ if(sourceMode==='live'){
+  if(!live)return toast('보드를 다시 연결하세요');
+  if(!liveDetectedAnalyzer){
+   if(cmd!=='b')return toast('먼저 보드 응답 확인을 기다리세요');
+   try{await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:'b'})});armProbeTimer($('ports').value,pollEpoch);toast('보드 응답을 다시 확인합니다')}catch(e){toast(e.message)}
+   return
+  }
+  let target=liveDetectedAnalyzer;if(activeAnalyzer!==target)selectAnalyzer(target);
+  try{
+   if(target==='vivado_ila'&&wanted){
    await api('/api/ila/capture',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:wanted,program:false})});
+    commandPending={analyzer:target,kind:'ila',before:0,label:`${wanted} ILA 캡처`,started:Date.now(),timeout:120000};syncCommandButtons();
     lastIlaStatus='arming';lastIlaError=null;$('status').textContent='LIVE · C · ILA ARMING';toast(`C ${wanted} 캡처 준비`)
-   }else if(activeAnalyzer==='vivado_ila'){
+   }else if(target==='vivado_ila'){
     if(cmd==='b'){render(rootData);toast('C sample clock: 100.00 MS/s')}
     else toast('C Pulse/Zero-mask 자동 실측은 전용 ILA re-arm flow가 필요합니다')
    }else{
-    await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});toast('명령 전송: '+cmd.toUpperCase())
+    let d=selected(rootData,target),kind=wanted?'capture':cmd==='b'?'benchmark':cmd==='s'?'pulse':'zero';
+    let before=kind==='capture'?d.captures.length:kind==='benchmark'?d.benchmarks.length:kind==='pulse'?d.pulses.length:d.zero_mask_tests;
+    commandPending={analyzer:target,kind,before,label:wanted?`${wanted} 캡처`:cmd==='b'?'Benchmark':cmd==='s'?'Pulse Stress':'Zero Mask',started:Date.now(),timeout:kind==='capture'?30000:kind==='pulse'?120000:15000};
+    syncCommandButtons();
+    try{await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})})}
+    catch(e){commandPending=null;syncCommandButtons();throw e}
+    $('status').textContent=`LIVE · ${analyzerLabel(target)} · ${commandPending.label} 진행 중`;
+    toast(wanted?'캡처 수신에는 약 12초가 걸립니다':'명령 전송: '+cmd.toUpperCase())
    }
-  }catch(e){toast(e.message)}}
- else {let d=selected(demoData);render(demoData,wanted);toast(cmd==='b'?'벤치마크 결과 표시':cmd==='s'?'Pulse Stress 결과 표시':cmd==='z'?(d.zero_mask_pass?'Zero Mask: PASS':'결과 없음'):(wanted+' 캡처 표시'))}
+  }catch(e){toast(e.message)}
+  return
+ }
+ let d=selected(demoData);render(demoData,wanted);toast(cmd==='b'?'벤치마크 결과 표시':cmd==='s'?'Pulse Stress 결과 표시':cmd==='z'?(d.zero_mask_pass?'Zero Mask: PASS':'결과 없음'):(wanted+' 캡처 표시'))
 });
 $('savePng').onclick=()=>{
  let c=selected(rootData)?.captures?.[captureIndices[activeAnalyzer]||0];if(!c)return toast('저장할 캡처가 없습니다');
@@ -1500,24 +1710,32 @@ $('savePng').onclick=()=>{
 $('captureFile').onchange=async event=>{
  let file=event.target.files[0];if(!file)return;
  try{
- let text=await file.text(),j=await api('/api/parse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
-  live=false;liveDetectedAnalyzer=null;clearInterval(poller);$('dot').className='dot';
-  $('term').textContent=text.slice(-12000);let detected=j.data.active_analyzer||'edgescope_lite';selectAnalyzer(detected,false);render(j.data);$('status').textContent='FILE · '+file.name;toast('캡처 파일을 불러왔습니다')
+  if(live)await disconnectBoard(false);else stopPolling();
+  let epoch=pollEpoch,text=await file.text(),j=await api('/api/parse',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+  if(epoch!==pollEpoch)return;
+  sourceMode='file';live=false;liveDetectedAnalyzer=null;commandPending=null;$('dot').className='dot';$('connect').textContent='보드 연결';syncCommandButtons();
+  $('term').textContent=text.slice(-12000);let detected=analyzerKeys.includes(j.data.active_analyzer)?j.data.active_analyzer:'edgescope_lite';selectAnalyzer(detected,false);render(j.data);$('status').textContent='FILE · '+file.name;toast('캡처 파일을 불러왔습니다')
  }catch(e){toast(e.message)}
  event.target.value=''
 };
-$('refresh').onclick=refreshPorts;$('connect').onclick=connect;$('demo').onclick=()=>loadDemo();
+$('refresh').onclick=refreshPorts;$('connect').onclick=connect;$('demo').onclick=async()=>{if(live)await disconnectBoard(false);await loadDemo()};
 window.onresize=()=>{let d=selected(rootData),c=d?.captures?.[captureIndices[activeAnalyzer]||0];c?draw(c):clearWave()};
 async function initialize(){
  await Promise.all([refreshPorts(),loadImplementation()]);
  try{
   let j=await api('/api/state');
   if(j.connected){
-   live=true;liveDetectedAnalyzer=j.data.active_analyzer;$('connect').textContent='연결됨';$('dot').className='dot live';
-   let detected=j.data.active_analyzer||requestedAnalyzer||'edgescope_lite';
-   $('status').textContent=`LIVE · ${analyzerLabel(detected)} · ${j.port||''}`;
+   stopPolling();let epoch=pollEpoch;sourceMode='live';live=true;liveDetectedAnalyzer=analyzerKeys.includes(j.data.active_analyzer)?j.data.active_analyzer:null;
+   $('connect').textContent=liveDetectedAnalyzer?'연결 해제':'연결 취소';$('dot').className=liveDetectedAnalyzer?'dot live':'dot';
+   let detected=liveDetectedAnalyzer||requestedAnalyzer||'edgescope_lite';
+   $('status').textContent=liveDetectedAnalyzer?`LIVE · ${analyzerLabel(detected)} · ${j.port||''}`:`UART 연결됨 · 보드 응답 확인 중 · ${j.port||''}`;
    $('term').textContent=j.transcript_tail||'보드 응답 대기 중…';
-   selectAnalyzer(detected,false);render(j.data);poller=setInterval(poll,500);return
+   rootData=j.data;selectAnalyzer(detected,false);render(j.data);syncCommandButtons();poller=setInterval(()=>poll(epoch),500);
+   if(!liveDetectedAnalyzer){
+    armProbeTimer(j.port||'',epoch);
+    try{await api('/api/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:'b'})})}catch(e){setDisconnected('보드 응답 확인 실패');toast(e.message);return}
+   }
+   poll(epoch);return
   }
  }catch(e){}
  await loadDemo()
@@ -1551,6 +1769,9 @@ class AppHandler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
+        elif path == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
         elif path == "/api/demo":
             self._json({"data": demo_payload(self.demo_text)})
         elif path == "/api/ports":
@@ -1571,6 +1792,10 @@ class AppHandler(BaseHTTPRequestHandler):
             if self.path == "/api/connect":
                 self.serial_manager.connect(str(payload["port"]))
                 self._json({"ok": True})
+            elif self.path == "/api/disconnect":
+                self.ila_manager.stop()
+                self.serial_manager.disconnect()
+                self._json({"ok": True})
             elif self.path == "/api/command":
                 self.serial_manager.command(str(payload["command"]).lower())
                 self._json({"ok": True})
@@ -1590,7 +1815,14 @@ class AppHandler(BaseHTTPRequestHandler):
                 data = parse_uart(text)
                 useful = False
                 for key, dataset in data["datasets"].items():
-                    if dataset["captures"] or dataset["warnings"]:
+                    if (
+                        dataset["ready"]
+                        or dataset["captures"]
+                        or dataset["benchmarks"]
+                        or dataset["pulses"]
+                        or dataset["zero_mask_pass"]
+                        or dataset["warnings"]
+                    ):
                         dataset["evidence"] = (
                             "IMPORTED · VIVADO ILA CSV"
                             if key == "vivado_ila"
