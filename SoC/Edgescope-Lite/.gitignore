@@ -33,6 +33,13 @@ comparison/cpu_polling/sw/test_cpu_polling_engine
 comparison/common/generated/
 comparison/*/hw/*_generated.tcl
 
+# Web dashboard dependencies and generated output.
+dashboard/node_modules/
+dashboard/dist/
+dashboard/coverage/
+dashboard/*.tsbuildinfo
+.npm-cache/
+
 # Vivado Block Memory Generator products are reproducible from the Tcl script.
 # Keep only the compact configuration needed to recreate the IP.
 ip/capture_bram/*
