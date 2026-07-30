@@ -3,6 +3,106 @@
 이 문서는 새 Ubuntu PC에서 저장소를 Clone한 뒤 A CPU Polling,
 B EdgeScope-Lite, C Vivado ILA와 통합 GUI를 재현하는 절차다.
 
+**GUI 시연만 하려는 경우에는 Vivado가 필요하지 않다.** 아래 §1~§5는
+A/B/C 전체 재빌드 기준이므로, 촬영용 PC를 준비하는 것이라면
+[§0 GUI 시연 전용 경량 설치](#0-gui-시연-전용-경량-설치)만 따르면 된다.
+
+## 0. GUI 시연 전용 경량 설치
+
+EdgeScope-Lite GUI는 표준 라이브러리만으로 동작하는 Python 서버와
+Browser 화면이다. Vivado, Vitis, XSim, Node.js는 GUI 실행에 전혀
+관여하지 않는다. 보드 프로그래밍용 PC와 촬영용 PC를 분리해도 된다.
+
+### 0.1 단계별 요구사항
+
+| 단계 | 필요한 것 | Vivado |
+|---|---|---|
+| 화면 리허설 (보드 없이) | Python 3.10+, Browser | 불필요 |
+| 실제 보드 시연 | + `pyserial`, USB 드라이버, 포트 권한, **프로그램된 보드** | 불필요 |
+| 보드 프로그래밍 (최초 1회) | + Vivado 2024.2, Basys3 board files | 필요 |
+
+`pyserial`은 실행 시점이 아니라 UART 연결 시점에 import된다. 따라서
+`pyserial`이 없어도 GUI는 정상 기동하며, Port 목록이 비고 연결 시도에서만
+`UART 연결 실패` 메시지가 나온다.
+
+Python GUI는 Web Serial을 사용하지 않으므로 Chrome이 아니어도 된다.
+Firefox에서도 동작한다.
+
+### 0.2 설치와 실행
+
+```bash
+git clone https://github.com/yoon3226/EdgeScope-Lite-SoC.git
+cd EdgeScope-Lite-SoC
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-gui.txt
+.venv/bin/python scripts/cpu_polling_gui.py --analyzer edgescope_lite
+```
+
+`--analyzer edgescope_lite`는 처음부터 B Tab을 선택해서 열기 때문에
+촬영 중 Tab을 바꾸는 장면이 필요 없다. Browser가 자동으로 열리지 않으면
+`http://127.0.0.1:8765/?analyzer=edgescope_lite`를 직접 연다.
+
+Linux에서 Serial Port 권한이 없으면 다음을 실행한 뒤 재로그인한다.
+
+```bash
+sudo usermod -aG dialout $USER
+```
+
+`.venv`는 절대 다른 PC로 복사하지 않는다. 경로가 내부에 기록되어 있어
+그대로 옮기면 동작하지 않는다. 대상 PC에서 새로 만든다.
+
+### 0.3 USB 전송용 최소 파일
+
+Git을 쓸 수 없는 환경이라면 다음만 옮겨도 GUI가 동작한다. 약 1.2 MB다.
+
+```text
+scripts/cpu_polling_gui.py
+comparison/cpu_polling/results/uart_capture.log
+comparison/*/reports/*.rpt
+```
+
+`uart_capture.log`는 기동 시점에 읽으므로 없으면 `FileNotFoundError`로
+종료한다. 로그 없이 띄우려면 `--log /dev/null`을 넘긴다. `reports/*.rpt`가
+없으면 Implementation 패널만 비고 나머지 기능은 모두 동작한다.
+
+저장소 전체 전송 크기는 `.venv`와 `.git`을 제외하면 약 13 MB다.
+
+### 0.4 촬영용 PC에서 사전 점검이 FAIL로 보이는 경우
+
+`scripts/check_portable_environment.sh`는 A/B/C 전체 재빌드 기준으로
+작성되어 있다. GUI 시연만 할 PC에서는 Vivado 계열 항목이 `FAIL`로 나오지만
+**GUI 실행에는 영향이 없다.**
+
+```text
+FAIL  vivado is not available in PATH
+FAIL  vitis / updatemem / xvlog / xelab / xsim ...
+```
+
+촬영용 PC에서 실제로 확인해야 하는 항목은 다음 세 개다.
+
+```text
+PASS  python3
+PASS  pyserial
+PASS  at least one ttyUSB/ttyACM serial device is present
+```
+
+### 0.5 보드 프로그래밍
+
+보드가 비어 있을 때만 필요하다. 체크인된 Bootable Bitstream을 사용하므로
+재빌드하지 않는다.
+
+```bash
+vivado -mode batch \
+  -source comparison/edgescope_lite/vitis/program_bitstream.tcl
+```
+
+프로그램이 끝나면 GUI에서 Port를 선택하고 `보드 연결`을 누른다. GUI가
+자동으로 `b`를 보내 analyzer를 감지하며, 감지되면 상태 표시가
+`LIVE · B · EdgeScope-Lite`로 바뀌고 dot이 초록색이 된다.
+
+Scene별 촬영 순서와 검증 항목은
+[GUI 시연 영상 촬영 가이드](gui_demo_recording.md)에 있다.
+
 ## 1. 지원 환경
 
 | 항목 | 요구사항 |

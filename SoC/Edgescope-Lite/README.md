@@ -10,6 +10,25 @@ Basys3의 MicroBlaze SoC에서 사용하는 8-channel standalone logic analyzer
 전체 재빌드를 수행하는 방법은
 [다른 PC 실행 가이드](docs/portable_setup.md)에 정리되어 있습니다.
 
+## 빠른 시작 — GUI 시연
+
+GUI 실행에는 **Vivado도, Node.js도 필요하지 않습니다.** Python과
+Browser만 있으면 됩니다.
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-gui.txt
+.venv/bin/python scripts/cpu_polling_gui.py --analyzer edgescope_lite
+```
+
+| 문서 | 내용 |
+|---|---|
+| [GUI 시연 전용 경량 설치](docs/portable_setup.md#0-gui-시연-전용-경량-설치) | 다른 PC 준비, 최소 파일, 권한 설정 |
+| [GUI 시연 영상 촬영 가이드](docs/gui_demo_recording.md) | Scene별 조작, 자동 검증 규칙, 촬영 전 점검 |
+
+보드가 연결되지 않아도 `데모 모드`로 화면을 확인할 수 있습니다. 이때
+표시되는 값에는 `DEMO · 예상` badge가 붙으며 실측값이 아닙니다.
+
 ## 동결 사양
 
 - 8-bit probe, 100 MHz
