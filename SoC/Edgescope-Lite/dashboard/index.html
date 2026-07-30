@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="EdgeScope-Lite 8채널 Logic Analyzer Web Serial Dashboard"
+    />
+    <meta name="theme-color" content="#08111f" />
+    <title>EdgeScope Lite · Capture Console</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div>
+            <p class="eyebrow">EDGE COMPUTE INSTRUMENTATION</p>
+            <h1>EdgeScope <strong>Lite</strong></h1>
+          </div>
+        </div>
+
+        <div class="header-status" aria-label="연결 및 펌웨어 상태">
+          <div class="status-cluster">
+            <span class="status-label">SERIAL</span>
+            <span id="connectionStatus" class="status-pill status-pill--idle">
+              연결 안 됨
+            </span>
+          </div>
+          <div class="status-cluster">
+            <span class="status-label">FIRMWARE</span>
+            <span id="firmwareStatus" class="status-pill status-pill--muted">
+              UNKNOWN
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <section class="control-deck" aria-label="연결 및 캡처 제어">
+        <div class="control-group control-group--transport">
+          <label for="transportSelect">Transport</label>
+          <select id="transportSelect">
+            <option value="mock">Mock fixture</option>
+            <option value="serial">Chrome Web Serial</option>
+          </select>
+        </div>
+
+        <div class="control-group mock-only">
+          <label for="demoSelect">Demo</label>
+          <select id="demoSelect">
+            <option value="rising">Rising · CH0</option>
+            <option value="falling">Falling · CH1</option>
+            <option value="pattern">Pattern · A0/F0</option>
+          </select>
+        </div>
+
+        <div class="control-group mock-only">
+          <label for="scenarioSelect">Scenario</label>
+          <select id="scenarioSelect">
+            <option value="normal">정상 Capture</option>
+            <option value="timeout">Timeout + Retry</option>
+            <option value="corrupt">검증 거부 · CRC 모의</option>
+          </select>
+        </div>
+
+        <div class="control-actions">
+          <button id="connectButton" class="button button--connect" type="button">
+            <span class="button-dot" aria-hidden="true"></span>
+            연결
+          </button>
+          <button id="syncButton" class="button button--quiet" type="button" disabled>
+            상태 동기화 <kbd>?</kbd>
+          </button>
+          <button id="startButton" class="button button--primary" type="button" disabled>
+            Capture 시작 <kbd>s</kbd>
+          </button>
+          <button id="freezeButton" class="button button--accent" type="button" disabled>
+            Freeze 완료 <kbd>f</kbd>
+          </button>
+        </div>
+      </section>
+
+      <div id="liveNotice" class="integration-notice" hidden>
+        Live 수신 Byte는 연결된 Protocol/QA decoder가 검증된 Event로 변환하기
+        전까지 Raw Log에만 보관됩니다. 손상되거나 미완성인 Capture는 화면에
+        반영하지 않습니다.
+      </div>
+
+      <div id="alertBanner" class="alert-banner" role="alert" hidden>
+        <span class="alert-icon" aria-hidden="true">!</span>
+        <span id="alertMessage"></span>
+        <button id="dismissAlertButton" type="button" aria-label="오류 메시지 닫기">
+          ×
+        </button>
+      </div>
+
+      <main class="workspace">
+        <section class="panel scope-panel" aria-labelledby="scopeTitle">
+          <div class="panel-heading scope-heading">
+            <div>
+              <p class="panel-kicker">CAPTURE MEMORY · 1,024 SAMPLES</p>
+              <h2 id="scopeTitle">Digital waveform</h2>
+            </div>
+            <div class="scope-tools">
+              <span id="viewportLabel" class="viewport-readout">
+                전체 · 0—1023
+              </span>
+              <div class="segmented-control" aria-label="파형 확대 범위">
+                <button
+                  id="zoomFullButton"
+                  class="segment is-active"
+                  type="button"
+                  aria-pressed="true"
+                >
+                  전체
+                </button>
+                <button
+                  id="zoomTriggerButton"
+                  class="segment"
+                  type="button"
+                  aria-pressed="false"
+                >
+                  Trigger ±64
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="waveform-stage">
+            <canvas
+              id="waveformCanvas"
+              role="img"
+              aria-label="Capture가 아직 없습니다"
+            ></canvas>
+            <div id="waveformEmpty" class="empty-waveform">
+              <div class="empty-signal" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <p>Capture를 기다리는 중</p>
+              <small>Mock 연결 후 <kbd>s</kbd>로 시작하세요</small>
+            </div>
+          </div>
+
+          <div class="scope-footer">
+            <div class="legend">
+              <span><i class="legend-line legend-line--signal"></i> Digital high/low</span>
+              <span><i class="legend-line legend-line--trigger"></i> Trigger index 512</span>
+              <span><i class="legend-line legend-line--bus"></i> SW[7:0] Hex bus</span>
+            </div>
+            <p id="captureSummary" class="capture-summary" aria-live="polite">
+              검증된 Capture가 도착하면 이전 정상 파형을 안전하게 교체합니다.
+            </p>
+          </div>
+        </section>
+
+        <aside class="side-rail" aria-label="Capture 상태와 검증">
+          <section class="panel workflow-panel" aria-labelledby="workflowTitle">
+            <div class="panel-heading panel-heading--compact">
+              <div>
+                <p class="panel-kicker">DEVICE WORKFLOW</p>
+                <h2 id="workflowTitle">Capture state</h2>
+              </div>
+              <span id="transactionBadge" class="mono-badge">TXN —</span>
+            </div>
+            <div id="workflowContainer"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="validationTitle">
+            <div class="panel-heading panel-heading--compact">
+              <div>
+                <p class="panel-kicker">DATA INTEGRITY</p>
+                <h2 id="validationTitle">Validation</h2>
+              </div>
+            </div>
+            <div id="validationPanel"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="demoTitle">
+            <div class="panel-heading panel-heading--compact">
+              <div>
+                <p class="panel-kicker">CAPTURE METADATA</p>
+                <h2 id="demoTitle">Demo detail</h2>
+              </div>
+            </div>
+            <div id="demoPanel"></div>
+          </section>
+
+          <details class="panel raw-log-panel">
+            <summary>
+              <span>
+                <span class="panel-kicker">SERIAL DIAGNOSTICS</span>
+                Raw protocol log
+              </span>
+              <span id="rawLogCount" class="log-count">0</span>
+            </summary>
+            <div class="raw-log-toolbar">
+              <span>최대 200개 Event</span>
+              <button id="clearLogButton" type="button">로그 지우기</button>
+            </div>
+            <ol id="rawLogList" class="raw-log-list"></ol>
+          </details>
+        </aside>
+      </main>
+
+      <footer class="app-footer">
+        <span>UART 9,600 · 8N1 · No flow control</span>
+        <span id="lastUpdated">마지막 Capture —</span>
+        <span>Secure Context / Chrome Web Serial</span>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/entry.ts"></script>
+  </body>
+</html>

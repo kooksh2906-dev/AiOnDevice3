@@ -1,15 +1,24 @@
 set bitstream [file normalize [file join [file dirname [info script]] \
     ".." "vitis_artifacts" "cpu_polling_app.bit"]]
 
+proc env_or_default {name default_value} {
+    if {[info exists ::env($name)] && $::env($name) ne ""} {
+        return $::env($name)
+    }
+    return $default_value
+}
+
 if {![file exists $bitstream]} {
     error "Missing bitstream: $bitstream"
 }
 
 open_hw_manager
 connect_hw_server -allow_non_jtag
-set targets [get_hw_targets *Digilent/210183BEA282A]
+set target_pattern [env_or_default EDGESCOPE_HW_TARGET \
+    {*/xilinx_tcf/Digilent/*}]
+set targets [get_hw_targets -quiet $target_pattern]
 if {[llength $targets] != 1} {
-    error "Expected exactly one hardware target, found [llength $targets]"
+    error "Expected exactly one hardware target matching '$target_pattern', found [llength $targets]: $targets"
 }
 
 current_hw_target [lindex $targets 0]

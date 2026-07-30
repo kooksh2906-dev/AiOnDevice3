@@ -1180,8 +1180,8 @@ static edge_scope_result_t run_demo(const demo_spec_t *spec,
 
         xil_printf("Waiting for PRE-TRIGGER samples...\r\n");
 
-        sampler_enable();
         capture_arm();
+        sampler_enable();
 
         result = capture_wait_pre_ready(PRE_READY_MAX_POLLS);
         if (result != EDGE_SCOPE_OK) {
@@ -1215,6 +1215,7 @@ static edge_scope_result_t run_demo(const demo_spec_t *spec,
             return EDGE_SCOPE_ERR_HW_STATE;
         }
 
+        trigger_clear();
         trigger_arm();
 
         result = sampler_wait_samples(1u,

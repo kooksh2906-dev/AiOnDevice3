@@ -15,11 +15,16 @@ standalone 애플리케이션입니다.
 - Trace BRAM window: `0xC0000000`, 4 KiB
 - Capture depth/index: 1,024 / 512
 
-Vivado XSA, bitstream, Vitis platform export와 BSP는 생성물이라 이 저장소에
-포함하지 않습니다. 각 개발자는 팀 Hardware Design에서
+이 앱이 대상으로 하는 팀 XSA, bitstream, Vitis platform export와 BSP는
+이 저장소에 포함하지 않습니다. 각 개발자는 팀 Hardware Design에서
 `logic_analyzer_HW` Platform을 생성해야 합니다.
 따라서 이 저장소만 Clone해서는 Vitis Build를 완전히 재현할 수 없으며,
 동일한 Hardware Design에서 Export한 XSA가 먼저 필요합니다.
+
+`comparison/edgescope_lite/`의 Portable XSA는 Test Pattern Generator를
+사용하고 BRAM 주소와 IRQ 연결도 다르므로 이 수동 `SW[7:0]` 데모 앱과
+교환해서 사용하면 안 됩니다. 주소와 IRQ mask는 선택한 팀 BSP의
+`xparameters.h`에서 가져옵니다.
 
 ## 구성
 
@@ -88,9 +93,9 @@ Demo 1과 2는 Logical 508~516만 출력하고, Demo 3은 시간순 전체
 
 ## 현재 범위와 Dashboard 후속 작업
 
-이 Snapshot은 사람이 읽는 최종 UART 시연 프로그램입니다. Compact Hex
-Frame과 Chrome Web Serial Dashboard는 아직 포함하지 않으며, Firmware
-Protocol과 Web UI를 독립 PR로 병렬 개발한 뒤 통합합니다.
+이 Snapshot은 사람이 읽는 최종 UART 시연 프로그램입니다. Mock/Web Serial
+Dashboard는 `dashboard/`에 존재하지만 Compact Hex firmware/parser의 실제
+보드 연동은 아직 완료되지 않았습니다.
 
 상세 역할, 작업 단계와 공통 규격 초기 제안은
 [GUI 공동작업 계획](../../docs/gui_collaboration_plan.md)을 참고하십시오.

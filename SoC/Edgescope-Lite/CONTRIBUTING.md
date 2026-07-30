@@ -57,8 +57,9 @@ review로 전환합니다.
 ## Commit과 생성물
 
 - Commit 제목은 현재형의 짧은 설명으로 작성합니다.
-- Vivado/Vitis Build, cache, XSA, bitstream, ELF와 개인 절대경로는
-  Commit하지 않습니다.
+- 일반 Vivado/Vitis Build, cache, XSA, bitstream, ELF와 개인 절대경로는
+  Commit하지 않습니다. 단, `.gitignore`에 명시된 검증 완료 A/B/C 비교군
+  산출물은 재현과 즉시 실행을 위해 예외로 버전 관리합니다.
 - 발표·검증용 VCD는 기존 정책대로 `artifacts/waves/`만 예외입니다.
 - Token, Serial Number, 개인 계정 정보와 로컬 Device 권한 설정을
   Commit하지 않습니다.
