@@ -88,7 +88,7 @@ check_artifact comparison/vivado_ila/vitis_artifacts/vivado_ila_app.bit
 check_artifact comparison/vivado_ila/hw/vivado_ila_reference.ltx
 
 if command -v lsusb >/dev/null 2>&1; then
-  if lsusb | grep -Eiq 'Digilent|Xilinx'; then
+  if lsusb | grep -Eiq 'Digilent|Xilinx|0403:6010'; then
     pass "Digilent/Xilinx USB device detected"
   else
     warn "no Digilent/Xilinx USB device detected; GUI DEMO works, but board programming does not"

@@ -719,7 +719,19 @@ class SerialManager:
     def ports(self) -> list[str]:
         try:
             from serial.tools import list_ports
-            return [port.device for port in list_ports.comports()]
+            ports = list(list_ports.comports())
+            usb_ports = [
+                port.device
+                for port in ports
+                if port.vid is not None
+                or port.device.startswith(("/dev/ttyUSB", "/dev/ttyACM"))
+                if not (
+                    port.vid == 0x0403
+                    and port.pid == 0x6010
+                    and (port.location or "").endswith(".0")
+                )
+            ]
+            return usb_ports or [port.device for port in ports]
         except ImportError:
             return []
 
@@ -1129,54 +1141,179 @@ HTML = r"""<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>EdgeScope-Lite · A/B/C Analyzer Console</title>
 <style>
-:root{--bg:#071019;--panel:#0d1925;--panel2:#111f2d;--line:#203348;--text:#e6f1fb;
---muted:#8298aa;--cyan:#22d3ee;--green:#34d399;--amber:#fbbf24;--red:#fb7185}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 30% 0,#10263a 0,#071019 45%);
-color:var(--text);font:14px Inter,ui-sans-serif,system-ui,sans-serif;min-height:100vh}
-.shell{max-width:1540px;margin:auto;padding:22px}.top{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.brand{font-size:20px;font-weight:800;letter-spacing:.3px}.brand span{color:var(--cyan)}
-.tag{font:11px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);padding:4px 8px;border-radius:99px}
-.tabs{display:flex;gap:5px;margin-left:8px;padding:4px;background:#091520;border:1px solid var(--line);border-radius:10px}
-.analyzer-tab{padding:7px 12px;border-color:transparent;background:transparent;color:var(--muted)}
+:root{
+  --bg:#071019;--panel:#0d1925;--panel2:#111f2d;--line:#203348;
+  --text:#e6f1fb;--muted:#8298aa;--cyan:#22d3ee;--green:#34d399;
+  --amber:#fbbf24;--red:#fb7185;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  background:radial-gradient(circle at 30% 0,#10263a 0,#071019 48%);
+  font:14px Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.shell{width:min(100%,1600px);margin:auto;padding:14px}
+.top{min-height:48px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.brand{font-size:20px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.brand span{color:var(--cyan)}
+.tag{
+  font:10px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);
+  padding:4px 8px;border-radius:99px;white-space:nowrap;
+}
+.tabs{
+  display:flex;gap:4px;margin-left:6px;padding:3px;background:#091520;
+  border:1px solid var(--line);border-radius:9px;
+}
+.analyzer-tab{padding:7px 11px;border-color:transparent;background:transparent;color:var(--muted)}
 .analyzer-tab.active{background:#12314a;border-color:#216383;color:var(--cyan)}
-.status{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.status{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber)}
 .dot.live{background:var(--green);box-shadow:0 0 12px var(--green)}
-.grid{display:grid;grid-template-columns:1fr 340px;gap:15px;align-items:start}.panel{background:linear-gradient(145deg,#0f1d2a,#0b1621);
-border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px #0005;overflow:hidden}
-.head{height:48px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid var(--line);font-weight:700}
-.head small{margin-left:auto;color:var(--muted);font-weight:400}.toolbar{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-button,select,.filebtn{background:#132537;color:var(--text);border:1px solid #294158;border-radius:7px;padding:8px 12px;font-weight:650;cursor:pointer}
-button:hover,.filebtn:hover{border-color:var(--cyan);color:var(--cyan)}button.primary{background:#0e7490;border-color:#0891b2;color:white}
-button:disabled{opacity:.45;cursor:not-allowed}.wavewrap{padding:10px 12px 4px;overflow-x:auto}
+.panel{
+  background:linear-gradient(145deg,#0f1d2a,#0b1621);border:1px solid var(--line);
+  border-radius:11px;box-shadow:0 12px 32px #0004;overflow:hidden;
+}
+.head{
+  min-height:42px;display:flex;align-items:center;padding:0 14px;
+  border-bottom:1px solid var(--line);font-weight:700;
+}
+.head small{margin-left:auto;color:var(--muted);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.connection-panel{
+  display:grid;grid-template-columns:auto minmax(270px,440px) auto minmax(250px,1fr);
+  align-items:center;gap:12px;padding:10px 14px;margin-bottom:12px;
+}
+.connection-title{font-weight:750;white-space:nowrap}
+.connection-title small{display:block;margin-top:2px;color:var(--muted);font-size:10px;font-weight:500}
+.connection-controls{display:flex;gap:7px;min-width:0}
+.connection-controls select{flex:1;min-width:0}
+.connection-actions{display:flex;gap:7px}
+.connection-help{color:var(--muted);font-size:11px;line-height:1.45}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;align-items:start}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.toolbar{
+  display:flex;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+button,select,.filebtn{
+  min-height:34px;background:#132537;color:var(--text);border:1px solid #294158;
+  border-radius:7px;padding:7px 10px;font-weight:650;cursor:pointer;
+}
+button:hover,.filebtn:hover{border-color:var(--cyan);color:var(--cyan)}
+button.primary{background:#0e7490;border-color:#0891b2;color:white}
+button:disabled{opacity:.45;cursor:not-allowed}
+.filebtn{display:inline-flex;align-items:center}
 .filebtn input{display:none}
-canvas{display:block;width:100%;height:470px;min-width:700px}.legend{display:flex;gap:18px;padding:5px 17px 14px;color:var(--muted);font-size:12px}
+.wavewrap{padding:8px 10px 2px;overflow-x:auto}
+canvas{
+  display:block;width:100%;height:clamp(350px,calc(100vh - 310px),520px);
+  min-width:680px;
+}
+.legend{
+  min-height:34px;display:flex;align-items:center;gap:16px;padding:4px 14px 10px;
+  color:var(--muted);font-size:11px;overflow:hidden;
+}
+#cursor{margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .swatch{display:inline-block;width:18px;height:2px;background:var(--cyan);vertical-align:middle;margin-right:6px}
-.trigger{background:var(--red)}.side{display:flex;flex-direction:column;gap:15px}.metrics{display:grid;grid-template-columns:1fr 1fr}
-.metric{padding:15px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.metric:nth-child(even){border-right:0}.metric label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.8px}
-.metric b{display:block;font-size:20px;margin-top:5px}.metric b.cyan{color:var(--cyan)}
-.addrline{padding:10px 14px;color:var(--muted);font:11px/1.7 ui-monospace,monospace;border-top:1px solid var(--line)}
-.badge{display:inline-block;margin-left:7px;padding:2px 6px;border:1px solid #765d18;border-radius:5px;color:var(--amber);font:9px ui-monospace,monospace;vertical-align:2px}
-.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.comparebox{background:#0a1621;border:1px solid var(--line);padding:9px 7px;border-radius:8px;min-width:0}
-.comparebox small{display:block;color:var(--muted);font-size:9px;white-space:nowrap}.comparebox strong{display:block;font-size:15px;margin:3px 0;white-space:nowrap}.comparebox.active{border-color:#16718b}
-.speedup{margin:10px 0 8px;padding:8px;text-align:center;border:1px solid #145369;background:#0b2936;border-radius:7px;color:var(--cyan)}
-.pulse-seq{font:10px/1.55 ui-monospace,monospace;color:var(--muted);word-break:break-word}
-.io{padding:14px}.row{display:flex;gap:8px;margin-bottom:9px}.row select{flex:1;min-width:0}
-.hint{color:var(--muted);font-size:12px;line-height:1.55}.barrow{display:grid;grid-template-columns:58px 1fr 48px;gap:8px;align-items:center;margin:9px 0;font-size:12px}
-.bar{height:8px;background:#16293a;border-radius:8px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#0891b2,var(--cyan));border-radius:8px}
-.impltable{width:100%;border-collapse:collapse;font:10px/1.45 ui-monospace,monospace}.impltable th,.impltable td{padding:5px 3px;border-bottom:1px solid var(--line);text-align:right}
-.impltable th:first-child,.impltable td:first-child{text-align:left}.impltable th{color:var(--muted);font-weight:500}.implnote{margin-top:9px;color:var(--cyan);font-size:10px;line-height:1.45}
-.terminal{grid-column:1/-1}.terminal pre{height:120px;margin:0;padding:13px 16px;overflow:auto;color:#7dd3fc;background:#050b11;
-font:11px/1.45 ui-monospace,SFMono-Regular,monospace}.toast{position:fixed;right:24px;bottom:24px;background:#15293a;
-border:1px solid #2b4961;padding:11px 16px;border-radius:8px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none}.toast.on{opacity:1;transform:none}
-@media(max-width:900px){.grid{grid-template-columns:1fr}.terminal{grid-column:auto}.top{flex-wrap:wrap}.status{margin-left:0}.tabs{order:3;margin-left:0;width:100%}.analyzer-tab{flex:1}}
+.trigger{background:var(--red)}
+.metrics{display:grid;grid-template-columns:1fr 1fr}
+.metric{padding:12px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metric:nth-child(even){border-right:0}
+.metric label{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px}
+.metric b{display:block;font-size:18px;margin-top:4px}
+.metric b.cyan{color:var(--cyan)}
+.addrline{padding:8px 12px;color:var(--muted);font:10px/1.6 ui-monospace,monospace}
+.badge{
+  display:inline-block;margin-left:6px;padding:2px 5px;border:1px solid #765d18;
+  border-radius:5px;color:var(--amber);font:9px ui-monospace,monospace;vertical-align:2px;
+}
+.io{padding:11px 12px}
+.hint{color:var(--muted);font-size:11px;line-height:1.5}
+.barrow{
+  display:grid;grid-template-columns:58px 1fr 48px;gap:7px;align-items:center;
+  margin:7px 0;font-size:11px;
+}
+.bar{height:7px;background:#16293a;border-radius:8px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#0891b2,var(--cyan));border-radius:8px}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.comparebox{background:#0a1621;border:1px solid var(--line);padding:9px;border-radius:8px;min-width:0}
+.comparebox small{display:block;color:var(--muted);font-size:9px;white-space:nowrap}
+.comparebox strong{display:block;font-size:15px;margin:3px 0;white-space:nowrap}
+.comparebox.active{border-color:#16718b}
+.speedup{margin:9px 0 7px;padding:7px;text-align:center;border:1px solid #145369;background:#0b2936;border-radius:7px;color:var(--cyan)}
+.pulse-seq{font:10px/1.5 ui-monospace,monospace;color:var(--muted);word-break:break-word}
+.impltable{width:100%;border-collapse:collapse;font:10px/1.4 ui-monospace,monospace}
+.impltable th,.impltable td{padding:5px 3px;border-bottom:1px solid var(--line);text-align:right}
+.impltable th:first-child,.impltable td:first-child{text-align:left}
+.impltable th{color:var(--muted);font-weight:500}
+.implnote{margin-top:8px;color:var(--cyan);font-size:10px;line-height:1.4}
+.terminal{margin-top:12px}
+.terminal pre{
+  height:120px;margin:0;padding:11px 14px;overflow:auto;color:#7dd3fc;background:#050b11;
+  font:11px/1.45 ui-monospace,SFMono-Regular,monospace;
+}
+.toast{
+  position:fixed;right:20px;bottom:20px;background:#15293a;border:1px solid #2b4961;
+  padding:10px 14px;border-radius:8px;opacity:0;transform:translateY(8px);
+  transition:.2s;pointer-events:none;z-index:10;
+}
+.toast.on{opacity:1;transform:none}
+@media(max-width:1100px){
+  .top{flex-wrap:wrap}
+  .status{margin-left:0}
+  .tabs{margin-left:auto}
+  .connection-panel{grid-template-columns:auto minmax(240px,1fr) auto}
+  .connection-help{display:none}
+  .grid{grid-template-columns:minmax(0,1fr) 290px}
+  canvas{height:400px}
+}
+@media(max-width:820px){
+  .shell{padding:8px}
+  .top{gap:8px}
+  .tag{display:none}
+  .tabs{order:3;width:100%;margin-left:0}
+  .analyzer-tab{flex:1;padding:7px 5px}
+  .status{margin-left:auto;font-size:11px;max-width:65%;overflow:hidden;text-overflow:ellipsis}
+  .connection-panel{grid-template-columns:1fr;gap:8px}
+  .connection-title small,.connection-help{display:block}
+  .connection-actions button{flex:1}
+  .grid,.summary-grid{grid-template-columns:1fr}
+  .side{display:grid;grid-template-columns:1fr 1fr}
+  .side .panel:first-child{grid-column:1/-1}
+  canvas{height:360px}
+}
+@media(max-width:560px){
+  .side{display:flex}
+  .toolbar button,.toolbar .filebtn{flex:1 1 44%}
+  .legend{flex-wrap:wrap}
+  #cursor{width:100%;margin-left:0}
+  canvas{height:330px;min-width:620px}
+}
 </style></head><body><div class="shell">
-<div class="top"><div class="brand"><span>EdgeScope</span>-Lite</div><div class="tag" id="analyzerTag">CPU POLLING REFERENCE</div>
-<div class="tabs"><button class="analyzer-tab active" data-analyzer="cpu_polling">A · CPU Polling</button><button class="analyzer-tab" data-analyzer="edgescope_lite">B · EdgeScope-Lite</button><button class="analyzer-tab" data-analyzer="vivado_ila">C · Vivado ILA</button></div>
-<div class="status"><i class="dot" id="dot"></i><span id="status">DEMO · RECORDED UART</span></div></div>
+<header class="top">
+ <div class="brand"><span>EdgeScope</span>-Lite</div>
+ <div class="tag" id="analyzerTag">CPU POLLING REFERENCE</div>
+ <nav class="tabs" aria-label="분석기 선택">
+  <button class="analyzer-tab active" data-analyzer="cpu_polling">A · CPU Polling</button>
+  <button class="analyzer-tab" data-analyzer="edgescope_lite">B · EdgeScope-Lite</button>
+  <button class="analyzer-tab" data-analyzer="vivado_ila">C · Vivado ILA</button>
+ </nav>
+ <div class="status"><i class="dot" id="dot"></i><span id="status">DEMO · RECORDED UART</span></div>
+</header>
+<section class="panel connection-panel" aria-label="Basys3 연결">
+ <div class="connection-title">Basys3 연결<small>UART 9600 baud · 8-N-1</small></div>
+ <div class="connection-controls">
+  <select id="ports" aria-label="UART 포트"><option>포트 검색 중…</option></select>
+  <button id="refresh" title="포트 새로고침">↻ 새로고침</button>
+ </div>
+ <div class="connection-actions">
+  <button class="primary" id="connect">보드 연결</button>
+  <button id="demo">데모 모드</button>
+ </div>
+ <div class="connection-help">B는 연결 후 Benchmark로 통신을 확인하세요. C 캡처는 ILA ARM 완료 후 자동으로 UART 자극을 전송합니다.</div>
+</section>
 <div class="grid">
- <section class="panel"><div class="head">8-Channel Logic Trace <small id="captureLabel">—</small></div>
+ <section class="panel trace-panel"><div class="head">8-Channel Logic Trace <small id="captureLabel">—</small></div>
   <div class="toolbar">
    <button class="primary" data-cmd="r">Rising 캡처</button><button data-cmd="f">Falling 캡처</button>
    <button data-cmd="p">Pattern 캡처</button><button data-cmd="h">Pattern Hold</button>
@@ -1192,23 +1329,21 @@ border:1px solid #2b4961;padding:11px 16px;border-radius:8px;opacity:0;transform
    <div class="metric"><label id="rateLabel">Throughput</label><b id="rate">—</b></div>
    <div class="metric"><label>Trigger Index</label><b id="trigIndex">—</b></div>
   </div><div class="addrline" id="addresses">START — · TRIGGER — · WRITE —</div></section>
-  <section class="panel"><div class="head">A/B/C Capture Comparison</div><div class="io">
-   <div class="compare"><div class="comparebox" id="compareA"><small>A · CPU polling</small><strong>1.67 MS/s</strong><span class="hint">실측 최저 처리량</span></div>
-   <div class="comparebox" id="compareB"><small>B · EdgeScope-Lite</small><strong>100.00 MS/s</strong><span class="hint">sample clock <i class="badge">DEMO</i></span></div>
-   <div class="comparebox" id="compareC"><small>C · Vivado ILA</small><strong>100.00 MS/s</strong><span class="hint">sample clock <i class="badge">DEMO</i></span></div></div>
-   <div class="speedup" id="speedup">B/C · 60.0× faster sampling</div><div class="pulse-seq" id="comparePulse"></div>
-  </div></section>
-  <section class="panel"><div class="head">Implementation Comparison <small>Vivado reports</small></div><div class="io" id="implementation"><div class="hint">보고서 읽는 중…</div></div></section>
-  <section class="panel"><div class="head">UART Connection</div><div class="io">
-   <div class="row"><select id="ports"><option>포트 검색 중…</option></select><button id="refresh">↻</button></div>
-   <div class="row"><button class="primary" id="connect" style="flex:1">연결</button><button id="demo" style="flex:1">데모 모드</button></div>
-   <div class="hint">Basys3 UART: 9600 baud, 8-N-1<br>C 캡처는 ILA ARM 확인 후 UART 자극을 전송합니다. JTAG 미연결 시 자극 없이 오류로 종료합니다.</div>
-  </div></section>
   <section class="panel"><div class="head" id="benchTitle">Polling Benchmark</div><div class="io" id="bench"></div></section>
   <section class="panel"><div class="head">Pulse Detection</div><div class="io" id="pulse"></div></section>
  </aside>
- <section class="panel terminal"><div class="head">UART Activity <small>최근 수신 데이터</small></div><pre id="term"></pre></section>
-</div></div><div class="toast" id="toast"></div>
+</div>
+<div class="summary-grid">
+ <section class="panel"><div class="head">A/B/C Capture Comparison</div><div class="io">
+  <div class="compare"><div class="comparebox" id="compareA"><small>A · CPU polling</small><strong>1.67 MS/s</strong><span class="hint">실측 최저 처리량</span></div>
+  <div class="comparebox" id="compareB"><small>B · EdgeScope-Lite</small><strong>100.00 MS/s</strong><span class="hint">sample clock <i class="badge">DEMO</i></span></div>
+  <div class="comparebox" id="compareC"><small>C · Vivado ILA</small><strong>100.00 MS/s</strong><span class="hint">sample clock <i class="badge">DEMO</i></span></div></div>
+  <div class="speedup" id="speedup">B/C · 60.0× faster sampling</div><div class="pulse-seq" id="comparePulse"></div>
+ </div></section>
+ <section class="panel"><div class="head">Implementation Comparison <small>Vivado reports</small></div><div class="io" id="implementation"><div class="hint">보고서 읽는 중…</div></div></section>
+</div>
+<section class="panel terminal"><div class="head">UART Activity <small>최근 수신 데이터</small></div><pre id="term"></pre></section>
+</div><div class="toast" id="toast"></div>
 <script>
 let demoData=null, rootData=null, activeAnalyzer='cpu_polling', captureIndices={cpu_polling:0,edgescope_lite:0,vivado_ila:0};
 let live=false, poller=null, liveDetectedAnalyzer=null, lastIlaStatus='idle', lastIlaError=null;
@@ -1285,17 +1420,21 @@ function renderImplementation(payload){
 async function loadImplementation(){
  try{renderImplementation(await api('/api/implementation'))}catch(e){$('implementation').innerHTML=`<div class="hint">${esc(e.message)}</div>`}
 }
+function waveHeight(){
+ let height=Math.round($('wave').getBoundingClientRect().height);
+ return Math.max(300,height||420)
+}
 function clearWave(){
- let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1;cv.width=rect.width*ratio;cv.height=470*ratio;
- let x=cv.getContext('2d');x.scale(ratio,ratio);x.fillStyle='#09131d';x.fillRect(0,0,rect.width,470);x.fillStyle='#8298aa';x.textAlign='center';x.font='13px ui-monospace';x.fillText('CAPTURE DATA WAITING',rect.width/2,235)
+ let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1,h=waveHeight();cv.width=rect.width*ratio;cv.height=h*ratio;
+ let x=cv.getContext('2d');x.scale(ratio,ratio);x.fillStyle='#09131d';x.fillRect(0,0,rect.width,h);x.fillStyle='#8298aa';x.textAlign='center';x.font='13px ui-monospace';x.fillText('CAPTURE DATA WAITING',rect.width/2,h/2)
 }
 function draw(c){
- let cv=$('wave'), rect=cv.getBoundingClientRect(), ratio=devicePixelRatio||1;cv.width=rect.width*ratio;cv.height=470*ratio;
- let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,h=470,left=54,right=14,top=22,row=51,plot=w-left-right;
+ let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1,h=waveHeight();cv.width=rect.width*ratio;cv.height=h*ratio;
+ let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,left=54,right=14,top=12,bottom=38,row=(h-top-bottom)/8,plot=w-left-right;
  x.fillStyle='#09131d';x.fillRect(0,0,w,h);x.font='11px ui-monospace';x.textAlign='right';
- for(let ch=7;ch>=0;ch--){let ri=7-ch,y=top+ri*row;x.strokeStyle='#1b3042';x.beginPath();x.moveTo(left,y+36);x.lineTo(w-right,y+36);x.stroke();
-  x.fillStyle='#8298aa';x.fillText('CH'+ch,left-10,y+24);x.strokeStyle=ch===0?'#22d3ee':'#38bdf8';x.lineWidth=1.4;x.beginPath();
-  c.samples.forEach((v,i)=>{let px=left+i/(c.samples.length-1)*plot,py=y+((v>>ch)&1?8:34);if(i===0)x.moveTo(px,py);else{x.lineTo(px,py)}});x.stroke()}
+ for(let ch=7;ch>=0;ch--){let ri=7-ch,y=top+ri*row,high=y+row*.18,low=y+row*.68;x.strokeStyle='#1b3042';x.beginPath();x.moveTo(left,y+row*.74);x.lineTo(w-right,y+row*.74);x.stroke();
+  x.fillStyle='#8298aa';x.fillText('CH'+ch,left-10,y+row*.5);x.strokeStyle=ch===0?'#22d3ee':'#38bdf8';x.lineWidth=1.4;x.beginPath();
+  c.samples.forEach((v,i)=>{let px=left+i/(c.samples.length-1)*plot,py=(v>>ch)&1?high:low;if(i===0)x.moveTo(px,py);else{x.lineTo(px,py)}});x.stroke()}
  let tx=left+c.trigger_index/(c.samples.length-1)*plot;x.strokeStyle='#fb7185';x.lineWidth=1.5;x.beginPath();x.moveTo(tx,4);x.lineTo(tx,h-20);x.stroke();
  x.fillStyle='#fb7185';x.textAlign='center';x.fillText('TRIGGER',tx,h-20);x.fillStyle='#8298aa';
  if(isHardware()&&c.sample_hz){
@@ -1319,7 +1458,7 @@ async function loadDemo(preferred='RISING'){
 async function refreshPorts(){let j=await api('/api/ports'),p=$('ports');p.innerHTML=j.ports.length?j.ports.map(x=>`<option>${esc(x)}</option>`).join(''):'<option value="">감지된 UART 없음</option>'}
 async function connect(){
  let p=$('ports').value;if(!p)return toast('UART 포트가 없습니다');
- try{await api('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({port:p})});live=true;liveDetectedAnalyzer=null;$('dot').className='dot live';$('status').textContent='LIVE · READY 마커 대기 · '+p;clearInterval(poller);poller=setInterval(poll,500);toast('UART 연결 완료')}catch(e){toast(e.message)}
+ try{await api('/api/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({port:p})});live=true;liveDetectedAnalyzer=null;$('connect').textContent='연결됨';$('dot').className='dot live';$('status').textContent='LIVE · READY 마커 대기 · '+p;clearInterval(poller);poller=setInterval(poll,500);toast('UART 연결 완료')}catch(e){toast(e.message)}
 }
 async function poll(){
  if(!live)return;
@@ -1369,7 +1508,21 @@ $('captureFile').onchange=async event=>{
 };
 $('refresh').onclick=refreshPorts;$('connect').onclick=connect;$('demo').onclick=()=>loadDemo();
 window.onresize=()=>{let d=selected(rootData),c=d?.captures?.[captureIndices[activeAnalyzer]||0];c?draw(c):clearWave()};
-refreshPorts();loadImplementation();loadDemo();
+async function initialize(){
+ await Promise.all([refreshPorts(),loadImplementation()]);
+ try{
+  let j=await api('/api/state');
+  if(j.connected){
+   live=true;liveDetectedAnalyzer=j.data.active_analyzer;$('connect').textContent='연결됨';$('dot').className='dot live';
+   let detected=j.data.active_analyzer||requestedAnalyzer||'edgescope_lite';
+   $('status').textContent=`LIVE · ${analyzerLabel(detected)} · ${j.port||''}`;
+   $('term').textContent=j.transcript_tail||'보드 응답 대기 중…';
+   selectAnalyzer(detected,false);render(j.data);poller=setInterval(poll,500);return
+  }
+ }catch(e){}
+ await loadDemo()
+}
+initialize();
 </script></body></html>"""
 
 

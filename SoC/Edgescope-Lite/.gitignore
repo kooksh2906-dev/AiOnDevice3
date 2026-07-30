@@ -12,6 +12,7 @@ clockInfo.txt
 !artifacts/waves/*.vcd
 __pycache__/
 *.py[cod]
+.venv/
 
 # Verified Team A CPU Polling deliverables are intentionally versioned so the
 # Basys3 measurement can be reproduced without rebuilding the toolchain.
