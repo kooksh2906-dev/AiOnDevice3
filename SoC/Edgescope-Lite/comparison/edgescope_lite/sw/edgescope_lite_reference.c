@@ -20,6 +20,13 @@
 #define GEN_STATUS_BUSY_MASK (1u << 0)
 #define GEN_STATUS_DONE_MASK (1u << 1)
 
+/* Sampler settings this reference programs.  _CODE goes into SAMPLER_REG_CONFIG
+   and _FACTOR is the matching 1/2/4/8 divide factor reported over UART; keep the
+   two in step when changing the sample rate. */
+#define EDGESCOPE_DIVIDER_CODE   SAMPLER_DIVIDE_BY_1
+#define EDGESCOPE_DIVIDER_FACTOR 1u
+#define EDGESCOPE_CHANNEL_MASK   0xffu
+
 typedef struct {
     uint32_t mode;
     uint32_t channel;
@@ -162,8 +169,8 @@ static bool prepare_capture(const trigger_config_t *config,
     Xil_Out32(EDGESCOPE_SAMPLER_BASEADDR + SAMPLER_REG_CONTROL,
               SAMPLER_CONTROL_SOFT_CLEAR);
     sampler_config =
-        SAMPLER_DIVIDE_BY_1 |
-        (0xffu << SAMPLER_CONFIG_CHANNEL_SHIFT);
+        EDGESCOPE_DIVIDER_CODE |
+        (EDGESCOPE_CHANNEL_MASK << SAMPLER_CONFIG_CHANNEL_SHIFT);
     Xil_Out32(EDGESCOPE_SAMPLER_BASEADDR + SAMPLER_REG_CONFIG,
               sampler_config);
 
@@ -282,6 +289,15 @@ static void dump_capture(const trigger_config_t *config,
     xil_printf("TRIGGER_ADDR=%u\r\n", result->trigger_addr);
     xil_printf("WRITE_ADDR=%u\r\n", result->write_addr);
     xil_printf("SAMPLE_COUNT=%u\r\n", result->sample_count);
+    /* Report the settings actually programmed into the sampler and trigger so
+       the GUI can display them as measured instead of assuming the frozen
+       firmware profile.  SAMPLE_DIVIDER is the divide factor (1/2/4/8), not
+       the raw SAMPLER_CONFIG_DIVIDER_MASK code. */
+    xil_printf("SAMPLE_DIVIDER=%u\r\n", EDGESCOPE_DIVIDER_FACTOR);
+    xil_printf("CHANNEL_MASK=%u\r\n", EDGESCOPE_CHANNEL_MASK);
+    xil_printf("TRIGGER_CHANNEL=%u\r\n", config->channel);
+    xil_printf("PATTERN_VALUE=%u\r\n", config->pattern);
+    xil_printf("PATTERN_MASK=%u\r\n", config->mask);
     for (uint32_t i = 0u; i < EDGE_SCOPE_CAPTURE_DEPTH; ++i) {
         const uint32_t physical =
             (result->start_addr + i) & TRACE_ADDR_MASK;
@@ -293,7 +309,6 @@ static void dump_capture(const trigger_config_t *config,
                        ? "  <TRIGGER>" : "");
     }
     xil_printf("CAPTURE_END\r\n");
-    (void)config;
 }
 
 static bool run_capture(const trigger_config_t *config, uint32_t test_id,
