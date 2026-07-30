@@ -24,8 +24,13 @@
 공통 Base SoC Source:
 
 ```text
-comparison/common/base_soc.tcl
+comparison/ila_reference/frozen/common/base_soc.tcl
 ```
+
+`comparison/common/`은 다른 PC 재빌드를 위한 Portable Source이고,
+`comparison/ila_reference/frozen/common/`은 아래 실측·체크섬 증거를 만든
+정확한 Source Snapshot입니다. Portable Source 변경이 기존 측정의 출처를
+바꾸지 않도록 ILA Step 1~10 재검증은 Frozen Snapshot을 사용합니다.
 
 포함된 공통 Block:
 
@@ -54,8 +59,8 @@ BRAM 깊이, UART·Timer·GPIO 설정, Interrupt 입력 수, Clock/Reset Net,
 공통 Generator Source:
 
 ```text
-comparison/common/rtl/test_pattern_generator.sv
-comparison/common/rtl/test_pattern_generator_gpio_adapter.v
+comparison/ila_reference/frozen/common/rtl/test_pattern_generator.sv
+comparison/ila_reference/frozen/common/rtl/test_pattern_generator_gpio_adapter.v
 ```
 
 `test_pattern_generator_gpio_adapter`는 공통 AXI GPIO와 다음처럼 연결된다.
@@ -888,7 +893,7 @@ comparison/ila_reference/run_step5_build.sh
 생성되는 로컬 프로젝트:
 
 ```text
-comparison/common/build/base_soc/edgescope_comparison_base.xpr
+comparison/ila_reference/frozen/common/build/base_soc/edgescope_comparison_base.xpr
 ```
 
 Git에 보관되는 검증 산출물:

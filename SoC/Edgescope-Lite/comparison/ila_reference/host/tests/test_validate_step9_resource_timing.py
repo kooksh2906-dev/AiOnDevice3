@@ -1026,7 +1026,7 @@ class CustomManifestTests(unittest.TestCase):
             validator.STATUS_VERIFIED,
             "ready",
         )
-        common = self.root.parent / "common"
+        common = self.root / "frozen/common"
         manifest = {
             "OVERALL": "PASS",
             "VIVADO_VERSION": validator.REQUIRED_VIVADO,

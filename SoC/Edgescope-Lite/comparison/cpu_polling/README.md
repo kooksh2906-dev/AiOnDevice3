@@ -204,6 +204,18 @@ CPU_POLL_TEST_ID_PULSE        6
 | `s` | 6개 Pulse 폭을 각각 10회 시험 |
 | `q` | 종료 |
 
+### GUI 시연
+
+터미널의 긴 Hex Dump 대신 8채널 파형과 측정 결과를 브라우저 GUI에서 볼 수
+있다. 보드가 없을 때는 저장된 실측 UART 로그로 즉시 시연된다.
+
+```bash
+python3 scripts/cpu_polling_gui.py
+```
+
+실시간 Basys3 연결 및 영상 촬영 방법은
+[`gui/README.md`](gui/README.md)에 정리되어 있다.
+
 Benchmark 전 Generator Clear 이후 10 ms를 기다리며, 저장된 입력이 모두
 `0x00`이고 Trigger Count가 0인지 확인한다. 하나라도 다르면 해당 Trial은
 `BENCHMARK_INVALID`이므로 공식 평균에서 제외하고 원인을 고친 뒤 다시 측정한다.

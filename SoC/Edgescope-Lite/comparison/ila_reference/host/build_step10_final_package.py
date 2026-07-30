@@ -432,8 +432,8 @@ def audit_git(
     )
 
     common_paths = (
-        "comparison/common/base_soc.tcl",
-        "comparison/common/rtl/test_pattern_generator.sv",
+        "comparison/ila_reference/frozen/common/base_soc.tcl",
+        "comparison/ila_reference/frozen/common/rtl/test_pattern_generator.sv",
     )
     cpu_paths = tuple(
         f"comparison/cpu_polling/reports/{name}"

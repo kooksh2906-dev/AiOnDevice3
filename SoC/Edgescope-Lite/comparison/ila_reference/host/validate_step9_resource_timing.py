@@ -996,7 +996,7 @@ def _path_state(spec: MethodSpec) -> tuple[str, str]:
 
 
 def _common_source_paths(root: Path) -> Mapping[str, Path]:
-    common = root.parent / "common"
+    common = root / "frozen/common"
     return {
         "BASE_SOC_TCL_SHA256": common / "base_soc.tcl",
         "GENERATOR_INTEGRATION_TCL_SHA256": (
@@ -1112,7 +1112,7 @@ def _verify_baseline_manifest(
     )
     local_provenance = {
         "BASE_BUILD_TCL_SHA256": (
-            root.parent / "common/build_base_with_generator.tcl"
+            root / "frozen/common/build_base_with_generator.tcl"
         ),
         "BASELINE_CONSTRAINT_SHA256": (
             root / "constraints/step9_baseline_common.xdc"

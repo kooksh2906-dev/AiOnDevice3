@@ -249,6 +249,7 @@ module tb_circular_trace_buffer_bram;
     repeat (4) @(posedge clk);
     @(negedge clk);
     rst_n = 1'b1;
+    #1ps; // Allow continuous BRAM clock/reset assignments to settle in XSim.
 
     if (bram_clk !== clk || bram_rst !== !rst_n)
       $fatal(1, "Packaged BRAM clock/reset wiring mismatch");
