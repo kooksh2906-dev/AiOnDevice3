@@ -48,7 +48,7 @@
 
 - Step 5~9 Checksum Manifest 6개 검증
 - Manifest가 결속한 파일 총 305개 검증
-- GitHub 원격 `main` 감사 Commit: `c95d1b7674154f5ae898657942972a0d1620aaf2`
+- GitHub 원격 `main` 감사 Commit: `c41254682dee66bbb5cea763641ba20aebd94e58`
 - 원격 코드 자동 시험: `PASS`
 - Final Demo 실제 XSA 매크로 호환: `FAIL`
 - 이 폴더의 최종 파일은 `SHA256SUMS`로 다시 검증 가능

@@ -1,12 +1,12 @@
 # GitHub 저장소 파일 감사
 
 - 저장소: `yoon3226/EdgeScope-Lite-SoC`
-- 감사 Ref: `origin/main`
-- 감사 Commit: `c95d1b7674154f5ae898657942972a0d1620aaf2`
-- 작성자/시각: `kimdk1005-collab` / `2026-07-29T20:08:01+09:00`
-- 제목: `Merge pull request #1 from yoon3226/agent/add-cpu-polling-reference`
-- 로컬 HEAD: `4f178c0e2606924fc9f55b844afb2ecd05a7303d` (`main`)
-- 로컬과 원격 차이: behind 7, ahead 0
+- 감사 Ref: `HEAD`
+- 감사 Commit: `c41254682dee66bbb5cea763641ba20aebd94e58`
+- 작성자/시각: `YOON HYEONG UK` / `2026-07-30T10:22:28+09:00`
+- 제목: `Resolve ILA evidence merge and restore provenance`
+- 로컬 HEAD: `c41254682dee66bbb5cea763641ba20aebd94e58` (`agent/publish-ila-step10`)
+- 로컬과 원격 차이: behind 0, ahead 0
 - 로컬 작업 트리 변경 존재: `YES`
 
 ## 확인 결과
@@ -18,7 +18,7 @@
 | 원격 `main` 자동 시험 | `PASS` |
 | 기본 회귀에 신규 Sampler/Trigger TB 포함 | `FAIL` |
 | Trigger TB 실패 시 Non-zero 종료 보장 | `FAIL` |
-| 원격 `main`에 ILA 비교군 디렉터리 존재 | `NO` |
+| 원격 `main`에 ILA 비교군 디렉터리 존재 | `YES` |
 | 원격 `main`에 Custom 계약 파일 7종 존재 | `0/7` |
 | Final Demo 브랜치가 `main`에 병합됨 | `NO` |
 | Final Demo와 실제 XSA `xparameters.h` 호환 | `FAIL` |
@@ -34,7 +34,7 @@ Custom 전체 Routed 계약 파일이 0/7개만
 존재하고, 로컬 ILA 비교군 디렉터리도 아직 게시되지 않았다. 따라서 GitHub
 파일만으로 Step 9의 Custom 공식 비교 Gate를 열 수 없다.
 
-`origin/agent/publish-final-demo` (`c3dd1204c94fb84c9f70a0ff956c117f4454d90f`)의 Vitis Final Demo는
+`origin/agent/publish-final-demo` (`841ec509930e24668c86864c0281031dbd92ab13`)의 Vitis Final Demo는
 현재 `main` 병합 상태가 `NOT_MERGED`다.
 또한 실제 XSA 기반 주소/Clock 매크로 호환 판정이
 `FAIL`이고, Buffer ARM보다 Sampler를

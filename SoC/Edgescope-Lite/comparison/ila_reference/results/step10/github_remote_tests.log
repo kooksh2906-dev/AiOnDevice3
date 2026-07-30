@@ -1,3 +1,4 @@
+SystemVerilog simulator: icarus
 EdgeScope-Lite common package: PASS
 PASS: reset and ARM
 PASS: sample_valid gating
@@ -52,7 +53,7 @@ PASS: CPU byte address = physical word index * 4
 PASS: 1,024 samples read in logical time order
 PASS: logical trigger index 512 mapped to physical 519
 tb_circular_trace_buffer_bram: PASS
-<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_bram.sv:332: $finish called at 41270000 (1ps)
+<REMOTE_MAIN_SNAPSHOT>/sim/tb/tb_circular_trace_buffer_bram.sv:333: $finish called at 41270000 (1ps)
 PASS: 7 SystemVerilog tests and C register-header check
 VCD info: dumpfile tb_basic_trigger_engine.vcd opened for output.
 
