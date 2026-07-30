@@ -34,7 +34,70 @@ REQUIRED_VIVADO_VERSION = "2024.2"
 DEFAULT_ILA_TIMEOUT_SECONDS = 60
 MAX_ILA_TIMEOUT_SECONDS = 3600
 MAX_CAPTURE_DEPTH = 65_536
-SUPPORTED_UART_COMMANDS = frozenset("brfphzs")
+SUPPORTED_UART_COMMANDS = frozenset("brfphzsq")
+
+# Frozen v2.1 capture geometry (docs/day1_common_spec.md).
+SYSTEM_CLOCK_HZ = 100_000_000
+FROZEN_CAPTURE_DEPTH = 1024
+FROZEN_TRIGGER_INDEX = 512
+DIVIDER_BY_CODE = {0: 1, 1: 2, 2: 4, 3: 8}
+
+# The EdgeScope-Lite firmware hardcodes one trigger profile and never accepts
+# PC->board configuration commands, so these are the settings actually applied
+# on the board.  Mirrors config_for_mode() and prepare_capture() in
+# comparison/edgescope_lite/sw/edgescope_lite_reference.c.  Newer firmware may
+# report the same values over UART, in which case the reported values win and
+# the GUI labels them as measured instead of assumed.
+FIRMWARE_FIXED_CONFIG = {
+    "divider": 1,
+    "channel_mask": 0xFF,
+    "trigger_channel": 0,
+    "pattern_value": 0xA0,
+    "pattern_mask": 0xF0,
+}
+
+# Section 2.3 shooting presets.  ``command`` is the single UART byte the
+# firmware really understands; ``expect`` is what section 2.4 must validate.
+# ``firmware_supported`` is False when the profile needs a divider or trigger
+# channel the current firmware cannot be told to use.
+DEMO_PROFILES = {
+    "demo1": {
+        "label": "DEMO 1 – Rising CH0 100M",
+        "command": "r",
+        "mode": "RISING",
+        "divider": 1,
+        "trigger_channel": 0,
+        "channel_mask": 0xFF,
+        "firmware_supported": True,
+        "note": "",
+    },
+    "demo2": {
+        "label": "DEMO 2 – Falling CH1 12.5M",
+        "command": "f",
+        "mode": "FALLING",
+        "divider": 8,
+        "trigger_channel": 1,
+        "channel_mask": 0xFF,
+        "firmware_supported": False,
+        "note": (
+            "현재 firmware는 divider 1과 trigger CH0으로 고정되어 있어 "
+            "divider 8·CH1을 보드에 지시할 수 없습니다. Falling 캡처는 "
+            "실제 실행되며 GUI는 보드가 실제로 사용한 설정만 표시합니다."
+        ),
+    },
+    "demo3": {
+        "label": "DEMO 3 – Pattern A0/F0",
+        "command": "p",
+        "mode": "PATTERN",
+        "divider": 1,
+        "trigger_channel": 0,
+        "channel_mask": 0xFF,
+        "pattern_value": 0xA0,
+        "pattern_mask": 0xF0,
+        "firmware_supported": True,
+        "note": "",
+    },
+}
 VIVADO_INSTALL_ROOTS = (
     Path("/tools/Xilinx/Vivado"),
     Path("/opt/Xilinx/Vivado"),
@@ -124,6 +187,7 @@ def _empty_dataset(key: str) -> dict:
         "zero_mask_tests": 0,
         "simulated": False,
         "evidence": "LIVE UART",
+        "receiving": None,
     }
 
 
@@ -397,6 +461,268 @@ def _append_vivado_ila_csv(dataset: dict, lines: list[str]) -> bool:
     return True
 
 
+def _divider_from_meta(value: int | None) -> int | None:
+    """Accept either a literal 1/2/4/8 divide factor or a raw register code."""
+    if value is None:
+        return None
+    if value in {1, 2, 4, 8}:
+        return value
+    return DIVIDER_BY_CODE.get(value)
+
+
+def _infer_edge_channel(
+    samples: list[int],
+    trigger_index: int,
+    rising: bool,
+) -> int | None:
+    """Return the only channel whose 511->512 transition matches the mode.
+
+    This is read straight out of the capture, so it is real evidence rather
+    than an assumption about what the firmware was configured to do.  An
+    ambiguous capture (several channels switching together) returns None.
+    """
+    if trigger_index <= 0 or trigger_index >= len(samples):
+        return None
+    before, after = samples[trigger_index - 1], samples[trigger_index]
+    low, high = (0, 1) if rising else (1, 0)
+    matches = [
+        channel
+        for channel in range(8)
+        if (before >> channel) & 1 == low and (after >> channel) & 1 == high
+    ]
+    return matches[0] if len(matches) == 1 else None
+
+
+def _resolve_capture_config(
+    analyzer_key: str,
+    mode: str,
+    meta: dict[str, int],
+    samples: list[int],
+    trigger_index: int,
+) -> dict:
+    """Resolve the settings the board actually used for this capture.
+
+    Section 2.5 of the demo scenario forbids showing settings the GUI cannot
+    stand behind, so every field carries its provenance:
+
+    ``uart``      firmware reported it explicitly
+    ``derived``   computed from data the firmware reported
+    ``firmware``  not reported; the frozen hardcoded firmware value
+    """
+    sources: dict[str, str] = {}
+    hardware = analyzer_key != "cpu_polling"
+
+    sample_hz = meta.get("SAMPLE_HZ") or meta.get("RATE") or 0
+    if not sample_hz and hardware:
+        sample_hz = SYSTEM_CLOCK_HZ
+
+    if not hardware:
+        # A is software polling: it has an observation throughput, not a
+        # sample-clock divider or a fixed sample period.
+        return {
+            "hardware": False,
+            "divider": None,
+            "sample_hz": sample_hz,
+            "sample_period_ns": None,
+            "channel_mask": 0xFF,
+            "trigger_channel": (
+                _infer_edge_channel(samples, trigger_index, mode == "RISING")
+                if mode in {"RISING", "FALLING"}
+                else None
+            ) or 0,
+            "pattern_value": FIRMWARE_FIXED_CONFIG["pattern_value"],
+            "pattern_mask": FIRMWARE_FIXED_CONFIG["pattern_mask"],
+            "sources": {},
+        }
+
+    divider = _divider_from_meta(meta.get("SAMPLE_DIVIDER"))
+    if divider is not None:
+        sources["divider"] = "uart"
+    elif sample_hz and SYSTEM_CLOCK_HZ % sample_hz == 0:
+        candidate = SYSTEM_CLOCK_HZ // sample_hz
+        if candidate in {1, 2, 4, 8}:
+            divider = candidate
+            sources["divider"] = "derived"
+    if divider is None:
+        divider = FIRMWARE_FIXED_CONFIG["divider"]
+        sources["divider"] = "firmware"
+
+    if "CHANNEL_MASK" in meta:
+        channel_mask = meta["CHANNEL_MASK"] & 0xFF
+        sources["channel_mask"] = "uart"
+    else:
+        channel_mask = FIRMWARE_FIXED_CONFIG["channel_mask"]
+        sources["channel_mask"] = "firmware"
+
+    trigger_channel: int | None = None
+    if "TRIGGER_CHANNEL" in meta:
+        trigger_channel = meta["TRIGGER_CHANNEL"] & 0x7
+        sources["trigger_channel"] = "uart"
+    elif mode in {"RISING", "FALLING"}:
+        trigger_channel = _infer_edge_channel(
+            samples, trigger_index, mode == "RISING"
+        )
+        if trigger_channel is not None:
+            sources["trigger_channel"] = "derived"
+    if trigger_channel is None:
+        trigger_channel = FIRMWARE_FIXED_CONFIG["trigger_channel"]
+        sources["trigger_channel"] = "firmware"
+
+    for name, key in (
+        ("pattern_value", "PATTERN_VALUE"),
+        ("pattern_mask", "PATTERN_MASK"),
+    ):
+        sources[name] = "uart" if key in meta else "firmware"
+
+    return {
+        "hardware": True,
+        "divider": divider,
+        "sample_hz": sample_hz,
+        "sample_period_ns": (1e9 / sample_hz) if sample_hz else None,
+        "channel_mask": channel_mask,
+        "trigger_channel": trigger_channel,
+        "pattern_value": meta.get(
+            "PATTERN_VALUE", FIRMWARE_FIXED_CONFIG["pattern_value"]
+        ) & 0xFF,
+        "pattern_mask": meta.get(
+            "PATTERN_MASK", FIRMWARE_FIXED_CONFIG["pattern_mask"]
+        ) & 0xFF,
+        "sources": sources,
+    }
+
+
+def _pattern_display(value: int, mask: int) -> str:
+    """Render a masked pattern as 0xA? with don't-care nibbles hidden."""
+    digits = ""
+    for shift in (4, 0):
+        nibble_mask = (mask >> shift) & 0xF
+        if nibble_mask == 0xF:
+            digits += f"{(value >> shift) & 0xF:X}"
+        elif nibble_mask == 0x0:
+            digits += "?"
+        else:
+            digits += "*"
+    return "0x" + digits
+
+
+def _validate_capture(
+    analyzer_key: str,
+    mode: str,
+    samples: list[int],
+    trigger_index: int,
+    config: dict,
+) -> dict:
+    """Apply the section 2.4 automatic validation rules.
+
+    Every check reports ``PASS``, ``FAIL`` or ``N/A``.  The capture is only
+    ``CAPTURE VALID`` when no check failed.
+    """
+    checks: list[dict] = []
+
+    def add(name: str, detail: str, state: str) -> None:
+        checks.append({"name": name, "detail": detail, "state": state})
+
+    depth = len(samples)
+    add(
+        "Samples",
+        f"{depth:,} / {FROZEN_CAPTURE_DEPTH:,}",
+        "PASS" if depth == FROZEN_CAPTURE_DEPTH else "FAIL",
+    )
+    add(
+        "Trigger",
+        f"Index {trigger_index}",
+        "PASS" if trigger_index == FROZEN_TRIGGER_INDEX else "FAIL",
+    )
+
+    channel = config["trigger_channel"]
+    in_range = 0 < trigger_index < depth
+    before = samples[trigger_index - 1] if in_range else 0
+    after = samples[trigger_index] if in_range else 0
+
+    if mode in {"RISING", "FALLING"}:
+        want_before, want_after = (0, 1) if mode == "RISING" else (1, 0)
+        got_before = (before >> channel) & 1
+        got_after = (after >> channel) & 1
+        state = "N/A"
+        if in_range:
+            state = (
+                "PASS"
+                if (got_before, got_after) == (want_before, want_after)
+                else "FAIL"
+            )
+        add(
+            "Condition",
+            f"{mode.title()} CH{channel} · "
+            f"CH{channel}[{trigger_index - 1}]={got_before}, "
+            f"CH{channel}[{trigger_index}]={got_after}",
+            state,
+        )
+    elif mode.startswith("PATTERN"):
+        mask = config["pattern_mask"]
+        value = config["pattern_value"]
+        target = value & mask
+        entry_hold = mode == "PATTERN HOLD"
+        match_state = "N/A"
+        if in_range:
+            match_state = "PASS" if (after & mask) == target else "FAIL"
+        add(
+            "Condition",
+            f"Sample[{trigger_index}] = 0x{after:02X} · "
+            f"Pattern {_pattern_display(value, mask)} · "
+            f"Mask 0x{mask:02X} · "
+            f"{'MATCH' if match_state == 'PASS' else 'NO MATCH'}",
+            match_state,
+        )
+        if entry_hold:
+            # Pattern-hold arms after the pattern has been held, so the
+            # preceding sample legitimately matches too.
+            add(
+                "Entry edge",
+                f"Sample[{trigger_index - 1}] = 0x{before:02X} · "
+                "PATTERN HOLD은 진입 edge를 요구하지 않습니다",
+                "N/A",
+            )
+        else:
+            entry_state = "N/A"
+            if in_range:
+                entry_state = (
+                    "PASS" if (before & mask) != target else "FAIL"
+                )
+            add(
+                "Entry edge",
+                f"Sample[{trigger_index - 1}] = 0x{before:02X} · "
+                f"masked 0x{before & mask:02X} "
+                f"{'!=' if entry_state == 'PASS' else '=='} "
+                f"0x{target:02X}",
+                entry_state,
+            )
+    else:
+        add("Condition", f"{mode} 검증 규칙 없음", "N/A")
+
+    if analyzer_key == "cpu_polling":
+        # A is a software-polling baseline, not a 100 MS/s hardware capture.
+        add(
+            "Sample rate",
+            "CPU polling baseline · 100 MS/s 검증 대상 아님",
+            "N/A",
+        )
+    else:
+        add(
+            "Sample rate",
+            f"{config['sample_hz'] / 1e6:.2f} MS/s · divider {config['divider']}"
+            if config["sample_hz"]
+            else "보고된 sample rate 없음",
+            "PASS" if config["sample_hz"] else "N/A",
+        )
+
+    failed = [check["name"] for check in checks if check["state"] == "FAIL"]
+    return {
+        "checks": checks,
+        "failed": failed,
+        "valid": not failed,
+    }
+
+
 def _append_capture(
     dataset: dict,
     analyzer_key: str,
@@ -448,6 +774,10 @@ def _append_capture(
             else 100_000_000,
         ),
     )
+    config = _resolve_capture_config(
+        analyzer_key, mode, {**meta, "SAMPLE_HZ": sample_hz}, samples,
+        trigger_index,
+    )
     dataset["captures"].append({
         "analyzer": ANALYZERS[analyzer_key]["analyzer"],
         "mode": mode,
@@ -461,6 +791,10 @@ def _append_capture(
         "start_addr": meta.get("START_ADDR"),
         "trigger_addr": meta.get("TRIGGER_ADDR"),
         "write_addr": meta.get("WRITE_ADDR"),
+        "config": config,
+        "validation": _validate_capture(
+            analyzer_key, mode, samples, trigger_index, config
+        ),
     })
 
 
@@ -595,15 +929,28 @@ def parse_uart(text: str) -> dict:
                         meta[meta_key.strip().upper()] = parsed_value
                 i += 1
             analyzer_key = current_analyzer or "cpu_polling"
-            _append_capture(
-                datasets[analyzer_key],
-                analyzer_key,
-                pending_mode[analyzer_key],
-                meta,
-                sample_rows,
-                trigger_index,
-                duplicate_count,
-            )
+            if i >= len(lines):
+                # The dump is still arriving.  A 1,024-sample dump takes about
+                # 11 s at 9,600 baud and the GUI re-parses the whole transcript
+                # twice a second, so validating a truncated capture here would
+                # raise a bogus integrity error for the entire transfer.
+                datasets[analyzer_key]["receiving"] = {
+                    "mode": pending_mode[analyzer_key],
+                    "received": len(sample_rows),
+                    "expected": meta.get(
+                        "OBSERVATIONS", meta.get("DEPTH", FROZEN_CAPTURE_DEPTH)
+                    ),
+                }
+            else:
+                _append_capture(
+                    datasets[analyzer_key],
+                    analyzer_key,
+                    pending_mode[analyzer_key],
+                    meta,
+                    sample_rows,
+                    trigger_index,
+                    duplicate_count,
+                )
         elif _is_csv_header(line):
             # Day 3 standalone export format: no UART marker is required.
             analyzer_key = "edgescope_lite"
@@ -686,6 +1033,22 @@ def demo_payload(text: str) -> dict:
             "write_addr": (start_addr + len(capture["samples"]) - 1) & 0x3FF,
             "simulated": True,
         })
+        # The preview reinterprets A's samples as a 100 MS/s hardware capture,
+        # so its settings and section 2.4 verdict have to be recomputed.
+        capture["config"] = _resolve_capture_config(
+            "edgescope_lite",
+            capture["mode"],
+            {"SAMPLE_HZ": 100_000_000},
+            capture["samples"],
+            capture["trigger_index"],
+        )
+        capture["validation"] = _validate_capture(
+            "edgescope_lite",
+            capture["mode"],
+            capture["samples"],
+            capture["trigger_index"],
+            capture["config"],
+        )
     for pulse in edgescope["pulses"]:
         pulse.update({
             "detected": pulse["trials"],
@@ -1239,8 +1602,12 @@ body{
 }
 .shell{width:min(100%,1600px);margin:auto;padding:14px}
 .top{min-height:48px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.brand{font-size:20px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.brand{font-size:20px;font-weight:800;letter-spacing:.3px;white-space:nowrap;line-height:1.15}
 .brand span{color:var(--cyan)}
+.brand small{
+  display:block;margin-top:1px;color:var(--muted);
+  font-size:10px;font-weight:500;letter-spacing:.2px;
+}
 .tag{
   font:10px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);
   padding:4px 8px;border-radius:99px;white-space:nowrap;
@@ -1332,6 +1699,58 @@ canvas{
 .impltable th:first-child,.impltable td:first-child{text-align:left}
 .impltable th{color:var(--muted);font-weight:500}
 .implnote{margin-top:8px;color:var(--cyan);font-size:10px;line-height:1.4}
+/* Section 2.4 validation card */
+.verdict{
+  display:flex;align-items:center;gap:9px;padding:11px 13px;
+  border-bottom:1px solid var(--line);font-weight:800;letter-spacing:.4px;
+}
+.verdict.pass{background:#062b21;color:var(--green)}
+.verdict.fail{background:#2c1119;color:var(--red)}
+.verdict.idle{background:#111f2d;color:var(--muted)}
+.verdict small{margin-left:auto;font:10px ui-monospace,monospace;font-weight:500;letter-spacing:0}
+.checks{padding:5px 0}
+.check{
+  display:grid;grid-template-columns:78px 1fr auto;gap:8px;align-items:baseline;
+  padding:6px 13px;font-size:11px;
+}
+.check+.check{border-top:1px solid #16273600}
+.check label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
+.check span{color:var(--text);font:10px/1.5 ui-monospace,monospace;word-break:break-word}
+.check b{font:10px ui-monospace,monospace;padding:2px 6px;border-radius:5px}
+.check b.PASS{color:var(--green);background:#062b21}
+.check b.FAIL{color:var(--red);background:#2c1119}
+.check b.NA{color:var(--muted);background:#16283a}
+/* Section 2.2 read-only settings */
+.settings{padding:4px 0}
+.setrow{
+  display:grid;grid-template-columns:104px 1fr auto;gap:8px;align-items:baseline;
+  padding:5px 13px;font-size:11px;
+}
+.setrow label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
+.setrow b{font:11px ui-monospace,monospace;color:var(--text)}
+.src{font:8px ui-monospace,monospace;padding:2px 5px;border-radius:4px;letter-spacing:.3px}
+.src.uart{color:var(--green);background:#062b21}
+.src.derived{color:var(--cyan);background:#07293a}
+.src.firmware{color:var(--amber);background:#2a1f06}
+.readonly-note{
+  margin:4px 13px 10px;padding:7px 9px;border:1px solid #765d18;border-radius:6px;
+  color:var(--amber);font-size:10px;line-height:1.5;background:#1e1706;
+}
+/* Section 2.2 data inspector */
+.datatable{width:100%;border-collapse:collapse;font:10px/1.5 ui-monospace,monospace}
+.datatable td{padding:4px 13px;border-bottom:1px solid #16273a}
+.datatable td:first-child{color:var(--muted);width:88px}
+.datatable td:last-child{text-align:right;color:var(--text)}
+.bits{display:flex;gap:3px;justify-content:flex-end;flex-wrap:wrap}
+.bit{
+  width:19px;text-align:center;border-radius:4px;padding:2px 0;
+  font:9px ui-monospace,monospace;border:1px solid var(--line);
+}
+.bit.hi{color:#062b21;background:var(--cyan);border-color:var(--cyan);font-weight:700}
+.bit.lo{color:var(--muted)}
+.presets{display:flex;gap:6px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.presets button{font-size:11px}
+button.on{background:#12314a;border-color:#216383;color:var(--cyan)}
 .terminal{margin-top:12px}
 .terminal pre{
   height:120px;margin:0;padding:11px 14px;overflow:auto;color:#7dd3fc;background:#050b11;
@@ -1393,7 +1812,7 @@ canvas{
 }
 </style></head><body><div class="shell">
 <header class="top">
- <div class="brand"><span>EdgeScope</span>-Lite</div>
+ <div class="brand"><span>EdgeScope</span>-Lite<small>8-Channel 100 MS/s Standalone Logic Analyzer</small></div>
  <div class="tag" id="analyzerTag">CPU POLLING REFERENCE</div>
  <nav class="tabs" aria-label="분석기 선택">
   <button class="analyzer-tab active" data-analyzer="cpu_polling">A · CPU Polling</button>
@@ -1416,21 +1835,30 @@ canvas{
 </section>
 <div class="grid">
  <section class="panel trace-panel"><div class="head">8-Channel Logic Trace <small id="captureLabel">—</small></div>
+  <div class="presets" id="presets" aria-label="촬영 Demo Profile"></div>
   <div class="toolbar">
    <button class="primary" data-cmd="r">Rising 캡처</button><button data-cmd="f">Falling 캡처</button>
    <button data-cmd="p">Pattern 캡처</button><button data-cmd="h">Pattern Hold</button>
    <button data-cmd="b">Benchmark</button><button data-cmd="s">Pulse Stress</button><button data-cmd="z">Zero Mask</button>
-   <button id="savePng">PNG 저장</button><label class="filebtn">UART/CSV 불러오기<input id="captureFile" type="file" accept=".log,.txt,.csv,text/plain,text/csv"></label>
+   <button id="zoomTrigger" title="Trigger 주변 [448,576) 확대">Trigger 확대</button>
+   <button id="savePng">PNG 저장</button><button id="saveCsv">CSV 저장</button>
+   <label class="filebtn">UART/CSV 불러오기<input id="captureFile" type="file" accept=".log,.txt,.csv,text/plain,text/csv"></label>
   </div><div class="wavewrap"><canvas id="wave"></canvas></div>
   <div class="legend"><span><i class="swatch"></i>Logic High / Low</span><span id="triggerLegend"><i class="swatch trigger"></i>Trigger @ 512</span><span id="cursor">파형 위에서 위치를 확인하세요</span></div>
  </section>
  <aside class="side">
+  <section class="panel"><div class="verdict idle" id="verdict">CAPTURE 대기<small id="verdictNote"></small></div>
+   <div class="checks" id="checks"><div class="hint" style="padding:8px 13px">캡처를 실행하면 자동 검증 결과가 표시됩니다.</div></div></section>
   <section class="panel"><div class="head">Capture Metrics <small id="evidence"></small></div><div class="metrics">
    <div class="metric"><label>Trigger</label><b class="cyan" id="mode">—</b></div>
    <div class="metric"><label>Samples</label><b id="samples">—</b></div>
    <div class="metric"><label id="rateLabel">Throughput</label><b id="rate">—</b></div>
    <div class="metric"><label>Trigger Index</label><b id="trigIndex">—</b></div>
   </div><div class="addrline" id="addresses">START — · TRIGGER — · WRITE —</div></section>
+  <section class="panel"><div class="head">Capture / Trigger Settings <small>read-only</small></div>
+   <div class="settings" id="settings"></div><div id="readonlyNote"></div></section>
+  <section class="panel"><div class="head">Data <small id="dataHint">파형을 클릭하세요</small></div>
+   <table class="datatable"><tbody id="dataTable"></tbody></table></section>
   <section class="panel"><div class="head" id="benchTitle">Polling Benchmark</div><div class="io" id="bench"></div></section>
   <section class="panel"><div class="head">Pulse Detection</div><div class="io" id="pulse"></div></section>
  </aside>
@@ -1450,6 +1878,9 @@ canvas{
 let demoData=null, rootData=null, activeAnalyzer='cpu_polling', captureIndices={cpu_polling:0,edgescope_lite:0,vivado_ila:0};
 let live=false, poller=null, liveDetectedAnalyzer=null, lastIlaStatus='idle', lastIlaError=null;
 let sourceMode='demo',pollEpoch=0,pollBusy=false,connectionProbeTimer=null,commandPending=null;
+let profiles={},frozenSpec={depth:1024,trigger_index:512},activePreset=null;
+let zoomed=false,selectedIndex=null;
+const ZOOM_SPAN=[448,576];
 const analyzerKeys=['cpu_polling','edgescope_lite','vivado_ila'];
 const requestedValue=new URLSearchParams(location.search).get('analyzer');
 const requestedAnalyzer=analyzerKeys.includes(requestedValue)?requestedValue:null;
@@ -1458,6 +1889,94 @@ function toast(s){$('toast').textContent=s;$('toast').classList.add('on');setTim
 async function api(path,options){let r=await fetch(path,options);let j=await r.json();if(!r.ok)throw Error(j.error||r.statusText);return j}
 function fmt(n){return Number.isFinite(Number(n))?Number(n).toLocaleString('ko-KR'):'—'}
 function rateText(n){return n?`${(Number(n)/1e6).toFixed(2)} MS/s`:'—'}
+function hex8(v){return '0x'+Number(v).toString(16).padStart(2,'0').toUpperCase()}
+function periodText(ns){
+ if(!Number.isFinite(ns)||ns<=0)return '—';
+ return ns<1000?`${ns%1?ns.toFixed(2):ns} ns`:`${(ns/1000).toFixed(2)} µs`
+}
+function timeText(seconds){
+ let ns=seconds*1e9,sign=ns<0?'-':'+',abs=Math.abs(ns);
+ return abs<1000?`${sign}${abs.toFixed(0)} ns`:`${sign}${(abs/1000).toFixed(2)} µs`
+}
+/* Section 2.4 validation card. */
+function renderValidation(c,d){
+ let receiving=d?.receiving;
+ if(receiving){
+  $('verdict').className='verdict idle';
+  $('verdict').innerHTML=`CAPTURE 수신 중<small>${fmt(receiving.received)} / ${fmt(receiving.expected)}</small>`;
+  $('checks').innerHTML=`<div class="hint" style="padding:8px 13px">${esc(receiving.mode)} 캡처를 9,600 baud로 수신하고 있습니다. 1,024 Sample 전송에는 약 11초가 걸립니다.</div>`;
+  return
+ }
+ let v=c?.validation;
+ if(!v){
+  $('verdict').className='verdict idle';$('verdict').innerHTML='CAPTURE 대기<small></small>';
+  $('checks').innerHTML='<div class="hint" style="padding:8px 13px">캡처를 실행하면 자동 검증 결과가 표시됩니다.</div>';
+  return
+ }
+ let simulated=d?.simulated?'DEMO · 예상 데이터':'';
+ $('verdict').className='verdict '+(v.valid?'pass':'fail');
+ $('verdict').innerHTML=(v.valid?'CAPTURE VALID':'CAPTURE INVALID')+`<small>${esc(simulated)}</small>`;
+ $('checks').innerHTML=v.checks.map(k=>
+  `<div class="check"><label>${esc(k.name)}</label><span>${esc(k.detail)}</span><b class="${k.state==='N/A'?'NA':k.state}">${k.state}</b></div>`
+ ).join('')
+}
+/* Section 2.2 settings, read-only per section 2.5. */
+function renderSettings(c){
+ if(!c?.config){$('settings').innerHTML='<div class="hint" style="padding:8px 13px">—</div>';$('readonlyNote').innerHTML='';return}
+ let g=c.config,s=g.sources||{},depth=c.samples.length;
+ let tag=key=>{let src=s[key];return src?`<i class="src ${src}">${{uart:'UART',derived:'DERIVED',firmware:'FW FIXED'}[src]}</i>`:''};
+ let rows=g.hardware===false
+  /* A is software polling: no sample-clock divider, no fixed sample period. */
+  ? [['Observation Rate',rateText(g.sample_hz),null],
+     ['Sample Divider','해당 없음 · CPU Polling',null]]
+  : [['Sample Divider',`1 / ${g.divider}`,'divider'],
+     ['Sample Rate',rateText(g.sample_hz),'divider'],
+     ['Sample Period',periodText(g.sample_period_ns),'divider'],
+     ['Channel Mask',hex8(g.channel_mask),'channel_mask']];
+ rows=rows.concat([
+  ['Capture Depth',fmt(depth)+' Samples',null],
+  ['Trigger Mode',c.mode,null],
+  ['Trigger Index',String(c.trigger_index),null],
+ ]);
+ if(c.mode==='RISING'||c.mode==='FALLING')rows.push(['Edge Channel','CH'+g.trigger_channel,'trigger_channel']);
+ if(String(c.mode).startsWith('PATTERN')){
+  rows.push(['Pattern Value',hex8(g.pattern_value),'pattern_value']);
+  rows.push(['Pattern Mask',hex8(g.pattern_mask),'pattern_mask'])
+ }
+ $('settings').innerHTML=rows.map(([label,value,key])=>
+  `<div class="setrow"><label>${esc(label)}</label><b>${esc(value)}</b>${key?tag(key):''}</div>`
+ ).join('');
+ let assumed=Object.entries(s).filter(([,src])=>src==='firmware').length;
+ $('readonlyNote').innerHTML=assumed
+  ? `<div class="readonly-note">이 Firmware는 PC→보드 설정 명령을 지원하지 않습니다. <b>FW FIXED</b> 항목은 Firmware에 고정된 값이며 GUI에서 변경할 수 없습니다.</div>`
+  : ''
+}
+/* Section 2.2 data inspector. */
+function renderData(c,index){
+ if(!c||index===null||index===undefined||index<0||index>=c.samples.length){
+  $('dataTable').innerHTML='<tr><td>Index</td><td>—</td></tr>';
+  $('dataHint').textContent='파형을 클릭하세요';return
+ }
+ let value=c.samples[index],hz=c.config?.sample_hz||c.sample_hz;
+ let bits=[7,6,5,4,3,2,1,0].map(ch=>{let on=(value>>ch)&1;return `<i class="bit ${on?'hi':'lo'}" title="CH${ch}">${on}</i>`}).join('');
+ $('dataHint').textContent=`Index ${index}`;
+ $('dataTable').innerHTML=
+  `<tr><td>Index</td><td>${index}</td></tr>`+
+  `<tr><td>Time</td><td>${hz?timeText((index-c.trigger_index)/hz):(index-c.trigger_index)+' samples'}</td></tr>`+
+  `<tr><td>Hex</td><td>${hex8(value)}</td></tr>`+
+  `<tr><td>Binary</td><td>${value.toString(2).padStart(8,'0')}</td></tr>`+
+  `<tr><td>CH7…CH0</td><td><div class="bits">${bits}</div></td></tr>`
+}
+/* Section 2.3 shooting presets. */
+function renderPresets(){
+ let keys=Object.keys(profiles);
+ if(!keys.length){$('presets').innerHTML='';return}
+ $('presets').innerHTML=keys.map(key=>{
+  let p=profiles[key];
+  return `<button data-preset="${key}" class="${activePreset===key?'on':''}" title="${esc(p.note||p.label)}">${esc(p.label)}${p.firmware_supported?'':' <i class="badge">FW 제한</i>'}</button>`
+ }).join('');
+ document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>runPreset(b.dataset.preset))
+}
 function selected(root,key=activeAnalyzer){return root?.datasets?.[key]||null}
 function isHardware(key=activeAnalyzer){return key==='edgescope_lite'||key==='vivado_ila'}
 function analyzerLabel(key){return {cpu_polling:'A · CPU Polling',edgescope_lite:'B · EdgeScope-Lite',vivado_ila:'C · Vivado ILA'}[key]||key}
@@ -1468,6 +1987,7 @@ function representativeRate(d){
 }
 function selectAnalyzer(key, renderNow=true){
  if(!analyzerKeys.includes(key))key='cpu_polling';
+ if(activeAnalyzer!==key)selectedIndex=null;
  activeAnalyzer=key;
  document.querySelectorAll('[data-analyzer]').forEach(b=>b.classList.toggle('active',b.dataset.analyzer===key));
  $('analyzerTag').textContent={cpu_polling:'CPU POLLING REFERENCE',edgescope_lite:'EDGESCOPE-LITE REFERENCE',vivado_ila:'VIVADO ILA REFERENCE'}[key];
@@ -1486,6 +2006,7 @@ function render(root,preferred){
  $('evidence').innerHTML=(d.simulated?'<span class="badge">DEMO · 예상</span>':esc(d.evidence||'LIVE UART'))+(warning?' <span class="badge">DATA CHECK</span>':'');
  $('rateLabel').textContent=isHardware()?'Sample Rate':'Throughput';
  $('benchTitle').textContent=activeAnalyzer==='vivado_ila'?'ILA Sampling':activeAnalyzer==='edgescope_lite'?'Hardware Sampling':'Polling Benchmark';
+ renderValidation(c,d);renderSettings(c);
  if(c){
   let shownRate=isHardware()?(c.sample_hz||c.rate):c.rate;
   $('mode').textContent=c.mode;$('samples').textContent=fmt(c.samples.length);$('rate').textContent=rateText(shownRate);
@@ -1494,10 +2015,13 @@ function render(root,preferred){
   $('captureLabel').textContent=`${c.mode} · ${c.samples.length} samples · PRE ${c.trigger_index} / POST ${c.samples.length-c.trigger_index}${timing}`;
   let addr=v=>v===null||v===undefined?'—':fmt(v);
   $('addresses').textContent=activeAnalyzer==='vivado_ila'?`ILA BUFFER 0–${c.samples.length-1} · TRIGGER ${c.trigger_index} · JTAG CSV`:`START ${addr(c.start_addr)} · TRIGGER ${addr(c.trigger_addr)} · WRITE ${addr(c.write_addr)}`;
-  draw(c)
+  if(selectedIndex===null)selectedIndex=c.trigger_index;
+  if(selectedIndex>=c.samples.length)selectedIndex=c.samples.length-1;
+  renderData(c,selectedIndex);draw(c)
  } else {
   $('mode').textContent='—';$('samples').textContent='—';$('rate').textContent=isHardware()&&d.ready?'100.00 MS/s':'—';
-  $('trigIndex').textContent='—';$('captureLabel').textContent=warning?warning:'캡처 실행 대기 중';$('addresses').textContent='START — · TRIGGER — · WRITE —';clearWave()
+  $('trigIndex').textContent='—';$('captureLabel').textContent=warning?warning:(d.receiving?'캡처 수신 중…':'캡처 실행 대기 중');$('addresses').textContent='START — · TRIGGER — · WRITE —';
+  renderData(null,null);clearWave()
  }
  let maxRate=Math.max(1,...d.benchmarks.map(x=>x.rate));
  $('bench').innerHTML=(d.benchmarks.length?d.benchmarks.map(x=>`<div class="barrow"><span>${esc(x.mode)}</span><div class="bar"><div class="fill" style="width:${x.rate/maxRate*100}%"></div></div><b>${(x.rate/1e6).toFixed(2)}M</b></div>`).join(''):'<div class="hint">Benchmark 실행 대기 중</div>')+
@@ -1538,27 +2062,60 @@ function clearWave(){
  cv.onpointermove=null;cv.onpointerleave=null;$('cursor').textContent='파형 위에서 위치를 확인하세요';
  let x=cv.getContext('2d');x.scale(ratio,ratio);x.fillStyle='#09131d';x.fillRect(0,0,rect.width,h);x.fillStyle='#8298aa';x.textAlign='center';x.font='13px ui-monospace';x.fillText('CAPTURE DATA WAITING',rect.width/2,h/2)
 }
+/* Visible logical index window: whole capture, or the section 2.2 trigger zoom. */
+function viewWindow(c){
+ if(!zoomed)return [0,c.samples.length];
+ let start=Math.max(0,Math.min(ZOOM_SPAN[0],c.samples.length-1));
+ return [start,Math.min(ZOOM_SPAN[1],c.samples.length)]
+}
 function draw(c){
  let cv=$('wave'),rect=cv.getBoundingClientRect(),ratio=devicePixelRatio||1,h=waveHeight();cv.width=rect.width*ratio;cv.height=h*ratio;
- let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,left=54,right=14,top=12,bottom=38,row=(h-top-bottom)/8,plot=w-left-right,denom=Math.max(1,c.samples.length-1);
- x.fillStyle='#09131d';x.fillRect(0,0,w,h);x.font='11px ui-monospace';x.textAlign='right';
+ let x=cv.getContext('2d');x.scale(ratio,ratio);let w=rect.width,left=54,right=14,top=12,bottom=38,row=(h-top-bottom)/8,plot=w-left-right;
+ let [v0,v1]=viewWindow(c),denom=Math.max(1,v1-1-v0),hz=c.config?.sample_hz||c.sample_hz;
+ let px=i=>left+(i-v0)/denom*plot;
+ x.fillStyle='#09131d';x.fillRect(0,0,w,h);
+ /* Section 2.2: pre/post background separation. */
+ let tx=px(c.trigger_index),plotTop=top-6,plotBottom=h-bottom+row*.1;
+ let clamp=v=>Math.max(left,Math.min(w-right,v));
+ if(c.trigger_index>v0){x.fillStyle='#081521';x.fillRect(left,plotTop,clamp(tx)-left,plotBottom-plotTop)}
+ if(c.trigger_index<v1){x.fillStyle='#152032';x.fillRect(clamp(tx),plotTop,w-right-clamp(tx),plotBottom-plotTop)}
+ x.font='11px ui-monospace';x.textAlign='right';
  for(let ch=7;ch>=0;ch--){let ri=7-ch,y=top+ri*row,high=y+row*.18,low=y+row*.68;x.strokeStyle='#1b3042';x.beginPath();x.moveTo(left,y+row*.74);x.lineTo(w-right,y+row*.74);x.stroke();
   x.fillStyle='#8298aa';x.fillText('CH'+ch,left-10,y+row*.5);x.strokeStyle=ch===0?'#22d3ee':'#38bdf8';x.lineWidth=1.4;x.beginPath();
-  let previousY=null;c.samples.forEach((v,i)=>{let px=left+i/denom*plot,py=(v>>ch)&1?high:low;if(i===0)x.moveTo(px,py);else{x.lineTo(px,previousY);x.lineTo(px,py)}previousY=py});x.stroke()}
- let tx=left+c.trigger_index/denom*plot;x.strokeStyle='#fb7185';x.lineWidth=1.5;x.beginPath();x.moveTo(tx,4);x.lineTo(tx,h-20);x.stroke();
- x.fillStyle='#fb7185';x.textAlign='center';x.fillText('TRIGGER',tx,h-20);x.fillStyle='#8298aa';
- if(isHardware()&&c.sample_hz){
-  let timeLabel=seconds=>{let us=seconds*1e6;return `${us>=0?'+':''}${us.toFixed(2)} µs`};
-  x.textAlign='left';x.fillText(timeLabel(-c.trigger_index/c.sample_hz),left,h-6);
-  x.textAlign='center';x.fillText('0',tx,h-6);
-  x.textAlign='right';x.fillText(timeLabel((c.samples.length-1-c.trigger_index)/c.sample_hz),w-right,h-6)
- }else{
-  x.textAlign='center';x.fillText('PRE-TRIGGER',left+plot*.25,h-6);x.fillText('POST-TRIGGER',left+plot*.75,h-6)
+  let previousY=null;
+  for(let i=v0;i<v1;i++){let cx=px(i),py=(c.samples[i]>>ch)&1?high:low;if(i===v0)x.moveTo(cx,py);else{x.lineTo(cx,previousY);x.lineTo(cx,py)}previousY=py}
+  x.stroke()}
+ /* Trigger cursor sits on the leading boundary of logical index 512, so the
+    511->512 transition and t=0 land on exactly the same x. */
+ if(c.trigger_index>=v0&&c.trigger_index<v1){
+  x.strokeStyle='#fb7185';x.lineWidth=1.5;x.beginPath();x.moveTo(tx,4);x.lineTo(tx,h-20);x.stroke();
+  x.fillStyle='#fb7185';x.textAlign='center';x.fillText('TRIGGER',tx,h-20)
  }
- cv.onpointermove=e=>{let r=cv.getBoundingClientRect(),idx=Math.max(0,Math.min(c.samples.length-1,Math.round((e.clientX-r.left-left)/(r.width-left-right)*(c.samples.length-1))));
-  let offset=idx-c.trigger_index,time=isHardware()&&c.sample_hz?` · ${(offset/c.sample_hz*1e9).toFixed(0)} ns`:` · ${offset} observations`;
-  $('cursor').textContent=`Index ${idx} · 0x${c.samples[idx].toString(16).padStart(2,'0').toUpperCase()}${time}`};
- cv.onpointerleave=()=>{$('cursor').textContent='파형 위에서 위치를 확인하세요'}
+ /* Selected-sample marker for the Data panel. */
+ if(selectedIndex!==null&&selectedIndex>=v0&&selectedIndex<v1){
+  let sx=px(selectedIndex);x.strokeStyle='#fbbf24';x.lineWidth=1;x.setLineDash([3,3]);
+  x.beginPath();x.moveTo(sx,plotTop);x.lineTo(sx,h-20);x.stroke();x.setLineDash([])
+ }
+ x.fillStyle='#8298aa';
+ if(hz){
+  x.textAlign='left';x.fillText(timeText((v0-c.trigger_index)/hz),left,h-6);
+  x.textAlign='right';x.fillText(timeText((v1-1-c.trigger_index)/hz),w-right,h-6);
+  if(c.trigger_index>=v0&&c.trigger_index<v1){x.textAlign='center';x.fillText('0 ns',tx,h-6)}
+ }else{
+  x.textAlign='left';x.fillText(`index ${v0}`,left,h-6);
+  x.textAlign='right';x.fillText(`index ${v1-1}`,w-right,h-6)
+ }
+ x.fillStyle='#64798c';x.font='10px ui-monospace';
+ if(c.trigger_index-v0>12){x.textAlign='center';x.fillText('PRE-TRIGGER',(left+clamp(tx))/2,top-1)}
+ if(v1-c.trigger_index>12){x.textAlign='center';x.fillText('POST-TRIGGER',(clamp(tx)+w-right)/2,top-1)}
+ let indexAt=e=>{let r=cv.getBoundingClientRect();
+  return Math.max(v0,Math.min(v1-1,Math.round((e.clientX-r.left-left)/(r.width-left-right)*denom)+v0))};
+ cv.onpointermove=e=>{let idx=indexAt(e),offset=idx-c.trigger_index;
+  let time=hz?` · ${timeText(offset/hz)}`:` · ${offset} samples`;
+  $('cursor').textContent=`Index ${idx} · ${hex8(c.samples[idx])}${time}`};
+ cv.onpointerleave=()=>{$('cursor').textContent='파형 위에서 위치를 확인하세요'};
+ cv.onclick=e=>{selectedIndex=indexAt(e);renderData(c,selectedIndex);draw(c)};
+ cv.style.cursor='crosshair'
 }
 function stopPolling(){
  pollEpoch++;clearInterval(poller);poller=null;pollBusy=false;clearTimeout(connectionProbeTimer);connectionProbeTimer=null
@@ -1587,7 +2144,7 @@ async function loadDemo(preferred='RISING'){
  stopPolling();let epoch=pollEpoch;sourceMode='demo';live=false;liveDetectedAnalyzer=null;commandPending=null;$('dot').className='dot';$('connect').textContent='보드 연결';syncCommandButtons();
  let j=await api('/api/demo');if(epoch!==pollEpoch)return;
  demoData=j.data;rootData=demoData;
- $('term').textContent='A는 저장된 Basys3 실측 UART 로그입니다.\\nB와 C는 동일 파형을 100 MHz 하드웨어 캡처 형식으로 변환한 DEMO이며 실측값이 아닙니다.';
+ $('term').textContent='A는 저장된 Basys3 실측 UART 로그입니다.\nB와 C는 동일 파형을 100 MHz 하드웨어 캡처 형식으로 변환한 DEMO이며 실측값이 아닙니다.';
  selectAnalyzer(initial,false);render(demoData,preferred)
 }
 async function refreshPorts(){
@@ -1625,7 +2182,7 @@ function completePending(data){
  else if(commandPending.kind==='pulse')done=d.pulses.length>commandPending.before;
  else if(commandPending.kind==='zero')done=d.zero_mask_tests>commandPending.before;
  if(done){
-  let label=commandPending.label;commandPending=null;syncCommandButtons();toast(label+' 완료')
+  let label=commandPending.label;commandPending=null;selectedIndex=null;syncCommandButtons();toast(label+' 완료')
  }else if(Date.now()-commandPending.started>commandPending.timeout){
   commandPending=null;syncCommandButtons();toast('명령 응답 시간이 초과되었습니다')
  }
@@ -1639,7 +2196,7 @@ async function poll(epoch=pollEpoch){
   if(!j.connected){let message=j.error?`UART 오류 · ${j.error}`:'보드 연결 끊김';setDisconnected(message);toast(message);return}
   if(ila.data?.datasets?.vivado_ila)j.data.datasets.vivado_ila=ila.data.datasets.vivado_ila;
   let terminalText=j.transcript_tail||'보드 응답 대기 중…';
-  if(activeAnalyzer==='vivado_ila'&&ila.output_tail)terminalText+=`\\n\\n--- VIVADO ILA ---\\n${ila.output_tail}`;
+  if(activeAnalyzer==='vivado_ila'&&ila.output_tail)terminalText+=`\n\n--- VIVADO ILA ---\n${ila.output_tail}`;
   $('term').textContent=terminalText;$('term').scrollTop=$('term').scrollHeight;
   let detected=analyzerKeys.includes(j.data.active_analyzer)?j.data.active_analyzer:null;
   if(detected&&detected!==liveDetectedAnalyzer){
@@ -1702,10 +2259,43 @@ document.querySelectorAll('[data-cmd]').forEach(b=>b.onclick=async()=>{
  }
  let d=selected(demoData);render(demoData,wanted);toast(cmd==='b'?'벤치마크 결과 표시':cmd==='s'?'Pulse Stress 결과 표시':cmd==='z'?(d.zero_mask_pass?'Zero Mask: PASS':'결과 없음'):(wanted+' 캡처 표시'))
 });
+function currentCapture(){return selected(rootData)?.captures?.[captureIndices[activeAnalyzer]||0]||null}
+function exportName(c,extension){
+ let stamp=new Date().toISOString().replace(/[:.]/g,'-');
+ return `${activeAnalyzer}_${c.mode.toLowerCase().replace(/\s+/g,'_')}_${stamp}.${extension}`
+}
+function saveBlob(name,mime,text){
+ let link=document.createElement('a'),url=URL.createObjectURL(new Blob([text],{type:mime}));
+ link.download=name;link.href=url;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
+}
+/* Section 2.3 preset: send the byte the firmware really accepts, then let
+   section 2.4 validate whatever the board actually did. */
+async function runPreset(key){
+ let p=profiles[key];if(!p)return;
+ activePreset=key;renderPresets();
+ if(!p.firmware_supported&&p.note)toast(p.note);
+ let button=document.querySelector(`[data-cmd="${p.command}"]`);
+ if(!button)return toast('해당 캡처 명령을 찾을 수 없습니다');
+ button.click()
+}
 $('savePng').onclick=()=>{
- let c=selected(rootData)?.captures?.[captureIndices[activeAnalyzer]||0];if(!c)return toast('저장할 캡처가 없습니다');
- let link=document.createElement('a'),stamp=new Date().toISOString().replace(/[:.]/g,'-');
- link.download=`${activeAnalyzer}_${c.mode.toLowerCase().replace(/\s+/g,'_')}_${stamp}.png`;link.href=$('wave').toDataURL('image/png');link.click();toast('파형 PNG 저장')
+ let c=currentCapture();if(!c)return toast('저장할 캡처가 없습니다');
+ let link=document.createElement('a');
+ link.download=exportName(c,'png');link.href=$('wave').toDataURL('image/png');link.click();toast('파형 PNG 저장')
+};
+/* Same column order as the importer, so an export round-trips back into the GUI. */
+$('saveCsv').onclick=()=>{
+ let c=currentCapture();if(!c)return toast('저장할 캡처가 없습니다');
+ let lines=['index,ch7,ch6,ch5,ch4,ch3,ch2,ch1,ch0'];
+ c.samples.forEach((v,i)=>{lines.push(i+','+[7,6,5,4,3,2,1,0].map(ch=>(v>>ch)&1).join(','))});
+ saveBlob(exportName(c,'csv'),'text/csv;charset=utf-8',lines.join('\n')+'\n');
+ toast(`${fmt(c.samples.length)} Sample CSV 저장`)
+};
+$('zoomTrigger').onclick=()=>{
+ let c=currentCapture();if(!c)return toast('표시할 캡처가 없습니다');
+ zoomed=!zoomed;$('zoomTrigger').classList.toggle('on',zoomed);
+ $('zoomTrigger').textContent=zoomed?'전체 보기':'Trigger 확대';
+ draw(c);toast(zoomed?`Trigger 확대 [${ZOOM_SPAN[0]},${ZOOM_SPAN[1]})`:'전체 캡처 표시')
 };
 $('captureFile').onchange=async event=>{
  let file=event.target.files[0];if(!file)return;
@@ -1720,8 +2310,13 @@ $('captureFile').onchange=async event=>{
 };
 $('refresh').onclick=refreshPorts;$('connect').onclick=connect;$('demo').onclick=async()=>{if(live)await disconnectBoard(false);await loadDemo()};
 window.onresize=()=>{let d=selected(rootData),c=d?.captures?.[captureIndices[activeAnalyzer]||0];c?draw(c):clearWave()};
+async function loadProfiles(){
+ try{
+  let j=await api('/api/profiles');profiles=j.profiles||{};frozenSpec=j.frozen||frozenSpec;renderPresets()
+ }catch(e){$('presets').innerHTML=`<div class="hint">Demo Profile을 불러오지 못했습니다: ${esc(e.message)}</div>`}
+}
 async function initialize(){
- await Promise.all([refreshPorts(),loadImplementation()]);
+ await Promise.all([refreshPorts(),loadImplementation(),loadProfiles()]);
  try{
   let j=await api('/api/state');
   if(j.connected){
@@ -1780,6 +2375,15 @@ class AppHandler(BaseHTTPRequestHandler):
             self._json(self.serial_manager.state())
         elif path == "/api/implementation":
             self._json(implementation_payload())
+        elif path == "/api/profiles":
+            self._json({
+                "profiles": DEMO_PROFILES,
+                "frozen": {
+                    "depth": FROZEN_CAPTURE_DEPTH,
+                    "trigger_index": FROZEN_TRIGGER_INDEX,
+                    "system_clock_hz": SYSTEM_CLOCK_HZ,
+                },
+            })
         elif path == "/api/ila/status":
             self._json(self.ila_manager.state())
         else:
@@ -1844,10 +2448,18 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--log", type=Path, default=DEFAULT_LOG)
     parser.add_argument("--no-browser", action="store_true")
+    parser.add_argument(
+        "--analyzer",
+        choices=sorted(ANALYZERS),
+        help="Tab to preselect on open.  Use edgescope_lite when recording the "
+             "standalone GUI demo so no tab switch is filmed.",
+    )
     args = parser.parse_args()
     AppHandler.demo_text = args.log.read_text(encoding="utf-8", errors="replace")
     server = ThreadingHTTPServer((args.host, args.port), AppHandler)
     url = f"http://{args.host}:{args.port}"
+    if args.analyzer:
+        url += f"/?analyzer={args.analyzer}"
     print(f"EdgeScope-Lite GUI: {url}")
     print("종료: Ctrl+C")
     if not args.no_browser:
