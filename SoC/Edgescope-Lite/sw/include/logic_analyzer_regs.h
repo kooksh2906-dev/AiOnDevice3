@@ -64,11 +64,58 @@
 #define TRACE_STATUS_PRE_READY  (1u << 1)
 #define TRACE_STATUS_TRIGGERED  (1u << 2)
 #define TRACE_STATUS_DONE       (1u << 3)
+#define TRACE_STATUS_ALL        (TRACE_STATUS_BUSY      | \
+                                 TRACE_STATUS_PRE_READY | \
+                                 TRACE_STATUS_TRIGGERED | \
+                                 TRACE_STATUS_DONE)
 
-#define TRACE_ADDR_MASK                 0x3FFu
-#define TRACE_CAPTURE_INFO_DEPTH_MASK   0x7FFu
-#define TRACE_CAPTURE_INFO_TRIG_SHIFT   16u
-#define TRACE_CAPTURE_INFO_TRIG_MASK    (0x3FFu << TRACE_CAPTURE_INFO_TRIG_SHIFT)
+#define TRACE_ADDR_MASK                0x3FFu
+#define TRACE_CAPTURE_INFO_DEPTH_MASK  0x7FFu
+#define TRACE_CAPTURE_INFO_TRIG_SHIFT  16u
+#define TRACE_CAPTURE_INFO_TRIG_MASK   \
+    (0x3FFu << TRACE_CAPTURE_INFO_TRIG_SHIFT)
+
+/*
+ * AXI Interrupt Controller
+ *
+ * Circular Trace Buffer irq_o is connected to AXI INTC input 0.
+ * The final demo polls raw ISR with HIE enabled and CPU interrupts disabled.
+ */
+#define INTC_REG_ISR                  0x00u
+#define INTC_REG_IAR                  0x0Cu
+#define INTC_REG_MER                  0x1Cu
+#define INTC_MER_MASTER_ENABLE        (1u << 0)
+#define INTC_MER_HARDWARE_ENABLE      (1u << 1)
+#define EDGE_SCOPE_TRACE_IRQ_MASK     (1u << 0)
+
+/*
+ * AXI Timer 0
+ *
+ * Timer0 is used as a polling-only one-shot down counter. ENIT remains
+ * disabled so the Timer input does not interfere with the Trace IRQ check.
+ */
+#define TIMER_REG_TCSR0  0x00u
+#define TIMER_REG_TLR0   0x04u
+#define TIMER_REG_TCR0   0x08u
+
+#define TIMER_CSR_CASCADE           (1u << 11)
+#define TIMER_CSR_ENABLE_ALL        (1u << 10)
+#define TIMER_CSR_ENABLE_PWM        (1u << 9)
+#define TIMER_CSR_INT_OCCURRED      (1u << 8)
+#define TIMER_CSR_ENABLE_TIMER      (1u << 7)
+#define TIMER_CSR_ENABLE_INTERRUPT  (1u << 6)
+#define TIMER_CSR_LOAD              (1u << 5)
+#define TIMER_CSR_AUTO_RELOAD       (1u << 4)
+#define TIMER_CSR_EXTERNAL_CAPTURE  (1u << 3)
+#define TIMER_CSR_EXTERNAL_GENERATE (1u << 2)
+#define TIMER_CSR_DOWN_COUNT        (1u << 1)
+#define TIMER_CSR_CAPTURE_MODE      (1u << 0)
+
+#define TIMER_CSR_TIMEOUT_LOAD  (TIMER_CSR_INT_OCCURRED | \
+                                 TIMER_CSR_LOAD         | \
+                                 TIMER_CSR_DOWN_COUNT)
+#define TIMER_CSR_TIMEOUT_RUN   (TIMER_CSR_ENABLE_TIMER | \
+                                 TIMER_CSR_DOWN_COUNT)
 
 #define EDGE_SCOPE_PROBE_WIDTH           8u
 #define EDGE_SCOPE_BRAM_WORD_BITS       32u
@@ -77,5 +124,14 @@
 #define EDGE_SCOPE_PRE_SAMPLES         512u
 #define EDGE_SCOPE_POST_SAMPLES        512u
 #define EDGE_SCOPE_TRIGGER_INDEX       512u
+#define EDGE_SCOPE_TWO_WRAP_SAMPLES   (2u * EDGE_SCOPE_CAPTURE_DEPTH)
+#define EDGE_SCOPE_DEMO_WINDOW_FIRST  \
+    (EDGE_SCOPE_TRIGGER_INDEX - 4u)
+#define EDGE_SCOPE_DEMO_WINDOW_LAST   \
+    (EDGE_SCOPE_TRIGGER_INDEX + 4u)
+#define EDGE_SCOPE_DEMO_WINDOW_COUNT  \
+    (EDGE_SCOPE_DEMO_WINDOW_LAST - EDGE_SCOPE_DEMO_WINDOW_FIRST + 1u)
+#define EDGE_SCOPE_FREEZE_GUARD_SAMPLES \
+    (EDGE_SCOPE_CAPTURE_DEPTH + 37u)
 
 #endif
