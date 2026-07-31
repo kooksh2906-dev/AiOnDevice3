@@ -1,0 +1,23 @@
+EdgeScope-Lite Vivado ILA Reference - Step 3
+=============================================
+Vivado                  : 2024.2
+FPGA Part               : xc7a35tcpg236-1
+ILA VLNV                : xilinx.com:ip:ila:6.2
+Monitor Type            : Native
+Probe Count             : 1
+Probe0 Width            : 8
+Probe0 Type             : 0 (DATA_AND_TRIGGER)
+Probe0 Match Units      : 1
+Capture Depth           : 1024 samples
+Input Pipeline Stages   : 0
+Advanced Trigger        : disabled
+Storage Qualification   : disabled
+TRIG_IN / TRIG_OUT      : disabled / disabled
+ILA Clock               : 100000000 Hz
+Probe Source            : test_pattern_generator_gpio_adapter_0/probe_test_o[7:0]
+Runtime Window Count    : 1 (Step 4 setting)
+Runtime Trigger Position: 512 (Step 4 setting)
+Capture Geometry        : pre 512, trigger sample + post 511
+Validate Design         : PASS
+Output Products         : GENERATED
+Full Synth/Impl/Bitstream: NOT RUN (reserved for Step 5)

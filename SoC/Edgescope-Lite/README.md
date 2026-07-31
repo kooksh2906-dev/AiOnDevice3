@@ -68,14 +68,13 @@ Logic Analysis/
 ```
 
 일반 generated output과 Vivado cache는 Git에 포함하지 않습니다. 보드에서
-즉시 실행할 수 있는 검증된 A/B/C Bootable Bitstream과
-`artifacts/waves/*.vcd`만 예외로 공유합니다.
+즉시 실행할 수 있는 검증된 A/B/C XSA·ELF·Bootable Bitstream,
+checksum-bound ILA 증거와 `artifacts/waves/*.vcd`만 예외로 공유합니다.
 
 ## 역할 B — Chrome Web Serial Dashboard
 
 역할 B의 TypeScript/Vite Dashboard는 [dashboard/README.md](dashboard/README.md)에
-기능과 실행법이 정리되어 있습니다. PR #5가 `main`에 병합되기 전 새 PC에서는
-`feature/web-dashboard` Branch를 체크아웃해야 합니다.
+기능과 실행법이 정리되어 있으며 현재 `main`에서 바로 실행할 수 있습니다.
 
 ```bash
 cd dashboard
@@ -137,6 +136,24 @@ FPGA Sampler/Trigger/Trace Buffer와 dual-port BRAM을 공통 Base SoC에 통합
 - Vivado JTAG CSV 자동 export 및 1,024-sample 무결성 검사
 - [A/B/C 통합 GUI 미리보기](docs/edgescope_abc_gui_preview.png)
 - [A/B/C 비교 시연 영상 시나리오](docs/abc_demo_video_scenario.md)
+
+### ILA 실측·Step 10 증거 패키지
+
+`comparison/vivado_ila/`는 다른 PC에서 재빌드하기 위한 Portable 구현이고,
+[comparison/ila_reference/README.md](comparison/ila_reference/README.md)는
+윤형욱의 실기기 측정·검증·Step 10 증거 패키지입니다.
+
+- 1,024 sample capture와 Rising/Falling/Masked Pattern trigger 검증
+- Basys3 실기기 캡처 및 10 ns~1 µs pulse stress 결과 포함
+- 공통 Base SoC와 Test Pattern Generator를 사용한 동일 조건 비교
+- 자동화 스크립트, 원본 CSV/ILA, 체크섬, 발표용 SVG 포함
+- 현재 상태: `PASS_WITH_TEAM_INPUT_PENDING`
+
+ILA 자체 검증은 완료됐지만 Custom Full-System 최종 측정 7종이 아직 없어
+공식 Custom 대비 절감률은 확정하지 않았습니다. 현재 결론과 팀 인수인계는
+[Step 10 요약](comparison/ila_reference/results/step10/final_summary.md)과
+[team_handoff.md](comparison/ila_reference/results/step10/team_handoff.md)에서
+확인할 수 있습니다.
 
 ## 회귀 테스트
 

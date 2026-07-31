@@ -1,0 +1,32 @@
+# EdgeScope-Lite Step 8 machine-readable evidence
+pair_kind=STEP6_UART_RUNTIME
+bit_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+bit_sha256=cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ltx_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ltx_sha256=ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+STEP=8
+ACTION=pulse_stress
+RESULT=CAPTURE_COMPLETE
+WIDTH_CYCLES=10000
+WIDTH_NS=100000
+TRIAL=9
+ELIGIBLE=1
+SESSION_TOKEN=w010000-r09
+ILA_PROFILE=rising
+TRIGGER_COMPARE_VALUE=eq8'bXXXXXXXR
+DATA_DEPTH=1024
+TRIGGER_POSITION=512
+ARM_STATUS=WAITING_FOR_TRIGGER
+UART_PORT=/dev/ttyUSB1
+UART_COMMAND=RUN 6 10000
+UART_REPLY=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+UART_START_EPOCH_MS=1785317943896
+UART_RESPONSE_EPOCH_MS=1785317944039
+PARTIAL_CAPTURE=0
+ILA_FILE=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_09.ila
+ILA_FILE_SHA256=e3bb06b3cd0e65df38e73e7cceccddfc7fb3eba5a93f31e9cc82ee2b645faa9b
+RAW_CSV_FILE=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_09_raw.csv
+RAW_CSV_SHA256=40fb7888ef099938776460fc292fbb383164fd2bc276323da03be8a1011df49c
+TARGET=localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+DEVICE=xc7a35t_0
+ILA_CELL=base_soc_i/ila_reference_0

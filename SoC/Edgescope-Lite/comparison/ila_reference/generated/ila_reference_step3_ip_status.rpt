@@ -1,0 +1,107 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (lin64) Build 5239630 Fri Nov 08 22:34:34 MST 2024
+| Date         : Wed Jul 29 16:36:58 2026
+| Host         : user4-B80KV-AP35BKE running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_ip_status
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+IP Status Summary
+
+1. Project IP Status
+--------------------
+Your project uses 17 IP. Some of these IP may have undergone changes in this release of the software. Please review the recommended actions.
+
+More information on the Xilinx versioning policy is available at www.xilinx.com.
+
+Project IP Instances
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| Instance Name                                    | Status     | Recommendation      | Change    | IP Name            | IP      | New Version   | New        | Original Part        |
+|                                                  |            |                     | Log       |                    | Version |               | License    |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_axi_gpio_test_ctrl_0                    | Up-to-date | No changes required |  *(1)     | AXI GPIO           | 2.0     | 2.0 (Rev. 35) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 35)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_axi_timer_0_0                           | Up-to-date | No changes required |  *(2)     | AXI Timer          | 2.0     | 2.0 (Rev. 35) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 35)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_axi_uartlite_0_0                        | Up-to-date | No changes required |  *(3)     | AXI Uartlite       | 2.0     | 2.0 (Rev. 37) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 37)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_clk_wiz_0                               | Up-to-date | No changes required |  *(4)     | Clocking Wizard    | 6.0     | 6.0 (Rev. 15) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 15)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_dlmb_bram_if_cntlr_0                    | Up-to-date | No changes required |  *(5)     | LMB BRAM           | 4.0     | 4.0 (Rev. 25) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Controller         | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 25)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_dlmb_v10_0                              | Up-to-date | No changes required |  *(6)     | Local Memory Bus   | 3.0     | 3.0 (Rev. 14) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | (LMB) 1.0          | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 14)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_ila_reference_0_0                       | Up-to-date | No changes required |  *(7)     | ILA (Integrated    | 6.2     | 6.2 (Rev. 16) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Logic Analyzer)    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 16)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_ilmb_bram_if_cntlr_0                    | Up-to-date | No changes required |  *(8)     | LMB BRAM           | 4.0     | 4.0 (Rev. 25) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Controller         | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 25)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_ilmb_v10_0                              | Up-to-date | No changes required |  *(9)     | Local Memory Bus   | 3.0     | 3.0 (Rev. 14) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | (LMB) 1.0          | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 14)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_lmb_bram_0                              | Up-to-date | No changes required |  *(10)    | Block Memory       | 8.4     | 8.4 (Rev. 9)  | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Generator          | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 9)      |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_mdm_1_0                                 | Up-to-date | No changes required |  *(11)    | MicroBlaze Debug   | 1.0     | 1.0 (Rev. 3)  | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Module (MDM) V     | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 3)      |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_microblaze_riscv_0_0                    | Up-to-date | No changes required |  *(12)    | MicroBlaze V       | 1.0     | 1.0 (Rev. 3)  | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 3)      |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_microblaze_riscv_0_axi_intc_0           | Up-to-date | No changes required |  *(13)    | AXI Interrupt      | 4.1     | 4.1 (Rev. 20) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Controller         | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 20)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_microblaze_riscv_0_axi_periph_0         | Up-to-date | No changes required |  *(14)    | AXI Interconnect   | 2.1     | 2.1 (Rev. 34) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 34)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_microblaze_riscv_0_xlconcat_0           | Up-to-date | No changes required |  *(15)    | Concat             | 2.1     | 2.1 (Rev. 6)  | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 6)      |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_rst_clk_wiz_100M_0                      | Up-to-date | No changes required |  *(16)    | Processor System   | 5.0     | 5.0 (Rev. 16) | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     |           | Reset              | (Rev.   |               |            |                      |
+|                                                  |            |                     |           |                    | 16)     |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+| base_soc_test_pattern_generator_gpio_adapter_0_0 | Up-to-date | No changes required | Change    | test_pattern_gener | 1.0     | 1.0 (Rev. 1)  | Included   | xc7a35tcpg236-1      |
+|                                                  |            |                     | Log not   |                    | (Rev.   |               |            |                      |
+|                                                  |            |                     | available |                    | 1)      |               |            |                      |
++--------------------------------------------------+------------+---------------------+-----------+--------------------+---------+---------------+------------+----------------------+
+*(1) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/axi_gpio_v2_0/doc/axi_gpio_v2_0_changelog.txt
+*(2) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/axi_timer_v2_0/doc/axi_timer_v2_0_changelog.txt
+*(3) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/axi_uartlite_v2_0/doc/axi_uartlite_v2_0_changelog.txt
+*(4) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/clk_wiz_v6_0/doc/clk_wiz_v6_0_changelog.txt
+*(5) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(6) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
+*(7) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/ila_v6_2/doc/ila_v6_2_changelog.txt
+*(8) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/lmb_bram_if_cntlr_v4_0/doc/lmb_bram_if_cntlr_v4_0_changelog.txt
+*(9) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/lmb_v10_v3_0/doc/lmb_v10_v3_0_changelog.txt
+*(10) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(11) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/mdm_riscv_v1_0/doc/mdm_riscv_v1_0_changelog.txt
+*(12) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/microblaze_riscv_v1_0/doc/microblaze_riscv_v1_0_changelog.txt
+*(13) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/axi_intc_v4_1/doc/axi_intc_v4_1_changelog.txt
+*(14) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/axi_interconnect_v2_1/doc/axi_interconnect_v2_1_changelog.txt
+*(15) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/xlconcat_v2_1/doc/xlconcat_v2_1_changelog.txt
+*(16) /media/user4/data/tools/Vivado/2024.2/data/ip/xilinx/proc_sys_reset_v5_0/doc/proc_sys_reset_v5_0_changelog.txt
+
+

@@ -9,8 +9,9 @@
 | C | Vivado ILA | Xilinx Hardware Analyzer 기준 |
 
 현재 이 디렉터리에는 보드 실측을 완료한 A, 구현·빌드를 완료한 B/C와 세
-비교군이 공유하는 Base SoC 및 Test Pattern Generator가 포함되어 있다. B/C의
-실제 trigger·Pulse 측정값은 Basys3에서 원본 UART/JTAG 캡처를 얻은 뒤 확정한다.
+비교군이 공유하는 Base SoC 및 Test Pattern Generator가 포함되어 있다.
+C의 Trigger·Pulse 실측과 Step 10 증거는 `ila_reference/`에 보존되어 있다.
+B의 공식 Custom-vs-ILA 비교에는 아직 Custom 전체 Routed 자료 7종이 필요하다.
 
 ## 주요 경로
 
@@ -19,6 +20,7 @@
 - `cpu_polling/`: 비교군 A의 Vivado, Vitis, 보고서 및 실측 결과
 - `edgescope_lite/`: 비교군 B의 Custom Analyzer 전체 빌드
 - `vivado_ila/`: 비교군 C의 Vivado ILA 전체 빌드와 JTAG 캡처 자동화
+- `ila_reference/`: 비교군 C의 동결 Source, 실측 및 Step 1~10 증거
 
 비교군 A는 기능적으로 100 MS/s Hardware Analyzer와 동등하지 않다. 따라서 A의
 처리량은 `observations/s`로 표기하며, 공식 자원 절감률은 기능적으로 동등한

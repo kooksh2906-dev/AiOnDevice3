@@ -1,0 +1,159 @@
+# EdgeScope-Lite Step 9 resource/timing validation
+OVERALL=PASS_WITH_TEAM_INPUT_PENDING
+
+[common_baseline]
+STATUS=VERIFIED
+DETAIL=whole routed SoC reports verified
+ASSERT.utilization_metadata=PASS | compatible
+ASSERT.utilization_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.hierarchy_metadata=PASS | compatible
+ASSERT.hierarchy_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.timing_metadata=PASS | compatible
+ASSERT.timing_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.drc_metadata=PASS | compatible
+ASSERT.drc_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.clock_period=PASS | actual=10.000 ns, expected=10.000 ns
+ASSERT.clock_frequency=PASS | actual=100.000 MHz, expected=100.000 MHz
+ASSERT.setup_timing=PASS | WNS=1.313, TNS=0.000
+ASSERT.hold_timing=PASS | WHS=0.033, THS=0.000
+ASSERT.pulse_width_timing=PASS | WPWS=3.000, TPWS=0.000
+ASSERT.internal_unconstrained_endpoints=PASS | count=0
+ASSERT.drc_no_errors=PASS | errors=0, critical_warnings=0, warnings=3
+ASSERT.drc_full_design_default_bitstream_no_waivers=PASS | entire_design=True, ruledecks=('bitstream_checks', 'default'), max_checks_unlimited=True, no_waivers=True, command_is_report_drc=True, command_ruledecks=('bitstream_checks', 'default'), scope_filter_absent=True
+ASSERT.fully_routed_zero_errors=PASS | routable=4704, fully_routed=4704, errors=0
+ASSERT.hierarchy_top_matches_total=PASS | hierarchy=ResourceMetrics(slice_luts=2685, lut_as_logic=2547, lut_as_memory=138, slice_registers=2455, ramb36=32, ramb18=0, dsp48e1=0), total=ResourceMetrics(slice_luts=2685, lut_as_logic=2547, lut_as_memory=138, slice_registers=2455, ramb36=32, ramb18=0, dsp48e1=0)
+ASSERT.common_generator_present=PASS | found
+ASSERT.common_generator_frozen_hierarchy=PASS | actual=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0), expected=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0)
+ASSERT.no_analyzer_debug_hierarchy=PASS | none
+ASSERT.baseline_manifest.STEP=PASS | actual='9', expected='9'
+ASSERT.baseline_manifest.BUILD_SCOPE=PASS | actual='COMMON_BASE_PLUS_GENERATOR', expected='COMMON_BASE_PLUS_GENERATOR'
+ASSERT.baseline_manifest.OVERALL=PASS | actual='PASS', expected='PASS'
+ASSERT.baseline_manifest.VIVADO_VERSION=PASS | actual='2024.2', expected='2024.2'
+ASSERT.baseline_manifest.FPGA_PART=PASS | actual='xc7a35tcpg236-1', expected='xc7a35tcpg236-1'
+ASSERT.baseline_manifest.BOARD_PART=PASS | actual='digilentinc.com:basys3:part0:1.2', expected='digilentinc.com:basys3:part0:1.2'
+ASSERT.baseline_manifest.TOP=PASS | actual='base_soc_wrapper', expected='base_soc_wrapper'
+ASSERT.baseline_manifest.DESIGN_STATE=PASS | actual='ROUTED', expected='ROUTED'
+ASSERT.baseline_manifest.CLOCK_HZ=PASS | actual='100000000', expected='100000000'
+ASSERT.baseline_manifest.CLOCK_PERIOD_NS=PASS | actual='10.000', expected='10.000'
+ASSERT.baseline_manifest.SYNTHESIS_STRATEGY=PASS | actual='Vivado Synthesis Defaults', expected='Vivado Synthesis Defaults'
+ASSERT.baseline_manifest.IMPLEMENTATION_STRATEGY=PASS | actual='Vivado Implementation Defaults', expected='Vivado Implementation Defaults'
+ASSERT.baseline_manifest.VIVADO_ILA_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.VIO_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.CUSTOM_ANALYZER_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.DEBUG_CORE_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.GENERATOR_HIERARCHY_COUNT=PASS | actual='1', expected='1'
+ASSERT.baseline_manifest.DRC_ERROR_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.DRC_CRITICAL_WARNING_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.DRC_WARNING_COUNT=PASS | actual='3', expected='3'
+ASSERT.baseline_manifest.DRC_OTHER_COUNT=PASS | actual='0', expected='0'
+ASSERT.baseline_manifest.BASE_SOC_TCL_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/frozen/common/base_soc.tcl, local=31f6d77d2150d0d6a744fae02b2a85661340fb71a17906ca5267ab8a74ae078c, manifest=31f6d77d2150d0d6a744fae02b2a85661340fb71a17906ca5267ab8a74ae078c
+ASSERT.baseline_manifest.GENERATOR_INTEGRATION_TCL_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/frozen/common/add_test_pattern_generator.tcl, local=971cf1b87e4b39b522626746e5d3464e840a4f413d183e8db6e353587f2121d8, manifest=971cf1b87e4b39b522626746e5d3464e840a4f413d183e8db6e353587f2121d8
+ASSERT.baseline_manifest.GENERATOR_RTL_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/frozen/common/rtl/test_pattern_generator.sv, local=9f0a1b7f9a54ddc8f9eb3e093382af9eb6a6cdf8c9ab48ab4ce65d83e7eb5440, manifest=9f0a1b7f9a54ddc8f9eb3e093382af9eb6a6cdf8c9ab48ab4ce65d83e7eb5440
+ASSERT.baseline_manifest.GENERATOR_ADAPTER_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/frozen/common/rtl/test_pattern_generator_gpio_adapter.v, local=73fd657010c8109d5a1c7e5168d4ae4a4d576fc80e2ddd02978b087523249580, manifest=73fd657010c8109d5a1c7e5168d4ae4a4d576fc80e2ddd02978b087523249580
+ASSERT.baseline_manifest.GIT_COMMIT=PASS | actual='4f178c0e2606924fc9f55b844afb2ecd05a7303d'; expected 40- or 64-hex Git object id
+ASSERT.baseline_manifest.GIT_WORKTREE_DIRTY=PASS | actual='1'; expected explicit 0/1/true/false
+ASSERT.baseline_manifest.BASE_BUILD_TCL_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/frozen/common/build_base_with_generator.tcl, local=0e3104db76d7120b04406f7e8140d3172591955df50394d1e5d23a5756015d2b, manifest=0e3104db76d7120b04406f7e8140d3172591955df50394d1e5d23a5756015d2b
+ASSERT.baseline_manifest.BASELINE_CONSTRAINT_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/constraints/step9_baseline_common.xdc, local=c702fd50aea605a072ff351b4f8a077a5f6bf78229526dd4237149506abcc341, manifest=c702fd50aea605a072ff351b4f8a077a5f6bf78229526dd4237149506abcc341
+ASSERT.baseline_manifest.BASELINE_TCL_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/build_step9_common_baseline.tcl, local=43544f1e0ca543429be63a7e9cc9c54b27101aaedebc03e8ff0639878e1f28fb, manifest=43544f1e0ca543429be63a7e9cc9c54b27101aaedebc03e8ff0639878e1f28fb
+ASSERT.baseline_manifest.BASELINE_RUNNER_SHA256=PASS | source=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/run_step9_common_baseline.sh, local=ee862300a85c651a2ffe1f88e41912356bc6adbb4f82538df3fb5cbc52d4a4f4, manifest=ee862300a85c651a2ffe1f88e41912356bc6adbb4f82538df3fb5cbc52d4a4f4
+ASSERT.baseline_manifest.ROUTED_DCP_SHA256=PASS | dcp=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/build/step9_common_baseline/common_base_plus_generator_routed.dcp, local=5bf512f6e5523af442d96913b1a2439775611f87184d1150ae34d5787fc13d02, manifest=5bf512f6e5523af442d96913b1a2439775611f87184d1150ae34d5787fc13d02
+ASSERT.baseline_manifest.UTILIZATION_REPORT_SHA256=PASS | actual=2714710ccf7b945c6a3658f43f3dcde647d8471016a4d9bd1e8438aeadaac7fe, manifest=2714710ccf7b945c6a3658f43f3dcde647d8471016a4d9bd1e8438aeadaac7fe
+ASSERT.baseline_manifest.HIERARCHICAL_REPORT_SHA256=PASS | actual=87193ee6e07186e6d9042cb72f3562f3b2f1f4280555613ceb725cfbb30017df, manifest=87193ee6e07186e6d9042cb72f3562f3b2f1f4280555613ceb725cfbb30017df
+ASSERT.baseline_manifest.TIMING_REPORT_SHA256=PASS | actual=c4ee9d7fdcd5620ffa21dd367bd6161756f9acea187fab4feb2c5bb7392358e4, manifest=c4ee9d7fdcd5620ffa21dd367bd6161756f9acea187fab4feb2c5bb7392358e4
+ASSERT.baseline_manifest.DRC_REPORT_SHA256=PASS | actual=8bdd4542cd4147c8a7e288e6ff7d025ed7af94e1b5cd2a28bdc59516f9f683be, manifest=8bdd4542cd4147c8a7e288e6ff7d025ed7af94e1b5cd2a28bdc59516f9f683be
+ASSERT.baseline_manifest.ROUTE_REPORT_SHA256=PASS | actual=6e6dd3c6f585d2d4a1cf864f5eba3eca2ff723aa71a3fd26adfb45648d95341e, manifest=6e6dd3c6f585d2d4a1cf864f5eba3eca2ff723aa71a3fd26adfb45648d95341e
+ASSERT.baseline_manifest.CHECK_TIMING_REPORT_SHA256=PASS | actual=4b1c4596ba85b3525726f21866ba5c6f6e3219c026eba53ea367f3853eebf2ba, manifest=4b1c4596ba85b3525726f21866ba5c6f6e3219c026eba53ea367f3853eebf2ba
+
+[cpu_polling]
+STATUS=VERIFIED
+DETAIL=whole routed SoC reports verified
+ASSERT.utilization_metadata=PASS | compatible
+ASSERT.utilization_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.hierarchy_metadata=PASS | compatible
+ASSERT.hierarchy_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.timing_metadata=PASS | compatible
+ASSERT.timing_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.drc_metadata=PASS | compatible
+ASSERT.drc_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.clock_period=PASS | actual=10.000 ns, expected=10.000 ns
+ASSERT.clock_frequency=PASS | actual=100.000 MHz, expected=100.000 MHz
+ASSERT.setup_timing=PASS | WNS=0.939, TNS=0.000
+ASSERT.hold_timing=PASS | WHS=0.047, THS=0.000
+ASSERT.pulse_width_timing=PASS | WPWS=3.000, TPWS=0.000
+ASSERT.internal_unconstrained_endpoints=PASS | count=0
+ASSERT.drc_no_errors=PASS | errors=0, critical_warnings=0, warnings=3
+ASSERT.hierarchy_top_matches_total=PASS | hierarchy=ResourceMetrics(slice_luts=2782, lut_as_logic=2644, lut_as_memory=138, slice_registers=2560, ramb36=32, ramb18=0, dsp48e1=0), total=ResourceMetrics(slice_luts=2782, lut_as_logic=2644, lut_as_memory=138, slice_registers=2560, ramb36=32, ramb18=0, dsp48e1=0)
+ASSERT.common_generator_present=PASS | found
+ASSERT.common_generator_frozen_hierarchy=PASS | actual=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0), expected=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0)
+ASSERT.no_analyzer_debug_hierarchy=PASS | none
+ASSERT.frozen_resource_snapshot=PASS | actual=ResourceMetrics(slice_luts=2782, lut_as_logic=2644, lut_as_memory=138, slice_registers=2560, ramb36=32, ramb18=0, dsp48e1=0), expected=ResourceMetrics(slice_luts=2782, lut_as_logic=2644, lut_as_memory=138, slice_registers=2560, ramb36=32, ramb18=0, dsp48e1=0)
+ASSERT.frozen_timing_snapshot=PASS | actual=(0.939, 0.0, 0.047, 0.0, 3.0, 0.0), expected=(0.939, 0.0, 0.047, 0.0, 3.0, 0.0)
+ASSERT.cpu_drive_fetch_mode=PASS | FETCH_MODE='GOOGLE_DRIVE_READ_ONLY'
+ASSERT.cpu_drive_id.utilization.rpt=PASS | FILE.utilization.rpt.ID='13_TA_VL1rG2ZLkHA9GQW2mPV9sdPU6MU'
+ASSERT.cpu_drive_size.utilization.rpt=PASS | local=13065, manifest='13065'
+ASSERT.cpu_drive_id.hierarchical_utilization.rpt=PASS | FILE.hierarchical_utilization.rpt.ID='1KkHjiSysgv26rYvVCjxdqdvWYYn1KILe'
+ASSERT.cpu_drive_size.hierarchical_utilization.rpt=PASS | local=218188, manifest='218188'
+ASSERT.cpu_drive_id.timing_summary.rpt=PASS | FILE.timing_summary.rpt.ID='1qCk9CsOmMk7TblVDmFZbl0hn7PoUW_M6'
+ASSERT.cpu_drive_size.timing_summary.rpt=PASS | local=55302, manifest='55302'
+ASSERT.cpu_drive_id.drc.rpt=PASS | FILE.drc.rpt.ID='1-CgTM53NHUj2urx3wACVlWDG-l1kGJrA'
+ASSERT.cpu_drive_size.drc.rpt=PASS | local=3078, manifest='3078'
+
+[ila_reference]
+STATUS=VERIFIED
+DETAIL=whole routed SoC reports verified
+ASSERT.utilization_metadata=PASS | compatible
+ASSERT.utilization_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.hierarchy_metadata=PASS | compatible
+ASSERT.hierarchy_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.timing_metadata=PASS | compatible
+ASSERT.timing_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.drc_metadata=PASS | compatible
+ASSERT.drc_identity=PASS | reference=base_soc_wrapper/2024.2, actual=base_soc_wrapper/2024.2
+ASSERT.clock_period=PASS | actual=10.000 ns, expected=10.000 ns
+ASSERT.clock_frequency=PASS | actual=100.000 MHz, expected=100.000 MHz
+ASSERT.setup_timing=PASS | WNS=1.544, TNS=0.000
+ASSERT.hold_timing=PASS | WHS=0.014, THS=0.000
+ASSERT.pulse_width_timing=PASS | WPWS=3.000, TPWS=0.000
+ASSERT.internal_unconstrained_endpoints=PASS | count=0
+ASSERT.drc_no_errors=PASS | errors=0, critical_warnings=0, warnings=14
+ASSERT.drc_full_design_default_bitstream_no_waivers=PASS | entire_design=True, ruledecks=('bitstream_checks', 'default'), max_checks_unlimited=True, no_waivers=True, command_is_report_drc=True, command_ruledecks=('bitstream_checks', 'default'), scope_filter_absent=True
+ASSERT.fully_routed_zero_errors=PASS | routable=7147, fully_routed=7147, errors=0
+ASSERT.hierarchy_top_matches_total=PASS | hierarchy=ResourceMetrics(slice_luts=3726, lut_as_logic=3500, lut_as_memory=226, slice_registers=4230, ramb36=32, ramb18=1, dsp48e1=0), total=ResourceMetrics(slice_luts=3726, lut_as_logic=3500, lut_as_memory=226, slice_registers=4230, ramb36=32, ramb18=1, dsp48e1=0)
+ASSERT.common_generator_present=PASS | found
+ASSERT.common_generator_frozen_hierarchy=PASS | actual=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0), expected=ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0)
+ASSERT.official_ila_present=PASS | expected exact instance ila_reference_0
+ASSERT.required_debug_hub_present=PASS | expected exact instance dbg_hub
+ASSERT.frozen_resource_snapshot=PASS | actual=ResourceMetrics(slice_luts=3726, lut_as_logic=3500, lut_as_memory=226, slice_registers=4230, ramb36=32, ramb18=1, dsp48e1=0), expected=ResourceMetrics(slice_luts=3726, lut_as_logic=3500, lut_as_memory=226, slice_registers=4230, ramb36=32, ramb18=1, dsp48e1=0)
+ASSERT.frozen_timing_snapshot=PASS | actual=(1.544, 0.0, 0.014, 0.0, 3.0, 0.0), expected=(1.544, 0.0, 0.014, 0.0, 3.0, 0.0)
+ASSERT.ila_manifest.FPGA Part=PASS | actual='xc7a35tcpg236-1', expected='xc7a35tcpg236-1'
+ASSERT.ila_manifest.Board Part=PASS | actual='digilentinc.com:basys3:part0:1.2', expected='digilentinc.com:basys3:part0:1.2'
+ASSERT.ila_manifest.Top=PASS | actual='base_soc_wrapper', expected='base_soc_wrapper'
+ASSERT.ila_manifest.Synthesis Strategy=PASS | actual='Vivado Synthesis Defaults', expected='Vivado Synthesis Defaults'
+ASSERT.ila_manifest.Implementation Strategy=PASS | actual='Vivado Implementation Defaults', expected='Vivado Implementation Defaults'
+ASSERT.ila_manifest.Synthesis Status=PASS | actual='synth_design Complete!', expected='synth_design Complete!'
+ASSERT.ila_manifest.Implementation Status=PASS | actual='route_design Complete!', expected='route_design Complete!'
+ASSERT.ila_manifest.sys_clock Period (ns)=PASS | actual='10.000', expected='10.000'
+ASSERT.ila_manifest.Internal Unconstrained=PASS | actual='0', expected='0'
+ASSERT.ila_manifest.Fully Placed=PASS | actual='PASS', expected='PASS'
+ASSERT.ila_manifest.Fully Routed=PASS | actual='PASS', expected='PASS'
+ASSERT.ila_manifest.Route Errors=PASS | actual='0', expected='0'
+ASSERT.ila_manifest.DRC Errors=PASS | actual='0', expected='0'
+ASSERT.ila_manifest.DRC Critical Warnings=PASS | actual='0', expected='0'
+ASSERT.ila_manifest.Vivado=PASS | actual='Vivado v2024.2 (64-bit)'
+ASSERT.ila_manifest.Routed_DCP_SHA256=PASS | dcp=/tmp/edgescope-pr3-resolve.T1OCt6/repo/comparison/ila_reference/build/step5/edgescope_ila_reference_routed.dcp, local=a82e65ad6e3762ba54533420a5bf48c707163c533e8f555277d631a0fd21dbe3, manifest=a82e65ad6e3762ba54533420a5bf48c707163c533e8f555277d631a0fd21dbe3
+ASSERT.ila_checksum.generated/ila_reference_step5_utilization.rpt=PASS | actual=d61edd931a0892cb0f53ceabc8e3f5fa4cdff8f5e8f5dae9ea61f4e369b5b5d4, index=d61edd931a0892cb0f53ceabc8e3f5fa4cdff8f5e8f5dae9ea61f4e369b5b5d4
+ASSERT.ila_checksum.generated/ila_reference_step5_hierarchical_utilization.rpt=PASS | actual=8f1ae4039c67cca6daea72801dd39e40714f953dc93657260d642e09188dccfb, index=8f1ae4039c67cca6daea72801dd39e40714f953dc93657260d642e09188dccfb
+ASSERT.ila_checksum.generated/ila_reference_step5_timing_summary.rpt=PASS | actual=6440e53d55f8971259e466d839711b4083d1ce63b22eb56a7cc035a88103fbe5, index=6440e53d55f8971259e466d839711b4083d1ce63b22eb56a7cc035a88103fbe5
+ASSERT.ila_checksum.generated/ila_reference_step5_drc.rpt=PASS | actual=ebefb24a5d1495540a28b91d683bda113b3b51fa098a1f18531459fe0cb03709, index=ebefb24a5d1495540a28b91d683bda113b3b51fa098a1f18531459fe0cb03709
+ASSERT.ila_checksum.generated/ila_reference_step5_route_status.rpt=PASS | actual=0571d07c4252b09056ef0c2049bb670e542392a28b3141246f3ac069f2818cfa, index=0571d07c4252b09056ef0c2049bb670e542392a28b3141246f3ac069f2818cfa
+ASSERT.ila_checksum.build/step5/edgescope_ila_reference_routed.dcp=PASS | actual=a82e65ad6e3762ba54533420a5bf48c707163c533e8f555277d631a0fd21dbe3, index=a82e65ad6e3762ba54533420a5bf48c707163c533e8f555277d631a0fd21dbe3
+ASSERT.ila_checksum.generated/ila_reference_step5_build_manifest.rpt=PASS | actual=b6e8d4b35948d07e6d9852191def1d929aed2e72ce26d49b7992b50c7fdce01c, index=b6e8d4b35948d07e6d9852191def1d929aed2e72ce26d49b7992b50c7fdce01c
+
+[custom]
+STATUS=NOT_RECEIVED
+DETAIL=missing: utilization.rpt, hierarchical_utilization.rpt, timing_summary.rpt, drc.rpt, route_status.rpt, routed_design.dcp, build_manifest.rpt
+
+[cross_method]
+ASSERT.same_tool_part_top_clock=PASS | [('2024.2', 'base_soc_wrapper', 'xc7a35tcpg236-1', 10.0)]
+ASSERT.same_common_generator_hierarchy=PASS | ['ResourceMetrics(slice_luts=110, lut_as_logic=110, lut_as_memory=0, slice_registers=65, ramb36=0, ramb18=0, dsp48e1=0)']
+ASSERT.same_common_base_generator_source_hashes=PASS | matched
