@@ -78,7 +78,7 @@
 /*
  * AXI Interrupt Controller
  *
- * Circular Trace Buffer irq_o is connected to AXI INTC input 0.
+ * Circular Trace Buffer irq_o is connected to AXI INTC input 2.
  * The final demo polls raw ISR with HIE enabled and CPU interrupts disabled.
  */
 #define INTC_REG_ISR                  0x00u
@@ -86,7 +86,7 @@
 #define INTC_REG_MER                  0x1Cu
 #define INTC_MER_MASTER_ENABLE        (1u << 0)
 #define INTC_MER_HARDWARE_ENABLE      (1u << 1)
-#define EDGE_SCOPE_TRACE_IRQ_MASK     (1u << 0)
+#define EDGE_SCOPE_TRACE_IRQ_MASK     (1u << 2)
 
 /*
  * AXI Timer 0
