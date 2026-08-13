@@ -1547,7 +1547,22 @@ class IlaCaptureManager:
             if not dataset["captures"]:
                 detail = dataset["warnings"][-1] if dataset["warnings"] else "알 수 없는 CSV 형식"
                 raise RuntimeError(detail)
-            dataset["captures"][0]["mode"] = mode
+            capture = dataset["captures"][0]
+            capture["mode"] = mode
+            capture["config"] = _resolve_capture_config(
+                "vivado_ila",
+                mode,
+                {"SAMPLE_HZ": capture["sample_hz"]},
+                capture["samples"],
+                capture["trigger_index"],
+            )
+            capture["validation"] = _validate_capture(
+                "vivado_ila",
+                mode,
+                capture["samples"],
+                capture["trigger_index"],
+                capture["config"],
+            )
             dataset["evidence"] = "MEASURED · VIVADO ILA JTAG CSV"
             dataset["simulated"] = False
             with self.lock:

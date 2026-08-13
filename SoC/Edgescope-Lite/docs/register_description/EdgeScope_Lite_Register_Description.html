@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>EdgeScope-Lite Register Description</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #d9dee7;
+      color: #172033;
+      font-family: "Noto Sans CJK KR", "Noto Sans KR", sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.58;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto 8mm;
+      padding: 15mm 16mm 14mm;
+      overflow: hidden;
+      background: #fff;
+      page-break-after: always;
+    }
+    .page:last-child { page-break-after: auto; }
+    .running-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6mm;
+      color: #657188;
+      font-size: 7.8pt;
+      font-weight: 700;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+    .running-head .accent { color: #087ca7; }
+    .footer {
+      position: absolute;
+      left: 16mm;
+      right: 16mm;
+      bottom: 7mm;
+      display: flex;
+      justify-content: space-between;
+      border-top: .35mm solid #d8dee9;
+      padding-top: 2.2mm;
+      color: #7b8497;
+      font-size: 7.2pt;
+    }
+    h1, h2, h3, h4, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 4mm;
+      color: #11233e;
+      font-size: 27pt;
+      line-height: 1.15;
+      letter-spacing: -.035em;
+    }
+    h2 {
+      margin: 0 0 4.2mm;
+      padding-bottom: 2.2mm;
+      border-bottom: .65mm solid #0a89b8;
+      color: #11233e;
+      font-size: 19pt;
+      line-height: 1.2;
+      letter-spacing: -.02em;
+    }
+    h3 {
+      margin: 4.3mm 0 2.3mm;
+      color: #0a789f;
+      font-size: 13pt;
+      line-height: 1.25;
+    }
+    h4 {
+      margin: 3mm 0 1.5mm;
+      color: #243a5a;
+      font-size: 10.8pt;
+    }
+    p { margin-bottom: 2.5mm; }
+    ul { margin: 1.5mm 0 2.5mm 5mm; padding-left: 4mm; }
+    li { margin-bottom: .8mm; }
+    code, pre, .mono {
+      font-family: "Noto Sans Mono CJK KR", "DejaVu Sans Mono", monospace;
+    }
+    code {
+      padding: .15mm .8mm;
+      border-radius: 1mm;
+      background: #eef4f8;
+      color: #0c5873;
+      font-size: .92em;
+    }
+    pre {
+      margin: 2.2mm 0;
+      padding: 3mm 3.5mm;
+      border-left: 1.1mm solid #0b91bf;
+      border-radius: 1.5mm;
+      background: #f1f6fa;
+      color: #17334a;
+      font-size: 8pt;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .lead {
+      color: #3c4a60;
+      font-size: 11.2pt;
+      line-height: 1.65;
+    }
+    .subtle { color: #647086; }
+    .small { font-size: 8.6pt; }
+    .tiny { font-size: 7.6pt; }
+    .strong { color: #11233e; font-weight: 800; }
+    .cyan { color: #0786b4; }
+    .magenta { color: #b33384; }
+    .green { color: #18855b; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3.2mm;
+    }
+    .card {
+      padding: 3.5mm 4mm;
+      border: .35mm solid #cdd7e4;
+      border-radius: 2mm;
+      background: #fbfdff;
+      break-inside: avoid;
+    }
+    .card h3, .card h4 { margin-top: 0; }
+    .card.cyan-card { border-top: 1.2mm solid #00a6d6; }
+    .card.purple-card { border-top: 1.2mm solid #8758be; }
+    .card.magenta-card { border-top: 1.2mm solid #d144a1; }
+    .callout {
+      margin: 2.5mm 0;
+      padding: 2.8mm 3.5mm;
+      border-left: 1.2mm solid #0a91bf;
+      background: #eef8fc;
+      color: #25445a;
+      break-inside: avoid;
+    }
+    .callout.warn {
+      border-left-color: #d08724;
+      background: #fff7e9;
+      color: #62430f;
+    }
+    .callout.pink {
+      border-left-color: #c7449c;
+      background: #fff2fb;
+      color: #5a2850;
+    }
+    table {
+      width: 100%;
+      margin: 2mm 0 3.2mm;
+      border-collapse: collapse;
+      table-layout: fixed;
+      break-inside: avoid;
+      font-size: 8.8pt;
+    }
+    th {
+      padding: 2mm 1.8mm;
+      border: .3mm solid #bac9d8;
+      background: #123955;
+      color: #fff;
+      font-weight: 700;
+      text-align: center;
+    }
+    td {
+      padding: 1.75mm 1.8mm;
+      border: .3mm solid #ccd6e1;
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) td { background: #f4f8fb; }
+    .bits th { background: #244f6b; }
+    .bits td { text-align: center; vertical-align: middle; }
+    .bits .desc { text-align: left; }
+    .summary td:first-child, .summary td:nth-child(2),
+    .summary td:nth-child(4), .summary td:nth-child(5) {
+      font-family: "Noto Sans Mono CJK KR", monospace;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .summary td:nth-child(3) { font-weight: 700; }
+    .state-flow {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 1.5mm;
+      margin: 3mm 0;
+    }
+    .state {
+      flex: 1;
+      padding: 2.6mm 1.5mm;
+      border: .35mm solid #78bcd2;
+      border-radius: 1.8mm;
+      background: #f0fbfe;
+      color: #14536b;
+      font-size: 8.2pt;
+      text-align: center;
+      font-weight: 800;
+    }
+    .arrow {
+      display: flex;
+      align-items: center;
+      color: #5d7184;
+      font-weight: 800;
+    }
+    .metric {
+      padding: 3mm;
+      border-radius: 2mm;
+      background: #102941;
+      color: #fff;
+      text-align: center;
+    }
+    .metric .num {
+      display: block;
+      margin-bottom: 1mm;
+      color: #4dd6f2;
+      font-size: 20pt;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .cover {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      background:
+        radial-gradient(circle at 82% 18%, rgba(0,174,220,.24), transparent 28%),
+        radial-gradient(circle at 16% 82%, rgba(176,60,154,.18), transparent 30%),
+        linear-gradient(145deg, #07101f 0%, #0a1830 55%, #122843 100%);
+      color: #fff;
+    }
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(55,170,218,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(55,170,218,.08) 1px, transparent 1px);
+      background-size: 22mm 22mm;
+    }
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 23mm 20mm 20mm;
+    }
+    .cover-kicker {
+      color: #71d7ee;
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: .18em;
+    }
+    .cover-title {
+      margin: 42mm 0 4mm;
+      color: #fff;
+      font-size: 38pt;
+      line-height: 1.08;
+      letter-spacing: -.04em;
+    }
+    .cover-subtitle {
+      color: #a9d9e8;
+      font-size: 16pt;
+      font-weight: 500;
+    }
+    .cover-rule {
+      width: 32mm;
+      height: 1.2mm;
+      margin: 9mm 0;
+      background: linear-gradient(90deg, #00d8ff, #c94aaf);
+    }
+    .cover-meta {
+      margin-top: auto;
+      width: 108mm;
+      border-top: .3mm solid rgba(255,255,255,.28);
+      padding-top: 7mm;
+    }
+    .cover-meta-row {
+      display: grid;
+      grid-template-columns: 26mm 1fr;
+      margin-bottom: 2.5mm;
+      font-size: 10pt;
+    }
+    .cover-meta-row span:first-child {
+      color: #78d6ec;
+      font-weight: 700;
+    }
+    .cover-meta-row span:last-child { color: #f3f8fb; }
+    .cover-foot {
+      margin-top: 8mm;
+      color: #8ea5b8;
+      font-size: 8pt;
+    }
+    .section-tag {
+      display: inline-block;
+      margin-bottom: 2mm;
+      padding: .8mm 2.5mm;
+      border-radius: 10mm;
+      background: #e6f6fb;
+      color: #087da6;
+      font-size: 7.5pt;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+    .cmd-table td:nth-child(1) {
+      width: 28%;
+      font-family: "Noto Sans Mono CJK KR", monospace;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .keep {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+  <section class="page cover">
+    <div class="cover-inner">
+      <div class="cover-kicker">EDGESCOPE-LITE / SoC PROJECT</div>
+      <h1 class="cover-title">EdgeScope-Lite<br>Register Description</h1>
+      <div class="cover-subtitle">Probe Sampler · Basic Trigger Engine · Circular Trace Buffer</div>
+      <div class="cover-rule"></div>
+      <div class="lead" style="color:#cedce7; width:135mm;">
+        Basys3 · MicroBlaze V · AXI4-Lite · 100 MHz<br>
+        Frozen Common Specification v2.1
+      </div>
+      <div class="cover-meta">
+        <div class="cover-meta-row"><span>교육명</span><span>온디바이스 AI 반도체 설계 3기</span></div>
+        <div class="cover-meta-row"><span>작성자</span><span>윤형욱 · 김도근 · 국승호</span></div>
+        <div class="cover-meta-row"><span>작성일</span><span>2026년 8월 10일</span></div>
+        <div class="cover-meta-row"><span>대상 보드</span><span>Digilent Basys3 · XC7A35T</span></div>
+      </div>
+      <div class="cover-foot">
+        본 문서는 EdgeScope-Lite 최종 Reference Design의 RTL 및 Block Design 주소 배치를 기준으로 작성하였다.
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">01 · OVERVIEW</span><span>EDGESCOPE-LITE REGISTER DESCRIPTION</span></div>
+    <h1>1. 개요</h1>
+    <p class="lead">
+      EdgeScope-Lite는 8개 디지털 채널을 병렬로 Sampling하고, Rising/Falling/Masked Pattern 조건을
+      하드웨어에서 검출한 뒤 Trigger 전 512개와 Trigger를 포함한 이후 512개 Sample을 Capture BRAM에 보존하는
+      독립형 Logic Analyzer이다. MicroBlaze V는 각 IP의 AXI4-Lite CSR을 설정하고 Capture 완료 후 BRAM 데이터를 읽는다.
+    </p>
+
+    <div class="grid-3" style="margin:5mm 0 4mm;">
+      <div class="metric"><span class="num">8 CH</span>Parallel Digital Input</div>
+      <div class="metric"><span class="num">100 MS/s</span>Maximum Sample Rate</div>
+      <div class="metric"><span class="num">1,024</span>512 Pre + 512 Post</div>
+    </div>
+
+    <h3>1.1 공통 인터페이스 사양</h3>
+    <table>
+      <colgroup><col style="width:28%"><col style="width:72%"></colgroup>
+      <tbody>
+        <tr><td class="strong">Bus</td><td>AXI4-Lite, 32-bit Data, 6-bit IP Local Byte Address</td></tr>
+        <tr><td class="strong">Clock / Reset</td><td>100 MHz Common Clock / Active-Low Synchronous Reset</td></tr>
+        <tr><td class="strong">Register Alignment</td><td>32-bit Register, 4-byte Alignment</td></tr>
+        <tr><td class="strong">Capture Memory</td><td>True Dual-Port BRAM, 1,024 × 32-bit = 4 KiB</td></tr>
+        <tr><td class="strong">Capture Contract</td><td>Logical Trigger Index 512, Trigger Sample은 Post 512개에 포함</td></tr>
+      </tbody>
+    </table>
+
+    <h3>1.2 주소 계산 및 접근 기호</h3>
+    <div class="grid-2">
+      <div class="card cyan-card">
+        <h4>주소 계산</h4>
+        <p><code>Actual Address = IP Base Address + Register Offset</code></p>
+        <p class="small">예: Trigger STATUS = <code>0x4002_0000 + 0x0C = 0x4002_000C</code></p>
+      </div>
+      <div class="card purple-card">
+        <h4>접근 기호</h4>
+        <p class="small"><b>R</b> Read · <b>RW</b> Read/Write · <b>W1P</b> 1을 기록하면 1-Clock Pulse 발생 · <b>RO=0</b> 읽으면 0</p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <b>주소 사용 규칙:</b> 아래 Base Address는 최종 Reference Design 전용이다. 다른 Vivado 설계에서는 BSP의
+      <code>xparameters.h</code>를 사용해야 한다. Custom IP는 하위 6-bit Local Address를 Decode하므로
+      문서에 정의된 Offset 외의 주소에는 접근하지 않는다.
+    </div>
+
+    <div class="grid-3" style="margin-top:7mm;">
+      <div class="card cyan-card"><h4>Sampler</h4><p class="small"><code>0x4001_0000</code><br>4 KiB CSR Window</p></div>
+      <div class="card purple-card"><h4>Trigger</h4><p class="small"><code>0x4002_0000</code><br>4 KiB CSR Window</p></div>
+      <div class="card magenta-card"><h4>Trace Buffer</h4><p class="small"><code>0x4003_0000</code><br>4 KiB CSR Window</p></div>
+    </div>
+    <div class="footer"><span>Frozen Common Specification v2.1</span><span>2 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">01 · OVERVIEW</span><span>REFERENCE DESIGN ADDRESS MAP</span></div>
+    <h1>1.3 System Address Map</h1>
+    <p class="lead">
+      아래 값은 최종 EdgeScope-Lite Reference Design의 MicroBlaze V Data Address Space이다.
+      Custom IP는 각 4 KiB Window를 할당받지만 Software는 문서에 정의된 CSR Offset만 사용한다.
+    </p>
+    <table class="summary">
+      <colgroup>
+        <col style="width:21%"><col style="width:21%"><col style="width:23%"><col style="width:12%"><col style="width:23%">
+      </colgroup>
+      <thead><tr><th>Base</th><th>High</th><th>Peripheral</th><th>Range</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td>0x0000_0000</td><td>0x0001_FFFF</td><td>Local Memory</td><td>128 KiB</td><td>Instruction / Data</td></tr>
+        <tr><td>0x4000_0000</td><td>0x4000_FFFF</td><td>Generator GPIO</td><td>64 KiB</td><td>Test Pattern Control</td></tr>
+        <tr><td>0x4001_0000</td><td>0x4001_0FFF</td><td>Probe Sampler</td><td>4 KiB</td><td>Custom IP CSR</td></tr>
+        <tr><td>0x4002_0000</td><td>0x4002_0FFF</td><td>Trigger Engine</td><td>4 KiB</td><td>Custom IP CSR</td></tr>
+        <tr><td>0x4003_0000</td><td>0x4003_0FFF</td><td>Trace Buffer</td><td>4 KiB</td><td>Custom IP CSR</td></tr>
+        <tr><td>0x4060_0000</td><td>0x4060_FFFF</td><td>AXI UARTLite</td><td>64 KiB</td><td>UART 9600 · 8-N-1</td></tr>
+        <tr><td>0x4120_0000</td><td>0x4120_FFFF</td><td>AXI INTC</td><td>64 KiB</td><td>Interrupt Controller</td></tr>
+        <tr><td>0x41C0_0000</td><td>0x41C0_FFFF</td><td>AXI Timer</td><td>64 KiB</td><td>Polling Timeout</td></tr>
+        <tr><td>0x4200_0000</td><td>0x4200_0FFF</td><td>Capture BRAM</td><td>4 KiB</td><td>1,024 × 32-bit</td></tr>
+      </tbody>
+    </table>
+    <h3>Address Space 관계</h3>
+    <div class="grid-2">
+      <div class="card cyan-card">
+        <h4>Control Plane</h4>
+        <p class="small">MicroBlaze V가 AXI4-Lite를 통해 Sampler, Trigger, Trace Buffer의 설정과 상태를 읽고 쓴다.</p>
+      </div>
+      <div class="card magenta-card">
+        <h4>Capture Data Plane</h4>
+        <p class="small">Trace Buffer가 BRAM Port A에 기록하고, Capture 완료 후 CPU가 Port B를 통해 읽는다.</p>
+      </div>
+    </div>
+    <div class="callout">
+      Vivado Address Editor에서 Base Address가 변경되면 이 표의 절대주소가 아니라 생성된 BSP의
+      <code>xparameters.h</code>를 우선한다. Register Offset과 Bit Field는 IP 내부 규격으로 유지된다.
+    </div>
+    <div class="footer"><span>Reference Design Address Map</span><span>3 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">02 · PROBE SAMPLER</span><span>BASE 0x4001_0000</span></div>
+    <span class="section-tag">8-CHANNEL MULTI-RATE CAPTURE</span>
+    <h1>2. Probe Sampler IP</h1>
+    <p class="lead">
+      <code>probe_i[7:0]</code>를 Channel Mask와 Clock Divider 설정에 따라 Sampling하여
+      <code>sample_data_o[7:0]</code>와 1-Clock <code>sample_valid_o</code>를 생성한다.
+    </p>
+
+    <h3>2.1 레지스터 요약</h3>
+    <table class="summary">
+      <colgroup><col style="width:13%"><col style="width:20%"><col style="width:24%"><col style="width:15%"><col style="width:28%"></colgroup>
+      <thead><tr><th>Offset</th><th>Actual Address</th><th>Name</th><th>Access</th><th>Reset</th></tr></thead>
+      <tbody>
+        <tr><td>0x00</td><td>0x4001_0000</td><td>CONTROL</td><td>RW/W1P</td><td>0x0000_0000</td></tr>
+        <tr><td>0x04</td><td>0x4001_0004</td><td>CONFIG</td><td>RW</td><td>0x0000_FF00</td></tr>
+        <tr><td>0x08</td><td>0x4001_0008</td><td>LAST_SAMPLE</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x0C</td><td>0x4001_000C</td><td>SAMPLE_COUNT</td><td>R</td><td>0x0000_0000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2.2 CONTROL — Sampler Control Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:17%"><col style="width:39%"><col style="width:22%"><col style="width:22%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:2</th><th>1</th><th>0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>SOFT_CLEAR</td><td>ENABLE</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>W1P / R=0</td><td>RW</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><b>ENABLE[0]</b>: 1이면 Sampling을 수행한다. 0이면 <code>sample_valid_o</code>를 중지하고 Divider Phase를 0으로 재설정한다.</li>
+      <li><b>SOFT_CLEAR[1]</b>: 1을 기록하면 Sample Data, Sample Count와 Divider Phase를 초기화하는 1-Clock Pulse가 발생한다.</li>
+      <li>ENABLE=0만 기록해도 <code>LAST_SAMPLE</code>과 <code>SAMPLE_COUNT</code>는 유지된다.</li>
+      <li>CONTROL Write는 <code>WSTRB[0]=1</code>일 때만 반영된다.</li>
+    </ul>
+
+    <table class="cmd-table">
+      <thead><tr><th>Write Value</th><th>결과</th></tr></thead>
+      <tbody>
+        <tr><td>0x0000_0000</td><td>Sampling Disable, 기존 Sample/Count 유지</td></tr>
+        <tr><td>0x0000_0001</td><td>Sampling Enable</td></tr>
+        <tr><td>0x0000_0002</td><td>Soft Clear 후 Disable 상태</td></tr>
+        <tr><td>0x0000_0003</td><td>Soft Clear 후 Enable 유지</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout small">
+      <b>Runtime:</b> Divider 변경 시 Phase가 0에서 재시작되며 그 Cycle에는
+      <code>sample_valid_o</code>가 발생하지 않는다. 권장 설정 순서는
+      <b>ENABLE=0 → CONFIG → CONTROL=0x3</b>이다.
+    </div>
+    <div class="footer"><span>Probe Sampler IP</span><span>4 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">02 · PROBE SAMPLER</span><span>READBACK & OPERATION</span></div>
+    <h1>Probe Sampler — 상세 동작</h1>
+
+    <h3>2.3 CONFIG — Sampling Configuration Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:13%"><col style="width:31%"><col style="width:28%"><col style="width:18%"><col style="width:10%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:16</th><th>15:8</th><th>7:2</th><th>1:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>CHANNEL_MASK</td><td>Reserved</td><td>DIVIDER_SEL</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>RW</td><td>—</td><td>RW</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0xFF</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <div class="grid-2">
+      <div>
+        <h4>DIVIDER_SEL[1:0]</h4>
+        <table class="tiny">
+          <thead><tr><th>Value</th><th>Divider</th><th>100 MHz 기준</th></tr></thead>
+          <tbody>
+            <tr><td>00</td><td>÷1</td><td>100 MS/s</td></tr>
+            <tr><td>01</td><td>÷2</td><td>50 MS/s</td></tr>
+            <tr><td>10</td><td>÷4</td><td>25 MS/s</td></tr>
+            <tr><td>11</td><td>÷8</td><td>12.5 MS/s</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h4>CHANNEL_MASK[15:8]</h4>
+        <p class="small">Bit n=1이면 CHn을 Sampling하고, 0이면 이후 생성되는 유효 Sample의 해당 bit를 0으로 저장한다.</p>
+        <p class="small"><code>0xFF</code>: 전체 채널 사용 · <code>0x01</code>: CH0만 사용</p>
+      </div>
+    </div>
+
+    <h3>2.4 LAST_SAMPLE — Last Valid Sample Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:18%"><col style="width:46%"><col style="width:36%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:8</th><th>7:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>LAST_SAMPLE</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>R</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0x00</td></tr>
+      </tbody>
+    </table>
+    <p>
+      가장 최근에 <code>sample_valid_o=1</code>이었던 Cycle의 Mask 적용 Sample을 제공한다.
+      CHANNEL_MASK를 변경해도 값은 즉시 바뀌지 않으며, 다음 유효 Sample 또는 SOFT_CLEAR 전까지 이전 값을 유지한다.
+    </p>
+
+    <h3>2.5 SAMPLE_COUNT — Valid Sample Counter</h3>
+    <table class="bits">
+      <thead><tr><th>Bit</th><th>31:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>SAMPLE_COUNT</td></tr>
+        <tr><td class="strong">Access</td><td>R</td></tr>
+        <tr><td class="strong">Reset</td><td>0x0000_0000</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Hardware Reset 또는 SOFT_CLEAR 이후 생성된 유효 Sample의 누적 횟수이다.
+      ENABLE=0에서는 유지되고, 32-bit Overflow 시 <code>0xFFFF_FFFF → 0x0000_0000</code>으로 순환한다.
+    </p>
+
+    <div class="callout small">
+      <b>Byte Strobe:</b> CONTROL/DIVIDER는 <code>WSTRB[0]</code>,
+      CHANNEL_MASK는 <code>WSTRB[1]</code>에서 갱신한다.
+    </div>
+    <div class="footer"><span>Probe Sampler IP</span><span>5 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">03 · BASIC TRIGGER ENGINE</span><span>BASE 0x4002_0000</span></div>
+    <span class="section-tag">DETERMINISTIC EVENT DETECTION</span>
+    <h1>3. Basic Trigger Engine IP</h1>
+    <p class="lead">
+      유효 Sample Stream에서 Rising, Falling 또는 Masked Pattern Entry를 검출한다.
+      검출된 Sample과 같은 Cycle에 1-Clock <code>trigger_pulse_o</code>를 생성하며, 한 번 ARM할 때 최대 한 번만 Trigger된다.
+    </p>
+
+    <h3>3.1 레지스터 요약</h3>
+    <table class="summary">
+      <colgroup><col style="width:13%"><col style="width:20%"><col style="width:24%"><col style="width:15%"><col style="width:28%"></colgroup>
+      <thead><tr><th>Offset</th><th>Actual Address</th><th>Name</th><th>Access</th><th>Reset</th></tr></thead>
+      <tbody>
+        <tr><td>0x00</td><td>0x4002_0000</td><td>CONTROL</td><td>W1P/RO=0</td><td>0x0000_0000</td></tr>
+        <tr><td>0x04</td><td>0x4002_0004</td><td>CONFIG</td><td>RW</td><td>0x0000_0000</td></tr>
+        <tr><td>0x08</td><td>0x4002_0008</td><td>PATTERN</td><td>RW</td><td>0x0000_F0A0</td></tr>
+        <tr><td>0x0C</td><td>0x4002_000C</td><td>STATUS</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x10</td><td>0x4002_0010</td><td>TRIGGER_COUNT</td><td>R</td><td>0x0000_0000</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 CONTROL — Trigger Command Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:17%"><col style="width:39%"><col style="width:22%"><col style="width:22%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:2</th><th>1</th><th>0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>CLEAR</td><td>ARM</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>W1P / R=0</td><td>W1P / R=0</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><b>ARM[0]</b>: ARMED를 Set하고 TRIGGERED와 Sample/Pattern History를 초기화한다.</li>
+      <li><b>CLEAR[1]</b>: ARMED, TRIGGERED와 History를 초기화한다.</li>
+      <li>ARM과 CLEAR는 TRIGGER_COUNT를 초기화하지 않는다.</li>
+      <li>동시 기록 우선순위는 <b>Hardware Reset &gt; CLEAR &gt; ARM &gt; Normal Processing</b>이다.</li>
+      <li>CONTROL은 <code>WSTRB[0]=1</code>일 때만 동작하며 읽으면 항상 0이다.</li>
+    </ul>
+
+    <h3>3.3 CONFIG — Trigger Configuration Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:13%"><col style="width:28%"><col style="width:20%"><col style="width:20%"><col style="width:19%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:11</th><th>10:8</th><th>7:2</th><th>1:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>EDGE_CHANNEL</td><td>Reserved</td><td>MODE</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>RW</td><td>—</td><td>RW</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td><td>00</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      MODE는 <code>00 Disabled</code>, <code>01 Rising</code>, <code>10 Falling</code>,
+      <code>11 Pattern</code>으로 Encoding한다. EDGE_CHANNEL은 CH0~CH7을 선택한다.
+    </div>
+    <div class="footer"><span>Basic Trigger Engine IP</span><span>6 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">03 · BASIC TRIGGER ENGINE</span><span>MODE & PATTERN</span></div>
+    <h1>Trigger Mode & Pattern</h1>
+
+    <h3>3.3.1 Trigger Mode Encoding</h3>
+    <table>
+      <thead><tr><th>MODE</th><th>기능</th><th>조건</th></tr></thead>
+      <tbody>
+        <tr><td>00</td><td>DISABLED</td><td>Trigger 출력 금지</td></tr>
+        <tr><td>01</td><td>RISING</td><td>선택 채널 0 → 1</td></tr>
+        <tr><td>10</td><td>FALLING</td><td>선택 채널 1 → 0</td></tr>
+        <tr><td>11</td><td>PATTERN</td><td>Masked Pattern 불일치 → 일치 진입</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.4 PATTERN — Masked Pattern Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:14%"><col style="width:29%"><col style="width:28%"><col style="width:29%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:16</th><th>15:8</th><th>7:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>PATTERN_MASK</td><td>PATTERN_VALUE</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>RW</td><td>RW</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0xF0</td><td>0xA0</td></tr>
+      </tbody>
+    </table>
+    <pre>current_match =
+    (sample_data & PATTERN_MASK) == (PATTERN_VALUE & PATTERN_MASK)</pre>
+    <ul>
+      <li>PATTERN_MASK bit=1인 채널만 비교하고, bit=0인 채널은 Don't Care이다.</li>
+      <li><code>PATTERN_MASK=0x00</code>이면 Pattern Trigger는 명시적으로 Disable된다.</li>
+      <li>ARM 후 첫 유효 Sample이 Pattern과 일치하면 즉시 Trigger될 수 있다.</li>
+      <li>한 번 Trigger된 뒤에는 Pattern이 다시 진입해도 CLEAR 또는 새 ARM 전까지 재Trigger하지 않는다.</li>
+      <li>PATTERN_VALUE는 <code>WSTRB[0]</code>, PATTERN_MASK는 <code>WSTRB[1]</code>에서 갱신된다.</li>
+    </ul>
+
+    <div class="callout pink">
+      <b>같은 Sample 정렬:</b> <code>trigger_pulse_o</code>는 조건을 만족한 유효 Sample과 같은 Cycle에 발생한다.
+      Capture Buffer는 그 Sample을 Logical Index 512에 보존한다.
+    </div>
+    <div class="footer"><span>Basic Trigger Engine IP</span><span>7 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">03 · BASIC TRIGGER ENGINE</span><span>STATUS & COUNTER</span></div>
+    <h1>Trigger Status & Count</h1>
+
+    <h3>3.5 STATUS — Trigger Status Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:17%"><col style="width:39%"><col style="width:22%"><col style="width:22%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:2</th><th>1</th><th>0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>TRIGGERED</td><td>ARMED</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>R</td><td>R</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <div class="grid-2">
+      <div class="card cyan-card">
+        <h4>ARMED[0]</h4>
+        <p class="small">Engine이 ARM된 상태를 나타내는 Latch이다. Trigger 후에도 CLEAR 전까지 1을 유지한다.</p>
+      </div>
+      <div class="card magenta-card">
+        <h4>TRIGGERED[1]</h4>
+        <p class="small">ARM 이후 Trigger가 한 번 수락되면 1이 되고, CLEAR 또는 새 ARM에서 0이 된다.</p>
+      </div>
+    </div>
+    <table class="tiny">
+      <thead><tr><th>STATUS[1:0]</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>00</td><td>Disarmed</td></tr>
+        <tr><td>01</td><td>ARM됨, Trigger 대기 중</td></tr>
+        <tr><td>11</td><td>Trigger 완료, CLEAR 또는 새 ARM 대기</td></tr>
+        <tr><td>10</td><td>정상 제어 흐름에서는 사용하지 않음</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.6 TRIGGER_COUNT — Accepted Trigger Counter</h3>
+    <table class="bits">
+      <thead><tr><th>Bit</th><th>31:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>TRIGGER_COUNT</td></tr>
+        <tr><td class="strong">Access</td><td>R</td></tr>
+        <tr><td class="strong">Reset</td><td>0x0000_0000</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Hardware Reset 이후 수락된 Trigger의 32-bit 누적 횟수이다. CLEAR와 ARM으로 초기화되지 않으며
+      Overflow 시 modulo 2<sup>32</sup>로 순환한다.
+    </p>
+
+    <div class="callout pink">
+      <b>Edge Mode 주의:</b> ARM 후 첫 유효 Sample은 비교 History 초기화에 사용되므로 Rising/Falling Trigger가
+      발생하지 않는다. Pattern Mode는 첫 유효 Sample에서도 Trigger될 수 있다.
+    </div>
+    <div class="footer"><span>Basic Trigger Engine IP</span><span>8 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">04 · CIRCULAR TRACE BUFFER</span><span>BASE 0x4003_0000</span></div>
+    <span class="section-tag">512 PRE · 512 POST · TRIGGER INCLUDED</span>
+    <h1>4. Circular Trace Buffer IP</h1>
+    <p class="lead">
+      Sample Stream을 1,024 × 32-bit True Dual-Port BRAM의 Port A에 Circular Write하고,
+      Trigger 전 512개와 Trigger Sample을 포함한 이후 512개를 보존한다. 완료 상태는 DONE과 Level IRQ로 유지된다.
+    </p>
+
+    <h3>4.1 레지스터 요약</h3>
+    <table class="summary">
+      <colgroup><col style="width:13%"><col style="width:20%"><col style="width:24%"><col style="width:15%"><col style="width:28%"></colgroup>
+      <thead><tr><th>Offset</th><th>Actual Address</th><th>Name</th><th>Access</th><th>Reset / Fixed</th></tr></thead>
+      <tbody>
+        <tr><td>0x00</td><td>0x4003_0000</td><td>CONTROL</td><td>W1P/RO=0</td><td>0x0000_0000</td></tr>
+        <tr><td>0x04</td><td>0x4003_0004</td><td>STATUS</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x08</td><td>0x4003_0008</td><td>START_ADDR</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x0C</td><td>0x4003_000C</td><td>TRIGGER_ADDR</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x10</td><td>0x4003_0010</td><td>WRITE_ADDR</td><td>R</td><td>0x0000_0000</td></tr>
+        <tr><td>0x14</td><td>0x4003_0014</td><td>CAPTURE_INFO</td><td>R</td><td>Fixed 0x0200_0400</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 CONTROL — Buffer Command Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:14%"><col style="width:30%"><col style="width:18%"><col style="width:20%"><col style="width:18%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:3</th><th>2</th><th>1</th><th>0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>ABORT</td><td>CLEAR_DONE</td><td>ARM</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>W1P</td><td>W1P</td><td>W1P</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><b>ARM[0]</b>: IDLE 또는 DONE에서 Capture를 PREFILL 상태로 시작한다.</li>
+      <li><b>CLEAR_DONE[1]</b>: DONE에서 DONE/TRIGGERED/IRQ를 지우고 IDLE로 돌아간다. BRAM과 주소값은 지우지 않는다.</li>
+      <li><b>ABORT[2]</b>: 모든 상태에서 Capture와 상태/주소 Counter를 즉시 초기화한다. BRAM Data 자체는 지우지 않는다.</li>
+      <li>CONTROL은 <code>WSTRB[0]=1</code>일 때만 동작하며 읽으면 0이다.</li>
+    </ul>
+
+    <div class="callout warn">
+      <b>상태 의존 우선순위:</b> ABORT는 모든 상태에서 최우선이다. CLEAR_DONE은 DONE에서만 유효하며 이때 ARM보다
+      우선한다. ARM은 IDLE/DONE에서만 유효하고, BUSY 중 ARM과 CLEAR_DONE은 모두 무시된다.
+    </div>
+
+    <div class="footer"><span>Circular Trace Buffer IP</span><span>9 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">04 · CIRCULAR TRACE BUFFER</span><span>ADDRESS & CAPTURE FLOW</span></div>
+    <h1>Trace Buffer — 주소와 Capture</h1>
+
+    <h3>4.3 STATUS — Capture Status Register</h3>
+    <table class="bits tiny">
+      <colgroup><col style="width:12%"><col style="width:28%"><col style="width:15%"><col style="width:15%"><col style="width:15%"><col style="width:15%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:4</th><th>3</th><th>2</th><th>1</th><th>0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>DONE</td><td>TRIGGERED</td><td>PRE_READY</td><td>BUSY</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>R</td><td>R</td><td>R</td><td>R</td></tr>
+        <tr><td class="strong">Reset</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.3.1 STATUS Bit 의미</h3>
+    <table class="tiny">
+      <colgroup><col style="width:18%"><col style="width:16%"><col style="width:66%"></colgroup>
+      <thead><tr><th>Bit</th><th>상태</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>BUSY[0]</td><td>1</td><td>PREFILL, ARMED 또는 POST_CAPTURE에서 Sample을 기록 중</td></tr>
+        <tr><td>PRE_READY[1]</td><td>1</td><td>Pre-Trigger Sample 512개가 준비됨. DONE까지 유지</td></tr>
+        <tr><td>TRIGGERED[2]</td><td>1</td><td>Trigger Sample을 수락하여 Post Capture를 수행했음</td></tr>
+        <tr><td>DONE[3]</td><td>1</td><td>1,024 Sample 보존 완료. CLEAR_DONE/ARM/ABORT까지 유지</td></tr>
+      </tbody>
+    </table>
+
+    <div class="state-flow">
+      <div class="state">IDLE<br><span class="tiny">STATUS 0x0</span></div><div class="arrow">→</div>
+      <div class="state">PREFILL<br><span class="tiny">STATUS 0x1</span></div><div class="arrow">→</div>
+      <div class="state">ARMED<br><span class="tiny">STATUS 0x3</span></div><div class="arrow">→</div>
+      <div class="state">POST<br><span class="tiny">STATUS 0x7</span></div><div class="arrow">→</div>
+      <div class="state">DONE<br><span class="tiny">STATUS 0xE</span></div>
+    </div>
+
+    <h3>4.5 Capture Address Registers</h3>
+    <table>
+      <colgroup><col style="width:22%"><col style="width:15%"><col style="width:18%"><col style="width:45%"></colgroup>
+      <thead><tr><th>Register</th><th>Bits</th><th>Access</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td><b>START_ADDR</b><br><code>0x08</code></td><td>[9:0]</td><td>R</td><td>DONE Capture에서 가장 오래된 Sample의 Physical Word Address</td></tr>
+        <tr><td><b>TRIGGER_ADDR</b><br><code>0x0C</code></td><td>[9:0]</td><td>R</td><td>Trigger Sample이 저장된 Physical Word Address</td></tr>
+        <tr><td><b>WRITE_ADDR</b><br><code>0x10</code></td><td>[9:0]</td><td>R</td><td>가장 마지막에 기록한 Physical Word Address</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      DONE에서 <code>START_ADDR = (WRITE_ADDR + 1) mod 1024</code>이며,
+      <code>physical(logical_index) = (START_ADDR + logical_index) mod 1024</code>이다.
+      따라서 <code>physical(512) = TRIGGER_ADDR</code>가 성립한다.
+    </div>
+
+    <div class="footer"><span>Circular Trace Buffer IP</span><span>10 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">04 · CIRCULAR TRACE BUFFER</span><span>CAPTURE INFO & BRAM</span></div>
+    <h1>Trace Buffer — Capture Memory</h1>
+
+    <h3>4.6 CAPTURE_INFO — Fixed Capability Register</h3>
+    <table class="bits">
+      <colgroup><col style="width:14%"><col style="width:18%"><col style="width:24%"><col style="width:20%"><col style="width:24%"></colgroup>
+      <thead><tr><th>Bit</th><th>31:26</th><th>25:16</th><th>15:11</th><th>10:0</th></tr></thead>
+      <tbody>
+        <tr><td class="strong">Field</td><td>Reserved</td><td>TRIGGER_INDEX</td><td>Reserved</td><td>CAPTURE_DEPTH</td></tr>
+        <tr><td class="strong">Access</td><td>—</td><td>R</td><td>—</td><td>R</td></tr>
+        <tr><td class="strong">Fixed</td><td>0</td><td>512</td><td>0</td><td>1024</td></tr>
+      </tbody>
+    </table>
+    <p>
+      항상 <code>0x0200_0400</code>을 반환한다. 이는 저장 상태가 아니라 IP의 고정 Capture Capability를 나타내므로
+      Reset Value가 아닌 <b>Fixed Read Value</b>로 표기한다.
+    </p>
+
+    <h3>4.7 Trigger Sample Contract</h3>
+    <ul>
+      <li>PREFILL에서 Trigger 입력은 무시하며, 512번째 PREFILL Sample도 Pre Sample로만 처리한다.</li>
+      <li>ARMED 상태에서 Trigger와 정렬된 유효 Sample을 Post Sample #1로 저장한다.</li>
+      <li>이후 511개를 추가 기록하여 총 Post 512개가 되면 DONE으로 전환한다.</li>
+    </ul>
+
+    <h3>4.8 Capture BRAM Mapping</h3>
+    <div class="grid-2">
+      <div class="card cyan-card">
+        <h4>Port A — Hardware Write</h4>
+        <p class="small">Circular Trace Buffer가 유효 Sample마다 32-bit Word 전체를 기록한다.</p>
+        <p><code>capture_word = {24'h0, sample_data[7:0]}</code></p>
+      </div>
+      <div class="card magenta-card">
+        <h4>Port B — MicroBlaze Access</h4>
+        <p class="small">AXI BRAM Controller를 통해 CPU가 Capture Data를 읽는다.</p>
+        <p><code>byte_addr = 0x4200_0000 + word_index × 4</code></p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <b>Software Contract:</b> Capture Data는 <code>STATUS.DONE=1</code>을 확인한 후 읽는다.
+      Port B Write와 BUSY 중 Read는 하드웨어가 차단하지 않지만 Reference Software에서는 사용하지 않는다.
+      따라서 <code>Word[31:8]=0</code>이라는 설명은 Trace Buffer가 Port A로 기록한 Word에 한해 성립한다.
+    </div>
+
+    <div class="callout">
+      <b>Logical Read:</b> Logical Index <code>i</code>의 Physical Word는
+      <code>(START_ADDR + i) &amp; 0x3FF</code>이며, BRAM Byte Address는
+      <code>0x4200_0000 + (physical &lt;&lt; 2)</code>이다.
+    </div>
+    <div class="footer"><span>Circular Trace Buffer / Capture BRAM</span><span>11 / 12</span></div>
+  </section>
+
+  <section class="page">
+    <div class="running-head"><span class="accent">05 · INTEGRATION</span><span>IRQ · SOFTWARE ACCESS</span></div>
+    <h1>5. Software 접근</h1>
+
+    <h3>5.1 Trace Completion IRQ</h3>
+    <table>
+      <colgroup><col style="width:31%"><col style="width:29%"><col style="width:40%"></colgroup>
+      <thead><tr><th>항목</th><th>값</th><th>설명</th></tr></thead>
+      <tbody>
+        <tr><td>Source</td><td>Trace Buffer <code>irq_o</code></td><td>DONE과 동일한 Active-High Level</td></tr>
+        <tr><td>AXI INTC Input</td><td><b>Input 2</b></td><td>xlconcat <code>In2</code> 연결</td></tr>
+        <tr><td>Interrupt Mask</td><td><b>0x0000_0004</b></td><td><code>1U &lt;&lt; 2</code></td></tr>
+        <tr><td>Clear</td><td>CLEAR_DONE / ARM / ABORT</td><td>DONE이 해제되면 IRQ도 해제</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 권장 Capture 순서</h3>
+    <ol style="margin:2mm 0 3mm 6mm; padding-left:5mm;">
+      <li>Trigger CLEAR 및 Buffer ABORT로 이전 상태를 정리한다.</li>
+      <li>Sampler CONFIG, Trigger CONFIG/PATTERN을 기록한다.</li>
+      <li>Buffer ARM 후 Sampler를 SOFT_CLEAR + ENABLE한다.</li>
+      <li>Buffer PRE_READY=1을 확인한 뒤 Trigger를 CLEAR하고 ARM한다.</li>
+      <li>Buffer DONE=1 또는 Trace IRQ를 기다린다.</li>
+      <li>START_ADDR를 기준으로 Capture BRAM의 1,024 Word를 Logical 순서로 읽는다.</li>
+    </ol>
+    <div class="callout pink">
+      Trigger Engine을 PRE_READY 전에 ARM하면 PREFILL 중 One-Shot Trigger가 먼저 소진될 수 있다.
+      Trigger 설정은 미리 기록하되 실제 ARM은 PRE_READY 확인 후 수행한다.
+    </div>
+
+    <h3>5.3 Integrated Software Example</h3>
+    <pre>/* Buffer arm, sampler clear+enable */
+Xil_Out32(TRACE_BASE   + TRACE_REG_CONTROL, TRACE_CONTROL_ARM);
+Xil_Out32(SAMPLER_BASE + SAMPLER_REG_CONTROL,
+          SAMPLER_CONTROL_ENABLE | SAMPLER_CONTROL_SOFT_CLEAR);
+
+while ((Xil_In32(TRACE_BASE + TRACE_REG_STATUS)
+        & TRACE_STATUS_PRE_READY) == 0U) { }
+
+Xil_Out32(TRIGGER_BASE + TRIGGER_REG_CONTROL, TRIGGER_CONTROL_CLEAR);
+Xil_Out32(TRIGGER_BASE + TRIGGER_REG_CONTROL, TRIGGER_CONTROL_ARM);
+
+while ((Xil_In32(TRACE_BASE + TRACE_REG_STATUS)
+        & TRACE_STATUS_DONE) == 0U) { }
+
+u32 start = Xil_In32(TRACE_BASE + TRACE_REG_START_ADDR) & 0x3FFU;
+for (u32 i = 0; i &lt; 1024U; ++i) {
+    u32 physical = (start + i) & 0x3FFU;
+    u8 sample = Xil_In32(BRAM_BASE + (physical &lt;&lt; 2)) & 0xFFU;
+}</pre>
+
+    <div class="callout small" style="margin-top:3mm;">
+      <b>검증:</b> RTL, C Header, Block Design과 Testbench를 상호 대조했으며,
+      7개 SystemVerilog Test + C Register Header Check 및 Frontend AXI 단위 Test가 PASS하였다.
+    </div>
+    <div class="footer"><span>RTL / Block Design Verified · 2026-08-10</span><span>12 / 12</span></div>
+  </section>
+
+</body>
+</html>

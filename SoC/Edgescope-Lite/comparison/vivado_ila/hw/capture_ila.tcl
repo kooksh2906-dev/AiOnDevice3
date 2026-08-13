@@ -28,7 +28,15 @@ proc set_and_verify_hw_property {object property expected} {
     puts "VIVADO_ILA_PROPERTY_UNAVAILABLE,$property"
     return
   }
-  set_property $property $expected $object
+  if {[catch {set_property $property $expected $object} set_error]} {
+    set actual [get_property $property $object]
+    if {[string match -nocase {*read-only*} $set_error] &&
+        [string equal -nocase $actual $expected]} {
+      puts "VIVADO_ILA_PROPERTY_READ_ONLY,$property,$actual"
+      return
+    }
+    error "ILA run-control property failed: $property=$actual, expected=$expected, error=$set_error"
+  }
   set actual [get_property $property $object]
   if {![string equal -nocase $actual $expected]} {
     error "ILA run-control assertion failed: $property=$actual, expected=$expected"
