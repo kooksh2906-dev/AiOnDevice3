@@ -1,0 +1,6 @@
+test_id,mode,channel,pattern,mask,expected_trigger_count,observed_trigger_count,status,evidence_log
+P-01,rising,0,,,1,1,PASS,uart_capture.log:41-1072;trigger@560
+P-02,falling,0,,,1,1,PASS,uart_capture.log:1084-2115;trigger@1603
+P-03,pattern,,0xA0,0xF0,1,1,PASS,uart_capture.log:2127-3158;trigger@2646
+P-04,pattern_hold,,0xA0,0xF0,1,1,PASS,uart_capture.log:3170-4201;trigger@3689
+P-05,pattern,,0xA0,0x00,0,0,PASS,uart_capture.log:4213-4215
