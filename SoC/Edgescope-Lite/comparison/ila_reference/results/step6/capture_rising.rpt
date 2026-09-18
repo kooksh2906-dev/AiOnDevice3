@@ -1,0 +1,19 @@
+# EdgeScope-Lite Step 6 machine-readable evidence
+pair_kind=STEP6_UART_RUNTIME
+bit_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+bit_sha256=cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ltx_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ltx_sha256=ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+STEP=6
+ACTION=collect
+PROFILE=rising
+SESSION_TOKEN=1785314957886-1860127
+RESULT=CAPTURE_COMPLETE
+PARTIAL_CAPTURE=0
+ILA_FILE=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step6/rising.ila
+ILA_FILE_SHA256=78d9d14d44dfd276b639adc016123147655c863ec97efdceef933e912b01aeb1
+RAW_CSV_FILE=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step6/rising_raw.csv
+RAW_CSV_SHA256=40fb7888ef099938776460fc292fbb383164fd2bc276323da03be8a1011df49c
+TARGET=localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+DEVICE=xc7a35t_0
+ILA_CELL=base_soc_i/ila_reference_0

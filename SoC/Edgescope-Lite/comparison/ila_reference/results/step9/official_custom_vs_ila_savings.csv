@@ -1,0 +1,8 @@
+metric,metric_label,status,ila_delta,custom_delta,saved_absolute,saved_percent_of_ila_delta,note
+slice_luts,Slice LUTs,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+lut_as_logic,LUT as Logic,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+lut_as_memory,LUT as Memory,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+slice_registers,Slice Registers,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+ramb36,RAMB36,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+ramb18,RAMB18,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.
+dsp48e1,DSP48E1,PENDING_CUSTOM_FULL_SYSTEM_REPORT,NA,NA,NA,NA,CPU Polling is excluded from official savings; no value is imputed as zero.

@@ -1,0 +1,19 @@
+EdgeScope-Lite Vivado ILA Reference - Step 6 Runtime Pair
+=========================================================
+Hardware implementation : frozen Step-5 routed design
+BRAM update method       : Vivado 2024.2 updatemem
+BIT header date/time      : normalized to Step-5 container
+Processor instance       : base_soc_i/microblaze_riscv_0
+Firmware ELF class       : ELF32
+Firmware machine         : RISC-V
+Firmware entry           : 0x0
+Runtime command path      : UART RUN
+UART                      : 9600 baud, 8-N-1
+Base BIT SHA-256          : f54640071377de4cc632158e1fc93092469c27967dd3624041131b5e3be8dfd6
+Runtime BIT SHA-256       : cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+Runtime LTX SHA-256       : ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+Runtime MMI SHA-256       : 63cd1de93678832e8241c68dc51751fd2ff5749bfd6770f20b32b6a9a601a768
+Firmware ELF SHA-256      : 7cd731b725da46489b0670666f234ee521771b3faf0b205f188866cf89150934
+Runtime BIT differs       : PASS
+LTX unchanged from Step 5 : PASS
+Hardware pair readback    : PENDING STEP 6 BOARD SESSION

@@ -1,0 +1,146 @@
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Wed Jul 29 17:48:19 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source {/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/hw/run_step6_hardware.tcl} -notrace
+ASSERT PASS: Runtime command path = UART RUN
+ASSERT PASS: Runtime BIT differs from bootloop = PASS
+ASSERT PASS: Runtime LTX unchanged from routed design = PASS
+ASSERT PASS: BIT hash manifest/index = cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ASSERT PASS: LTX hash manifest/index = ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+ASSERT PASS: BIT hash on disk = cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ASSERT PASS: LTX hash on disk = ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+ASSERT PASS: LTX ILA instance = base_soc_i/ila_reference_0
+ASSERT PASS: LTX ILA spec = labtools_ila_v6
+ASSERT PASS: LTX ILA IP name = ila
+ASSERT PASS: LTX probe name = probe0
+ASSERT PASS: LTX probe ID = 0
+ASSERT PASS: LTX probe direction = IN
+ASSERT PASS: LTX probe vector flag = true
+ASSERT PASS: LTX probe port = 0
+ASSERT PASS: LTX probe width = 8
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2024.2.0
+  ****** Build date   : Oct 31 2024-03:19:07
+    **** Build number : 2024.2.1730312347
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+ASSERT PASS: explicit hardware target selector = localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+ASSERT PASS: PROGRAM.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+ASSERT PASS: PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: FULL_PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+Programming xc7a35t_0 with fixed Step-6 runtime BIT/LTX...
+INFO: [Labtools 27-3164] End of startup status: HIGH
+INFO: [Labtools 27-2302] Device xc7a35t (JTAG device index = 0) is programmed with a design that has 1 ILA core(s).
+ASSERT PASS: PROGRAM.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+ASSERT PASS: PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: FULL_PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: Hardware ILA instance = base_soc_i/ila_reference_0
+ASSERT PASS: Hardware ILA maximum depth = 1024
+ASSERT PASS: Hardware/LTX ILA UUID = 4FB82E5963D554A68B9EF3ACD537453F
+ASSERT PASS: Hardware probe port = 0
+ASSERT PASS: Hardware probe width = 8
+ASSERT PASS: Hardware probe comparator count = 1
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXF
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: falling
+Description: CH0 Falling Edge
+Compare: eq8'bXXXXXXXF
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'b1010XXXX
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: pattern
+Description: Masked Pattern: pattern=0xA0, mask=0xF0
+Compare: eq8'b1010XXXX
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'hFF
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: no_trigger
+Description: P-05 impossible condition: probe=0xFF
+Compare: eq8'hFF
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step6/pair_readback.rpt
+EDGESCOPE_CHECKPOINT|state=PAIR_READBACK_PASS|profiles=rising,falling,pattern,no_trigger
+EDGESCOPE_STEP6: PASS
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+INFO: [Common 17-206] Exiting Vivado at Wed Jul 29 17:48:24 2026...

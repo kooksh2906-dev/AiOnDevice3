@@ -1,0 +1,7 @@
+method,component_role,instance,module,total_luts,logic_luts,lutrams,srls,ffs,ramb36,ramb18,dsp_blocks,note
+common_baseline,COMMON_TEST_PATTERN_GENERATOR,test_pattern_generator_gpio_adapter_0,base_soc_test_pattern_generator_gpio_adapter_0_0,110,110,0,0,65,0,0,0,공통 Generator 계층; 방법별 동일성 교차 검증
+cpu_polling,COMMON_TEST_PATTERN_GENERATOR,test_pattern_generator_0,base_soc_test_pattern_generator_0_0,110,110,0,0,65,0,0,0,공통 Generator 계층; 방법별 동일성 교차 검증
+cpu_polling,CPU_POLLING_PROBE_INTERFACE,axi_gpio_probe,base_soc_axi_gpio_probe_0,53,53,0,0,104,0,0,0,AXI GPIO probe 계층; CPU Polling 총량의 부분 계층값
+ila_reference,COMMON_TEST_PATTERN_GENERATOR,test_pattern_generator_gpio_adapter_0,base_soc_test_pattern_generator_gpio_adapter_0_0,110,110,0,0,65,0,0,0,공통 Generator 계층; 방법별 동일성 교차 검증
+ila_reference,VIVADO_ILA_CORE,ila_reference_0,base_soc_ila_reference_0_0,591,527,0,64,1034,0,1,0,공식 ILA 계층값; 전체 SoC 증분값과 동일하지 않음
+ila_reference,VIVADO_DEBUG_HUB,dbg_hub,dbg_hub,449,425,24,0,741,0,0,0,ILA에 필요한 Debug Hub 계층값; ILA Core와 별도 표시

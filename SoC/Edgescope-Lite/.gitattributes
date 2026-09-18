@@ -1,0 +1,14 @@
+# Vivado-generated Tcl and report snapshots preserve vendor spacing because
+# their exact bytes are bound by SHA-256 manifests.
+comparison/common/generated/** -whitespace
+comparison/*/reports/** -whitespace
+comparison/ila_reference/generated/** -whitespace
+comparison/ila_reference/results/** -whitespace
+
+# Preserve generated hardware and capture artifacts as binary files.
+*.bit binary
+*.dcp binary
+*.elf binary
+*.ila binary
+*.xsa binary
+*.png binary
