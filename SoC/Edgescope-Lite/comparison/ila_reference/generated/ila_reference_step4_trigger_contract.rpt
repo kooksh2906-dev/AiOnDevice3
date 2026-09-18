@@ -1,0 +1,22 @@
+EdgeScope-Lite Vivado ILA Reference - Step 4 Trigger Contract
+===============================================================
+Common Runtime Geometry
+  CONTROL.DATA_DEPTH       : 1024
+  CONTROL.WINDOW_COUNT     : 1
+  CONTROL.TRIGGER_POSITION : 512
+  CONTROL.CAPTURE_MODE     : ALWAYS
+  CONTROL.CAPTURE_CONDITION: AND
+  CONTROL.TRIGGER_MODE     : BASIC_ONLY
+  CONTROL.TRIGGER_CONDITION: AND
+  CAPTURE_COMPARE_VALUE    : eq8'bXXXXXXXX
+
+Trigger Profiles
+  rising     : eq8'bXXXXXXXR
+  falling    : eq8'bXXXXXXXF
+  pattern    : eq8'b1010XXXX
+  no_trigger : eq8'hFF
+
+Normalized indices: pre=0..511, trigger=512, post-extra=513..1023
+Block Design / ILA structure: UNCHANGED AND OFFLINE-VALIDATED
+Hardware Manager apply/readback: PENDING STEP 6
+Bitstream / LTX: PENDING STEP 5

@@ -1,0 +1,88 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2024.2 (lin64) Build 5239630 Fri Nov 08 22:34:34 MST 2024
+| Date         : Wed Jul 29 19:58:02 2026
+| Host         : user4-B80KV-AP35BKE running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_utilization -hierarchical -hierarchical_depth 4 -file {/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step9/baseline_raw/baseline_hierarchical_utilization.rpt}
+| Design       : base_soc_wrapper
+| Device       : xc7a35tcpg236-1
+| Speed File   : -1
+| Design State : Routed
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-----------------------------------------------+--------------------------------------------------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+|                    Instance                   |                                        Module                                        | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++-----------------------------------------------+--------------------------------------------------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+| base_soc_wrapper                              |                                                                                (top) |       2685 |       2547 |      96 |   42 | 2455 |     32 |      0 |          0 |
+|   (base_soc_wrapper)                          |                                                                                (top) |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|   base_soc_i                                  |                                                                             base_soc |       2685 |       2547 |      96 |   42 | 2455 |     32 |      0 |          0 |
+|     (base_soc_i)                              |                                                                             base_soc |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     axi_gpio_test_ctrl                        |                                                        base_soc_axi_gpio_test_ctrl_0 |         76 |         76 |       0 |    0 |  150 |      0 |      0 |          0 |
+|       U0                                      |                                               base_soc_axi_gpio_test_ctrl_0_axi_gpio |         76 |         76 |       0 |    0 |  150 |      0 |      0 |          0 |
+|         (U0)                                  |                                               base_soc_axi_gpio_test_ctrl_0_axi_gpio |          0 |          0 |       0 |    0 |   29 |      0 |      0 |          0 |
+|         AXI_LITE_IPIF_I                       |                                          base_soc_axi_gpio_test_ctrl_0_axi_lite_ipif |         70 |         70 |       0 |    0 |   53 |      0 |      0 |          0 |
+|         gpio_core_1                           |                                              base_soc_axi_gpio_test_ctrl_0_GPIO_Core |          6 |          6 |       0 |    0 |   68 |      0 |      0 |          0 |
+|     axi_timer_0                               |                                                               base_soc_axi_timer_0_0 |        289 |        289 |       0 |    0 |  241 |      0 |      0 |          0 |
+|       U0                                      |                                                     base_soc_axi_timer_0_0_axi_timer |        289 |        289 |       0 |    0 |  241 |      0 |      0 |          0 |
+|         AXI4_LITE_I                           |                                                 base_soc_axi_timer_0_0_axi_lite_ipif |        120 |        120 |       0 |    0 |   62 |      0 |      0 |          0 |
+|         TC_CORE_I                             |                                                       base_soc_axi_timer_0_0_tc_core |        170 |        170 |       0 |    0 |  179 |      0 |      0 |          0 |
+|     axi_uartlite_0                            |                                                            base_soc_axi_uartlite_0_0 |         98 |         88 |       0 |   10 |  114 |      0 |      0 |          0 |
+|       U0                                      |                                               base_soc_axi_uartlite_0_0_axi_uartlite |         98 |         88 |       0 |   10 |  114 |      0 |      0 |          0 |
+|         AXI_LITE_IPIF_I                       |                                              base_soc_axi_uartlite_0_0_axi_lite_ipif |         30 |         30 |       0 |    0 |   26 |      0 |      0 |          0 |
+|         UARTLITE_CORE_I                       |                                              base_soc_axi_uartlite_0_0_uartlite_core |         69 |         59 |       0 |   10 |   88 |      0 |      0 |          0 |
+|     clk_wiz                                   |                                                                   base_soc_clk_wiz_0 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       inst                                    |                                                           base_soc_clk_wiz_0_clk_wiz |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     mdm_1                                     |                                                                     base_soc_mdm_1_0 |        130 |        125 |       0 |    5 |  193 |      0 |      0 |          0 |
+|       U0                                      |                                                           base_soc_mdm_1_0_MDM_RISCV |        130 |        125 |       0 |    5 |  193 |      0 |      0 |          0 |
+|         (U0)                                  |                                                           base_soc_mdm_1_0_MDM_RISCV |         12 |          9 |       0 |    3 |   48 |      0 |      0 |          0 |
+|         MDM_Core_I1                           |                                                            base_soc_mdm_1_0_MDM_Core |         96 |         94 |       0 |    2 |  145 |      0 |      0 |          0 |
+|         Use_E2.BSCAN_I                        |                                                          base_soc_mdm_1_0_MB_BSCANE2 |         18 |         18 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         Use_E2.LUT1_I                         |                                                             base_soc_mdm_1_0_MB_LUT1 |          5 |          5 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         Use_JTAG_BSCAN.BUFG_JTAG_TCK          |                                                         base_soc_mdm_1_0_MB_BUFGCE_1 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     microblaze_riscv_0                        |                                                        base_soc_microblaze_riscv_0_0 |       1652 |       1564 |      64 |   24 | 1339 |      0 |      0 |          0 |
+|       U0                                      |                                                  base_soc_microblaze_riscv_0_0_riscv |       1652 |       1564 |      64 |   24 | 1339 |      0 |      0 |          0 |
+|         riscv_core_I                          |                                             base_soc_microblaze_riscv_0_0_riscv_core |       1652 |       1564 |      64 |   24 | 1339 |      0 |      0 |          0 |
+|     microblaze_riscv_0_axi_intc               |                                               base_soc_microblaze_riscv_0_axi_intc_0 |        134 |        102 |      32 |    0 |  182 |      0 |      0 |          0 |
+|       U0                                      |                                      base_soc_microblaze_riscv_0_axi_intc_0_axi_intc |        134 |        102 |      32 |    0 |  182 |      0 |      0 |          0 |
+|         (U0)                                  |                                      base_soc_microblaze_riscv_0_axi_intc_0_axi_intc |          0 |          0 |       0 |    0 |    4 |      0 |      0 |          0 |
+|         AXI_LITE_IPIF_I                       |                                 base_soc_microblaze_riscv_0_axi_intc_0_axi_lite_ipif |         76 |         76 |       0 |    0 |   78 |      0 |      0 |          0 |
+|         INTC_CORE_I                           |                                     base_soc_microblaze_riscv_0_axi_intc_0_intc_core |         59 |         27 |      32 |    0 |  100 |      0 |      0 |          0 |
+|     microblaze_riscv_0_axi_periph             |                                             base_soc_microblaze_riscv_0_axi_periph_0 |        136 |        136 |       0 |    0 |  119 |      0 |      0 |          0 |
+|       xbar                                    |                                    base_soc_microblaze_riscv_0_axi_periph_imp_xbar_0 |        136 |        136 |       0 |    0 |  119 |      0 |      0 |          0 |
+|         inst                                  |  base_soc_microblaze_riscv_0_axi_periph_imp_xbar_0_axi_crossbar_v2_1_34_axi_crossbar |        136 |        136 |       0 |    0 |  119 |      0 |      0 |          0 |
+|     microblaze_riscv_0_local_memory           |                                           microblaze_riscv_0_local_memory_imp_R4JR1S |         44 |         42 |       0 |    2 |   14 |     32 |      0 |          0 |
+|       (microblaze_riscv_0_local_memory)       |                                           microblaze_riscv_0_local_memory_imp_R4JR1S |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       dlmb_bram_if_cntlr                      |                                                        base_soc_dlmb_bram_if_cntlr_0 |          4 |          4 |       0 |    0 |    2 |      0 |      0 |          0 |
+|         U0                                    |                                      base_soc_dlmb_bram_if_cntlr_0_lmb_bram_if_cntlr |          4 |          4 |       0 |    0 |    2 |      0 |      0 |          0 |
+|       dlmb_v10                                |                                                                  base_soc_dlmb_v10_0 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         U0                                    |                                                          base_soc_dlmb_v10_0_lmb_v10 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       ilmb_bram_if_cntlr                      |                                                        base_soc_ilmb_bram_if_cntlr_0 |          2 |          2 |       0 |    0 |    2 |      0 |      0 |          0 |
+|         U0                                    |                                      base_soc_ilmb_bram_if_cntlr_0_lmb_bram_if_cntlr |          2 |          2 |       0 |    0 |    2 |      0 |      0 |          0 |
+|       ilmb_v10                                |                                                                  base_soc_ilmb_v10_0 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         U0                                    |                                                          base_soc_ilmb_v10_0_lmb_v10 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       lmb_bram                                |                                                                  base_soc_lmb_bram_0 |         38 |         36 |       0 |    2 |   10 |     32 |      0 |          0 |
+|         U0                                    |                                               base_soc_lmb_bram_0_blk_mem_gen_v8_4_9 |         38 |         36 |       0 |    2 |   10 |     32 |      0 |          0 |
+|     microblaze_riscv_0_xlconcat               |                                               base_soc_microblaze_riscv_0_xlconcat_0 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     rst_clk_wiz_100M                          |                                                          base_soc_rst_clk_wiz_100M_0 |         18 |         17 |       0 |    1 |   38 |      0 |      0 |          0 |
+|       U0                                      |                                           base_soc_rst_clk_wiz_100M_0_proc_sys_reset |         18 |         17 |       0 |    1 |   38 |      0 |      0 |          0 |
+|         (U0)                                  |                                           base_soc_rst_clk_wiz_100M_0_proc_sys_reset |          0 |          0 |       0 |    0 |    3 |      0 |      0 |          0 |
+|         EXT_LPF                               |                                                      base_soc_rst_clk_wiz_100M_0_lpf |          5 |          4 |       0 |    1 |   17 |      0 |      0 |          0 |
+|         SEQ                                   |                                             base_soc_rst_clk_wiz_100M_0_sequence_psr |         13 |         13 |       0 |    0 |   18 |      0 |      0 |          0 |
+|     test_pattern_generator_gpio_adapter_0     |                                     base_soc_test_pattern_generator_gpio_adapter_0_0 |        110 |        110 |       0 |    0 |   65 |      0 |      0 |          0 |
+|       (test_pattern_generator_gpio_adapter_0) |                                     base_soc_test_pattern_generator_gpio_adapter_0_0 |          0 |          0 |       0 |    0 |    0 |      0 |      0 |          0 |
+|       inst                                    | base_soc_test_pattern_generator_gpio_adapter_0_0_test_pattern_generator_gpio_adapter |        110 |        110 |       0 |    0 |   65 |      0 |      0 |          0 |
+|         (inst)                                | base_soc_test_pattern_generator_gpio_adapter_0_0_test_pattern_generator_gpio_adapter |          2 |          2 |       0 |    0 |    0 |      0 |      0 |          0 |
+|         generator_i                           |              base_soc_test_pattern_generator_gpio_adapter_0_0_test_pattern_generator |        108 |        108 |       0 |    0 |   65 |      0 |      0 |          0 |
++-----------------------------------------------+--------------------------------------------------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

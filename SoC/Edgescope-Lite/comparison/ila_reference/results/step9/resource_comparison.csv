@@ -1,0 +1,9 @@
+method,method_label,view,status,slice_luts,lut_as_logic,lut_as_memory,slice_registers,ramb36,ramb18,bram_tile_equiv,dsp48e1,note
+common_baseline,Common Base + Generator,TOTAL_WHOLE_ROUTED_SOC,VERIFIED,2685,2547,138,2455,32,0,32.0,0,Vivado routed design total; not analyzer-only overhead.
+common_baseline,Common Base + Generator,DELTA_VS_COMMON_BASE_PLUS_GENERATOR,VERIFIED,0,0,0,0,0,0,0.0,0,Signed TOTAL minus COMMON_BASE_PLUS_GENERATOR; negative values are preserved.
+cpu_polling,CPU Polling,TOTAL_WHOLE_ROUTED_SOC,VERIFIED,2782,2644,138,2560,32,0,32.0,0,Vivado routed design total; not analyzer-only overhead.
+cpu_polling,CPU Polling,DELTA_VS_COMMON_BASE_PLUS_GENERATOR,VERIFIED,97,97,0,105,0,0,0.0,0,Signed TOTAL minus COMMON_BASE_PLUS_GENERATOR; negative values are preserved. Reference only; excluded from official savings.
+ila_reference,Vivado ILA,TOTAL_WHOLE_ROUTED_SOC,VERIFIED,3726,3500,226,4230,32,1,32.5,0,Vivado routed design total; not analyzer-only overhead.
+ila_reference,Vivado ILA,DELTA_VS_COMMON_BASE_PLUS_GENERATOR,VERIFIED,1041,953,88,1775,0,1,0.5,0,Signed TOTAL minus COMMON_BASE_PLUS_GENERATOR; negative values are preserved.
+custom,EdgeScope Custom,TOTAL_WHOLE_ROUTED_SOC,NOT_RECEIVED,NA,NA,NA,NA,NA,NA,NA,NA,Vivado routed design total; not analyzer-only overhead.
+custom,EdgeScope Custom,DELTA_VS_COMMON_BASE_PLUS_GENERATOR,NOT_RECEIVED,NA,NA,NA,NA,NA,NA,NA,NA,Signed TOTAL minus COMMON_BASE_PLUS_GENERATOR; negative values are preserved.
