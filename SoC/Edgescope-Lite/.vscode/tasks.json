@@ -1,0 +1,107 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dashboard: npm ci",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "ci"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dashboard: lint (TypeScript)",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "run",
+        "lint"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Dashboard: test",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dashboard: build",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "run",
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": "$tsc"
+    },
+    {
+      "label": "Dashboard: dev",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "run",
+        "dev"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Dashboard: preview",
+      "type": "process",
+      "command": "npm",
+      "windows": {
+        "command": "npm.cmd"
+      },
+      "args": [
+        "run",
+        "preview"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/dashboard"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      }
+    }
+  ]
+}
