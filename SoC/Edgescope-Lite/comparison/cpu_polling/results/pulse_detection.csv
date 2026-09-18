@@ -1,0 +1,7 @@
+pulse_width,pulse_width_cycles,trials,detected,status,evidence_log
+10_ns,1,10,0,MEASURED,uart_capture.log:4238
+100_ns,10,10,0,MEASURED,uart_capture.log:4249
+1_us,100,10,10,MEASURED,uart_capture.log:4260
+10_us,1000,10,10,MEASURED,uart_capture.log:4271
+100_us,10000,10,10,MEASURED,uart_capture.log:4282
+1_ms,100000,10,10,MEASURED,uart_capture.log:4293
