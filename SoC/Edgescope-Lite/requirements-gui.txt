@@ -1,0 +1,3 @@
+# Live Basys3 UART discovery and communication. The browser GUI itself uses
+# only Python's standard library.
+pyserial>=3.5,<4
