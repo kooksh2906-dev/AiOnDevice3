@@ -1,0 +1,10 @@
+fact_id,category,label,value,unit,status,evidence,allowed_claim
+ILA-001,configuration,Sampling clock,100,MHz,VERIFIED,results/step6/step6_status.rpt,100 MHz 동기 Capture
+ILA-002,configuration,Capture depth,1024,samples,VERIFIED,results/step6/step6_status.rpt,"1,024 Sample Capture"
+ILA-003,configuration,Trigger index,512,index,VERIFIED,results/step6/step6_status.rpt,Trigger Sample은 Post 512개에 포함
+ILA-004,hardware,Trigger profiles,3/3,profiles,VERIFIED,results/step6/capture_validation.rpt,Rising/Falling/Pattern PASS
+ILA-005,hardware,Pulse stress,60/60,trials,VERIFIED,results/step8/pulse_detection_summary.csv,동기 Pulse 10 ns~1 ms
+ILA-006,resources,ILA delta Slice LUT,1041,LUT,VERIFIED,results/step9/resource_comparison.csv,Common Base+Generator 대비
+ILA-007,resources,ILA delta FF,1775,FF,VERIFIED,results/step9/resource_comparison.csv,Common Base+Generator 대비
+ILA-008,timing,WNS at 100 MHz,1.544,ns,VERIFIED,results/step9/timing_comparison.csv,Fmax로 환산 금지
+TEAM-001,official_comparison,Custom-vs-ILA savings,PENDING_CUSTOM,status,PENDING_CUSTOM,results/step9/official_custom_vs_ila_savings.csv,CPU Polling 제외

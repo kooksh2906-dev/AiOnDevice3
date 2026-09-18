@@ -1,0 +1,70 @@
+EdgeScope-Lite Vivado ILA Reference - Step 5 Build Manifest
+============================================================
+Build Time                 : 2026-07-29 16:49:05 +0900
+Vivado                     : Vivado v2024.2 (64-bit)
+SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+Tool Version Limit: 2024.11
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+
+FPGA Part                  : xc7a35tcpg236-1
+Board Part                 : digilentinc.com:basys3:part0:1.2
+Top                        : base_soc_wrapper
+Synthesis Strategy         : Vivado Synthesis Defaults
+Implementation Strategy    : Vivado Implementation Defaults
+Synthesis Status           : synth_design Complete!
+Implementation Status      : route_design Complete!
+Git Commit                 : 4f178c0e2606924fc9f55b844afb2ecd05a7303d
+Git Worktree Dirty         : true
+WNS (ns)                   : 1.544
+TNS (ns)                   : 0.000
+WHS (ns)                   : 0.014
+THS (ns)                   : 0.000
+WPWS (ns)                  : 3.000
+TPWS (ns)                  : 0.000
+sys_clock Period (ns)      : 10.000
+ILA Clock Period (ns)      : 10.000
+Debug Hub Input Clock (Hz) : 100000000
+Bus Skew Constraints Met   : 4
+Internal Unconstrained     : 0
+CDC Info / Non-Info        : 15 / 0
+External I/O Delays        : NOT MODELED (reset/UART asynchronous interfaces)
+Fully Placed               : PASS
+Fully Routed               : PASS
+Route Errors               : 0
+DRC Errors                 : 0
+DRC Critical Warnings      : 0
+DRC Warnings               : 14
+BIT/LTX Same Routed Design : PASS
+Hardware Pair Readback     : PENDING STEP 6
+Runtime Control Firmware   : PENDING (current ELF is riscv_bootloop.elf)
+Source Provenance          : ALL BUILD INPUTS HASHED BELOW; GIT DIRTY STATE RECORDED
+Checksum Index             : comparison/ila_reference/generated/ila_reference_step5_SHA256SUMS
+
+Base SoC Tcl SHA-256: 31f6d77d2150d0d6a744fae02b2a85661340fb71a17906ca5267ab8a74ae078c
+Generator Integration Tcl SHA-256: 971cf1b87e4b39b522626746e5d3464e840a4f413d183e8db6e353587f2121d8
+Base Build Tcl SHA-256: 0e3104db76d7120b04406f7e8140d3172591955df50394d1e5d23a5756015d2b
+Generator Core RTL SHA-256: 9f0a1b7f9a54ddc8f9eb3e093382af9eb6a6cdf8c9ab48ab4ce65d83e7eb5440
+Generator Adapter RTL SHA-256: 73fd657010c8109d5a1c7e5168d4ae4a4d576fc80e2ddd02978b087523249580
+Step 3 Build Tcl SHA-256: a6f01e0ed94d9c7ead3d410f306510d0bf3a126ed45d22db93f658b57a5e3aae
+Step 4 Build Tcl SHA-256: 05f2db4e292dd6843cd63f5ecd2a4453c959271a9faf8de0290da6b688c40dba
+Step 4 Validation Tcl SHA-256: 97320ede529748c22ad49568058aa50f692fd9ae9e6279b5efce2364c38b53d1
+ILA Structure Tcl SHA-256: a4bf313b9827c4063cc55364237e84e1cd08f8b8d34a17962da6f6fe148ee55d
+ILA Trigger Tcl SHA-256: b0e0cd0678e9e90cf2596515dfd045b809ed47468fc64b68c52f28b12a7271fc
+Debug Hub XDC SHA-256: bf313edb1bc6ac4940414e25efcb4b7bd00fcd4b469d99ba861c62ecbb771f91
+Step 5 Tcl SHA-256: 7bcfe6923aaf6bc62da51bdb0e3204b057f261c80fef4403d34080850b7605ce
+Step 5 Runner SHA-256: 58897778933f2151d79afe691c2cd1abc0d691b331dc29a745a0ff0944878377
+MicroBlaze Bootloop ELF SHA-256: 05de8d02c2e040dc68eac8d097962aaccad3a263680e2829e3a548679f625ee7
+Generated Wrapper SHA-256: b27f488f030e29bce43d660accfb8d684a8a208d3848cd58f18ad3088293512b
+
+Routed DCP Path   : comparison/ila_reference/build/step5/edgescope_ila_reference_routed.dcp
+Routed DCP Size   : 4158966
+Routed DCP SHA-256: a82e65ad6e3762ba54533420a5bf48c707163c533e8f555277d631a0fd21dbe3
+Bitstream Path   : comparison/ila_reference/build/step5/edgescope_ila_reference.bit
+Bitstream Size   : 2192124
+Bitstream SHA-256: f54640071377de4cc632158e1fc93092469c27967dd3624041131b5e3be8dfd6
+Debug Probes LTX Path   : comparison/ila_reference/build/step5/debug_nets.ltx
+Debug Probes LTX Size   : 3669
+Debug Probes LTX SHA-256: ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b

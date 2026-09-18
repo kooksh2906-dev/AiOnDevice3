@@ -1,0 +1,21 @@
+# EdgeScope-Lite Step 6 machine-readable evidence
+pair_kind=STEP6_UART_RUNTIME
+bit_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+bit_sha256=cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ltx_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ltx_sha256=ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+STEP=6
+ACTION=no_trigger_check
+PROFILE=no_trigger
+SESSION_TOKEN=1785315130223-1861803
+RESULT=PASS_NO_TRIGGER_100MS
+REQUIRED_DURATION_MS=100
+OBSERVED_DURATION_MS=103
+CORE_STATUS=WAITING_FOR_TRIGGER
+PARTIAL_CAPTURE_SAVED=0
+PARTIAL_UPLOAD_ATTEMPTED=0
+CAPTURE_ARTIFACT=NONE_BY_DESIGN
+RUNTIME_ACK_FILE=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step6/no_trigger_runtime_ack.rpt
+TARGET=localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+DEVICE=xc7a35t_0
+ILA_CELL=base_soc_i/ila_reference_0

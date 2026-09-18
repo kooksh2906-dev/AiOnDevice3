@@ -1,0 +1,7 @@
+width_cycles,width_ns,eligible_trials,detected_count,detection_rate_percent,expected_detected_count,result
+1,10,10,10,100.0,10,PASS
+10,100,10,10,100.0,10,PASS
+100,1000,10,10,100.0,10,PASS
+1000,10000,10,10,100.0,10,PASS
+10000,100000,10,10,100.0,10,PASS
+100000,1000000,10,10,100.0,10,PASS

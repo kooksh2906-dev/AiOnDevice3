@@ -1,0 +1,1682 @@
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Wed Jul 29 18:38:44 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source {/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/hw/run_step8_pulse_stress.tcl} -notrace
+ASSERT PASS: Runtime command path = UART RUN
+ASSERT PASS: Runtime BIT differs from bootloop = PASS
+ASSERT PASS: Runtime LTX unchanged from routed design = PASS
+ASSERT PASS: BIT hash manifest/index = cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ASSERT PASS: LTX hash manifest/index = ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+ASSERT PASS: BIT hash on disk = cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ASSERT PASS: LTX hash on disk = ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+ASSERT PASS: LTX ILA instance = base_soc_i/ila_reference_0
+ASSERT PASS: LTX ILA spec = labtools_ila_v6
+ASSERT PASS: LTX ILA IP name = ila
+ASSERT PASS: LTX probe name = probe0
+ASSERT PASS: LTX probe ID = 0
+ASSERT PASS: LTX probe direction = IN
+ASSERT PASS: LTX probe vector flag = true
+ASSERT PASS: LTX probe port = 0
+ASSERT PASS: LTX probe width = 8
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-3415] Connecting to cs_server url TCP:localhost:0
+INFO: [Labtools 27-3417] Launching cs_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+
+******** Xilinx cs_server v2024.2.0
+  ****** Build date   : Oct 31 2024-03:19:07
+    **** Build number : 2024.2.1730312347
+      ** Copyright 2017-2022 Xilinx, Inc. All Rights Reserved.
+      ** Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+
+
+
+ASSERT PASS: explicit hardware target selector = localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+ASSERT PASS: PROGRAM.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+ASSERT PASS: PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: FULL_PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+Programming xc7a35t_0 with fixed Step-6 runtime BIT/LTX...
+INFO: [Labtools 27-3164] End of startup status: HIGH
+INFO: [Labtools 27-2302] Device xc7a35t (JTAG device index = 0) is programmed with a design that has 1 ILA core(s).
+ASSERT PASS: PROGRAM.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+ASSERT PASS: PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: FULL_PROBES.FILE readback = /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ASSERT PASS: Hardware ILA instance = base_soc_i/ila_reference_0
+ASSERT PASS: Hardware ILA maximum depth = 1024
+ASSERT PASS: Hardware/LTX ILA UUID = 4FB82E5963D554A68B9EF3ACD537453F
+ASSERT PASS: Hardware probe port = 0
+ASSERT PASS: Hardware probe width = 8
+ASSERT PASS: Hardware probe comparator count = 1
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:53
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=1|eligible=1|session=w000001-r01|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:53
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=1|eligible=1|session=w000001-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:53
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=2|eligible=1|session=w000001-r02|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:53
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=2|eligible=1|session=w000001-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:53
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=3|eligible=1|session=w000001-r03|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:54
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=3|eligible=1|session=w000001-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:54
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=4|eligible=1|session=w000001-r04|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:54
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=4|eligible=1|session=w000001-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:54
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=5|eligible=1|session=w000001-r05|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:54
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=5|eligible=1|session=w000001-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:54
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=6|eligible=1|session=w000001-r06|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:54
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=6|eligible=1|session=w000001-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:54
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=7|eligible=1|session=w000001-r07|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:54
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=7|eligible=1|session=w000001-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:54
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=8|eligible=1|session=w000001-r08|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:55
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=8|eligible=1|session=w000001-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:55
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=9|eligible=1|session=w000001-r09|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:55
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=9|eligible=1|session=w000001-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:55
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1|width_ns=10|trial=10|eligible=1|session=w000001-r10|uart_command=RUN 6 1|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1 reply=OK RUN id=6 pulse=0x00000001 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:55
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000001_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1|trial=10|eligible=1|session=w000001-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000001_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000001_trial_10.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:55
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=1|eligible=1|session=w000010-r01|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:55
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=1|eligible=1|session=w000010-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:55
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=2|eligible=1|session=w000010-r02|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:55
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=2|eligible=1|session=w000010-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:56
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=3|eligible=1|session=w000010-r03|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:56
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=3|eligible=1|session=w000010-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:56
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=4|eligible=1|session=w000010-r04|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:56
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=4|eligible=1|session=w000010-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:56
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=5|eligible=1|session=w000010-r05|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:56
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=5|eligible=1|session=w000010-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:56
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=6|eligible=1|session=w000010-r06|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:56
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=6|eligible=1|session=w000010-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:56
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=7|eligible=1|session=w000010-r07|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:57
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=7|eligible=1|session=w000010-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:57
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=8|eligible=1|session=w000010-r08|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:57
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=8|eligible=1|session=w000010-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:57
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=9|eligible=1|session=w000010-r09|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:57
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=9|eligible=1|session=w000010-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:57
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10|width_ns=100|trial=10|eligible=1|session=w000010-r10|uart_command=RUN 6 10|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10 reply=OK RUN id=6 pulse=0x0000000A saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:57
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000010_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10|trial=10|eligible=1|session=w000010-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000010_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000010_trial_10.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:57
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=1|eligible=1|session=w000100-r01|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:57
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=1|eligible=1|session=w000100-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:57
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=2|eligible=1|session=w000100-r02|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:58
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=2|eligible=1|session=w000100-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:58
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=3|eligible=1|session=w000100-r03|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:58
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=3|eligible=1|session=w000100-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:58
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=4|eligible=1|session=w000100-r04|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:58
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=4|eligible=1|session=w000100-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:58
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=5|eligible=1|session=w000100-r05|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:58
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=5|eligible=1|session=w000100-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:58
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=6|eligible=1|session=w000100-r06|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:59
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=6|eligible=1|session=w000100-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:59
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=7|eligible=1|session=w000100-r07|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:59
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=7|eligible=1|session=w000100-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:59
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=8|eligible=1|session=w000100-r08|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:59
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=8|eligible=1|session=w000100-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:59
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=9|eligible=1|session=w000100-r09|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:59
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=9|eligible=1|session=w000100-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:59
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100|width_ns=1000|trial=10|eligible=1|session=w000100-r10|uart_command=RUN 6 100|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100 reply=OK RUN id=6 pulse=0x00000064 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:38:59
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w000100_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100|trial=10|eligible=1|session=w000100-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w000100_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w000100_trial_10.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:38:59
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=1|eligible=1|session=w001000-r01|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:00
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=1|eligible=1|session=w001000-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:00
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=2|eligible=1|session=w001000-r02|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:00
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=2|eligible=1|session=w001000-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:00
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=3|eligible=1|session=w001000-r03|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:00
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=3|eligible=1|session=w001000-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:00
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=4|eligible=1|session=w001000-r04|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:00
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=4|eligible=1|session=w001000-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:00
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=5|eligible=1|session=w001000-r05|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:01
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=5|eligible=1|session=w001000-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:01
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=6|eligible=1|session=w001000-r06|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:01
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=6|eligible=1|session=w001000-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:01
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=7|eligible=1|session=w001000-r07|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:01
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=7|eligible=1|session=w001000-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:01
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=8|eligible=1|session=w001000-r08|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:01
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=8|eligible=1|session=w001000-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:01
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=9|eligible=1|session=w001000-r09|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:01
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=9|eligible=1|session=w001000-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:01
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=1000|width_ns=10000|trial=10|eligible=1|session=w001000-r10|uart_command=RUN 6 1000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=1000 reply=OK RUN id=6 pulse=0x000003E8 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:02
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w001000_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=1000|trial=10|eligible=1|session=w001000-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w001000_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w001000_trial_10.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:02
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=1|eligible=1|session=w010000-r01|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:02
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=1|eligible=1|session=w010000-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:02
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=2|eligible=1|session=w010000-r02|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:02
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=2|eligible=1|session=w010000-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:02
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=3|eligible=1|session=w010000-r03|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:02
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=3|eligible=1|session=w010000-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:02
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=4|eligible=1|session=w010000-r04|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:02
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=4|eligible=1|session=w010000-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:03
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=5|eligible=1|session=w010000-r05|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:03
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=5|eligible=1|session=w010000-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:03
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=6|eligible=1|session=w010000-r06|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:03
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=6|eligible=1|session=w010000-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:03
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=7|eligible=1|session=w010000-r07|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:03
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=7|eligible=1|session=w010000-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:03
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=8|eligible=1|session=w010000-r08|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:03
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=8|eligible=1|session=w010000-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:03
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=9|eligible=1|session=w010000-r09|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:04
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=9|eligible=1|session=w010000-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:04
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=10000|width_ns=100000|trial=10|eligible=1|session=w010000-r10|uart_command=RUN 6 10000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=10000 reply=OK RUN id=6 pulse=0x00002710 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:04
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w010000_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=10000|trial=10|eligible=1|session=w010000-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w010000_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w010000_trial_10.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:04
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=1|eligible=1|session=w100000-r01|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:04
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_01.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=1|eligible=1|session=w100000-r01|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_01_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_01.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:04
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=2|eligible=1|session=w100000-r02|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:04
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_02.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=2|eligible=1|session=w100000-r02|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_02_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_02.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:04
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=3|eligible=1|session=w100000-r03|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:04
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_03.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=3|eligible=1|session=w100000-r03|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_03_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_03.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:04
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=4|eligible=1|session=w100000-r04|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:05
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_04.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=4|eligible=1|session=w100000-r04|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_04_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_04.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:05
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=5|eligible=1|session=w100000-r05|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:05
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_05.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=5|eligible=1|session=w100000-r05|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_05_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_05.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:05
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=6|eligible=1|session=w100000-r06|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:05
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_06.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=6|eligible=1|session=w100000-r06|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_06_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_06.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:05
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=7|eligible=1|session=w100000-r07|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:05
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_07.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=7|eligible=1|session=w100000-r07|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_07_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_07.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:05
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=8|eligible=1|session=w100000-r08|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:06
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_08.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=8|eligible=1|session=w100000-r08|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_08_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_08.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:06
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=9|eligible=1|session=w100000-r09|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:06
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_09.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=9|eligible=1|session=w100000-r09|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_09_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_09.ila
+READBACK PASS: Maximum data depth = 1024
+READBACK PASS: Core status before configuration = IDLE
+READBACK PASS: Probe type = ila
+READBACK PASS: Probe port = 0
+READBACK PASS: Probe bit count = 8
+READBACK PASS: Probe comparator count = 1
+READBACK PASS: Data depth = 1024
+READBACK PASS: Window count = 1
+READBACK PASS: Trigger position = 512
+READBACK PASS: Capture mode = ALWAYS
+READBACK PASS: Capture condition = AND
+READBACK PASS: Trigger mode = BASIC_ONLY
+READBACK PASS: Trigger condition = AND
+READBACK PASS: Trigger output mode = DISABLED
+READBACK PASS: Capture compare value = eq8'bXXXXXXXX
+READBACK PASS: Trigger compare value = eq8'bXXXXXXXR
+EDGESCOPE_ILA_TRIGGER_CONFIG: PASS
+Mode: rising
+Description: CH0 Rising Edge
+Compare: eq8'bXXXXXXXR
+Next: run_hw_ila, wait for Waiting for Trigger, then START Generator
+INFO: [Labtools 27-1964] The ILA core 'hw_ila_1' trigger was armed at 2026-Jul-29 18:39:06
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_WAITING_FOR_TRIGGER|width_cycles=100000|width_ns=1000000|trial=10|eligible=1|session=w100000-r10|uart_command=RUN 6 100000|core_status=WAITING_FOR_TRIGGER
+STEP8_UART: width=100000 reply=OK RUN id=6 pulse=0x000186A0 saw_busy=1 status=0x00000002
+INFO: [Labtools 27-1966] The ILA core 'hw_ila_1' triggered at 2026-Jul-29 18:39:06
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/trials/pulse_w100000_trial_10.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_COMPLETE|width_cycles=100000|trial=10|eligible=1|session=w100000-r10|csv_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/raw/pulse_w100000_trial_10_raw.csv|ila_file=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/ila/pulse_w100000_trial_10.ila
+EVIDENCE: /home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/results/step8/pulse_capture_manifest.rpt
+EDGESCOPE_CHECKPOINT|step=8|state=PULSE_CAPTURE_MATRIX_COMPLETE|widths=1,10,100,1000,10000,100000|repetitions=10|total_eligible=60|total_detected=60
+EDGESCOPE_STEP8_CAPTURE: COMPLETE
+INFO: [Labtoolstcl 44-464] Closing hw_target localhost:3121/xilinx_tcf/Digilent/210183BEA180A
+INFO: [Common 17-206] Exiting Vivado at Wed Jul 29 18:39:06 2026...

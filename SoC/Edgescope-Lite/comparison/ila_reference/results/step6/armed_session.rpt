@@ -1,0 +1,15 @@
+# EdgeScope-Lite Step 6 machine-readable evidence
+pair_kind=STEP6_UART_RUNTIME
+bit_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/edgescope_ila_reference_runtime.bit
+bit_sha256=cd9d25d4aa3556690876be3c5a94a581e7c6299935664679f7500e83ef8f5acf
+ltx_path=/home/user4/workspace_ondevice_3/Logic Analysis/comparison/ila_reference/build/step6/debug_nets.ltx
+ltx_sha256=ad8b65ba6078aa52ea718c743ca12b75e2bd5e832b860145ec0aa19c36100b9b
+STEP=6
+ACTION=arm
+PROFILE=no_trigger
+SESSION_TOKEN=1785315130223-1861803
+ARM_EPOCH_MS=1785315130223
+ILA_CELL=base_soc_i/ila_reference_0
+ILA_UUID=4FB82E5963D554A68B9EF3ACD537453F
+CORE_STATUS=WAITING_FOR_TRIGGER
+RESULT=ARMED_WAITING_FOR_TRIGGER

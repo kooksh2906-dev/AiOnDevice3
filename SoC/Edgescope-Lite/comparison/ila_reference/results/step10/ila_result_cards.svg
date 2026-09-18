@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"
+     viewBox="0 0 1600 900" role="img"
+     aria-label="Vivado ILA Step 10 result cards">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#030817"/>
+      <stop offset="1" stop-color="#10102d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00E5FF"/>
+      <stop offset="1" stop-color="#B14CFF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g opacity=".23" fill="none" stroke="#00D9FF">
+    <path d="M0 180 H340 C430 180 430 110 520 110 H1600"/>
+    <path d="M0 740 H420 C510 740 510 810 600 810 H1600"/>
+    <path d="M1250 0 V150 C1250 220 1320 220 1320 290 V900"/>
+  </g>
+  <text x="86" y="94" fill="#AAB4D6" font-size="22"
+        font-family="Inter, Noto Sans KR, sans-serif" letter-spacing="4">
+    EDGESCOPE-LITE / VIVADO ILA REFERENCE
+  </text>
+  <text x="86" y="174" fill="#FFFFFF" font-size="64" font-weight="750"
+        font-family="Inter, Noto Sans KR, sans-serif">
+    VERIFIED RESULTS
+  </text>
+  <rect x="86" y="210" width="1428" height="3" fill="url(#accent)"/>
+
+  <g font-family="Inter, Noto Sans KR, sans-serif">
+    <g>
+      <rect x="86" y="278" width="440" height="390" rx="28"
+            fill="#0C1534" stroke="#00E5FF" stroke-width="2"/>
+      <text x="126" y="338" fill="#00E5FF" font-size="21"
+            letter-spacing="3">CAPTURE WINDOW</text>
+      <text x="126" y="455" fill="#FFFFFF" font-size="104"
+            font-weight="760">1,024</text>
+      <text x="126" y="508" fill="#D8DDF0" font-size="28">samples at 100 MHz</text>
+      <text x="126" y="575" fill="#9EA8CA" font-size="23">
+        Trigger index 512
+      </text>
+      <text x="126" y="615" fill="#9EA8CA" font-size="23">
+        512 pre / 512 post incl. trigger
+      </text>
+    </g>
+
+    <g>
+      <rect x="580" y="278" width="440" height="390" rx="28"
+            fill="#0C1534" stroke="#00E5FF" stroke-width="2"/>
+      <text x="620" y="338" fill="#00E5FF" font-size="21"
+            letter-spacing="3">PULSE STRESS</text>
+      <text x="620" y="455" fill="#FFFFFF" font-size="104"
+            font-weight="760">60/60</text>
+      <text x="620" y="508" fill="#D8DDF0" font-size="28">
+        synchronized pulses detected
+      </text>
+      <text x="620" y="575" fill="#9EA8CA" font-size="23">
+        10 ns to 1 ms
+      </text>
+      <text x="620" y="615" fill="#9EA8CA" font-size="23">
+        6 widths × 10 repetitions
+      </text>
+    </g>
+
+    <g>
+      <rect x="1074" y="278" width="440" height="390" rx="28"
+            fill="#0C1534" stroke="#B14CFF" stroke-width="2"/>
+      <text x="1114" y="338" fill="#D06AFF" font-size="21"
+            letter-spacing="3">ILA DELTA VS BASE</text>
+      <text x="1114" y="432" fill="#FFFFFF" font-size="72"
+            font-weight="760">+1,041</text>
+      <text x="1114" y="474" fill="#D8DDF0" font-size="26">Slice LUTs</text>
+      <text x="1114" y="548" fill="#FFFFFF" font-size="52"
+            font-weight="740">+1,775 FF</text>
+      <text x="1114" y="607" fill="#9EA8CA" font-size="23">
+        +1 RAMB18
+      </text>
+      <text x="1114" y="640" fill="#9EA8CA" font-size="18">
+        Total LUT 3,726
+      </text>
+    </g>
+  </g>
+
+  <rect x="86" y="748" width="1428" height="70" rx="18"
+        fill="#F59E0B" opacity=".14"/>
+  <circle cx="126" cy="783" r="8" fill="#F59E0B" filter="url(#glow)"/>
+  <text x="151" y="792" fill="#F59E0B" font-size="24" font-weight="700"
+        font-family="Inter, Noto Sans KR, sans-serif" letter-spacing="2">
+    DRAFT • CUSTOM ROUTED REPORTS PENDING
+  </text>
+</svg>
