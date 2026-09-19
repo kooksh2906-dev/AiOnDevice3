@@ -62,23 +62,30 @@ proc package_frontend_ip {project_dir build_root ip_repo name display top files}
   close_project
 }
 
+if {[llength $argv] > 1 ||
+    ([llength $argv] == 1 && [lindex $argv 0] ne {-trigger-only})} {
+  error {Usage: package_frontend_ips.tcl [-trigger-only]}
+}
+set trigger_only [expr {[llength $argv] == 1}]
 set package_file [file join $project_dir rtl include logic_analyzer_pkg.sv]
 
-package_frontend_ip \
-  $project_dir $build_root $ip_repo \
-  probe_sampler {EdgeScope Probe Sampler} probe_sampler_axi \
-  [list \
-    $package_file \
-    [file join $project_dir rtl core probe_sampler.sv] \
-    [file join $project_dir rtl bus probe_sampler_axi.sv]]
+if {!$trigger_only} {
+  package_frontend_ip \
+    $project_dir $build_root $ip_repo \
+    probe_sampler {EdgeScope Probe Sampler} probe_sampler_axi \
+    [list \
+      $package_file \
+      [file join $project_dir rtl core probe_sampler.sv] \
+      [file join $project_dir rtl bus probe_sampler_axi.sv]]
+}
 
 package_frontend_ip \
   $project_dir $build_root $ip_repo \
   basic_trigger_engine {EdgeScope Basic Trigger Engine} \
   basic_trigger_engine_axi \
   [list \
-    $package_file \
     [file join $project_dir rtl core basic_trigger_engine.v] \
-    [file join $project_dir rtl bus basic_trigger_engine_axi.sv]]
+    [file join $project_dir rtl bus basic_trigger_engine_axi_slave_lite_v1_0_S_AXI.v] \
+    [file join $project_dir rtl bus basic_trigger_engine_axi.v]]
 
 puts "Frontend AXI IP packaging: PASS"
