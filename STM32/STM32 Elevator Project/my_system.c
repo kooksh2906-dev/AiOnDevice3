@@ -9,26 +9,8 @@ void SysInit(){
 
 	while(!Photo_IsBottomBlocked()){
 
-		if (HAL_GetTick() - last_motor_time >= 2){
-
-			last_motor_time = HAL_GetTick();
-			motor_step--;
-			if (motor_step < 0){
-				motor_step = 7;
-			}
-			stepMotor(motor_step);
-
-		}
-
-		if (HAL_GetTick() - last_led_time >= 100){
-
-			last_led_time = HAL_GetTick();
-
-
-			if (led_index == 0) led_index = 7;
-			else led_index--;
-			LED_Update(led_index);
-		}
+		Lift_UpdateStep(2);
+		LED_ShiftUpdate(2);
 	}
 }
 
@@ -42,14 +24,7 @@ void SysReset(){
 
     // 1. 일단 1층으로 내려오기
     while(!Photo_IsBottomBlocked()){
-        if (HAL_GetTick() - last_motor_time >= 2){
-            last_motor_time = HAL_GetTick();
-            motor_step--;
-            if (motor_step < 0){
-                motor_step = 7;
-            }
-            stepMotor(motor_step);
-        }
+        Lift_UpdateStep(2);
     }
     motorStop(); // 바닥에 완전히 도달했으므로 리프트 모터 정지 (안전을 위해 권장)
 
@@ -126,14 +101,7 @@ void CheckDoor(){
 void CheckLift(){
     // 1. 천장에 도달할 때까지 위로 이동 (motor_step 증가 방향)
     while(!Photo_IsTopBlocked()){
-        if (HAL_GetTick() - last_motor_time >= 2){
-            last_motor_time = HAL_GetTick();
-            motor_step++;
-            if (motor_step > 7){
-                motor_step = 0;
-            }
-            stepMotor(motor_step);
-        }
+        Lift_UpdateStep(1);
     }
 
     // 천장에 도착했으므로 모터 정지
@@ -149,14 +117,7 @@ void CheckLift(){
     // 3. 바닥에 도달할 때까지 아래로 이동 (motor_step 감소 방향)
     // 플래그 체크 없이, 위 루프와 대기가 끝나면 바로 이어서 실행됩니다.
     while(!Photo_IsBottomBlocked()){
-        if (HAL_GetTick() - last_motor_time >= 2){
-            last_motor_time = HAL_GetTick();
-            motor_step--;
-            if (motor_step < 0){
-                motor_step = 7;
-            }
-            stepMotor(motor_step);
-        }
+        Lift_UpdateStep(2);
     }
 
     // 바닥에 도착했으므로 최종 정지

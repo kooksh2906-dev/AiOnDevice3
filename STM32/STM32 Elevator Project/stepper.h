@@ -48,4 +48,16 @@ void rotateDegrees(uint16_t degrees, uint8_t direction);
  */
 void motorStop(void);
 
+/* 매 호출마다 버튼/리밋 상태를 확인하고 2ms 간격으로 승강 모터를 구동합니다. */
+void Lift_Update(void);
+
+/* 영점 복귀 및 점검 루틴에서 2ms 간격으로 한 스텝 진행합니다 (1:상승, 2:하강). */
+void Lift_UpdateStep(uint8_t direction);
+
+/* 부저/LED가 참조할 현재 방향 (0:정지, 1:상승, 2:하강). */
+uint8_t Lift_GetDirection(void);
+
+/* 비상 정지 시 즉시 출력과 방향을 초기화합니다. */
+void Lift_Stop(void);
+
 #endif /* INC_STEPPER_H_ */

@@ -52,15 +52,6 @@ extern uint8_t state;               /* 현재 시스템의 동작 상태 (STATE_
 extern uint8_t EmergencyMsgflag;    /* 비상 메시지 출력 여부 기록 */
 extern uint8_t RecoverMsgflag;      /* 복구 메시지 출력 여부 기록 */
 
-/* 엘리베이터 승강 모터(stepper) 제어용 변수들 */
-extern uint32_t last_motor_time;    /* 모터가 마지막으로 1스텝 구동된 시간(ms) */
-extern uint8_t lift_direction;      /* 엘리베이터 이동 방향 (0:정지, 1:상승, 2:하강) */
-extern int8_t motor_step;           /* 1-2상 여자 방식 배열의 현재 인덱스 (0~7) */
-
-/* LED 층수 표시기 제어용 변수들 */
-extern int8_t led_index;            /* 현재 불이 켜져 있는 LED의 위치 (0~7) */
-extern uint32_t last_led_time;      /* LED 불빛이 마지막으로 이동한 시간(ms) */
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

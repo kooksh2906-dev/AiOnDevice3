@@ -51,3 +51,33 @@ void LED_Update(int8_t active_index)
         }
     }
 }
+
+/* LED 이동 표시의 인덱스와 100ms 간격을 모듈 내부에서 관리합니다. */
+static int8_t led_index = 0;
+static uint32_t last_led_time = 0;
+
+void LED_ShiftUpdate(uint8_t lift_direction)
+{
+    if (HAL_GetTick() - last_led_time < 100)
+    {
+        return;
+    }
+
+    last_led_time = HAL_GetTick();
+    if (lift_direction == 1)
+    {
+        led_index++;
+        if (led_index >= 8) led_index = 0;
+        LED_Update(led_index);
+    }
+    else if (lift_direction == 2)
+    {
+        if (led_index == 0) led_index = 7;
+        else led_index--;
+        LED_Update(led_index);
+    }
+    else
+    {
+        LED_Update(-1);
+    }
+}
