@@ -2,7 +2,7 @@
 
 #include "can_app.h"
 #include "cmsis_os2.h"
-#include "motor_control.h"
+#include "motor_task.h"
 #include "uart_log.h"
 #include "ultrasonic.h"
 
@@ -128,7 +128,7 @@ void AutonomousDrive_Task(void *argument)
             last_print = HAL_GetTick();
             char dbg[96];
             MotorControlState motor_state;
-            MotorControl_GetState(&motor_state);
+            MotorTask_GetState(&motor_state);
             int length = snprintf(dbg, sizeof(dbg),
                                   "F=%u L=%u R=%u FL=%u FR=%u V=%u%u%u T=%u S=%u A=%u\r\n",
                                   measured[0], measured[1], measured[2],
@@ -143,7 +143,7 @@ void AutonomousDrive_Task(void *argument)
             }
         }
 
-        if (MotorControl_IsAutoMode() != 1U) {
+        if (MotorTask_IsAutoMode() != 1U) {
             avoid_state = AVOID_CRUISE;
             turn_dir = 0U;
             commit_until = 0U;
@@ -156,7 +156,7 @@ void AutonomousDrive_Task(void *argument)
 
         if (avoid_state == AVOID_REVERSING) {
             if ((int32_t)(now - state_until) < 0) {
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 700U, 700U);
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 700U, 700U);
                 continue;
             }
             avoid_state = AVOID_TURNING;
@@ -166,7 +166,7 @@ void AutonomousDrive_Task(void *argument)
         if (avoid_state == AVOID_TURNING) {
             uint32_t turn_elapsed = now - turn_started;
             if (turn_elapsed < TURN_MIN_MS) {
-                MotorControl_QueueAutoMotion(
+                MotorTask_QueueAutoMotion(
                     (turn_dir == 1U)
                     ? MOTOR_ACTION_TURN_LEFT
                     : MOTOR_ACTION_TURN_RIGHT,
@@ -184,7 +184,7 @@ void AutonomousDrive_Task(void *argument)
                     (right <= SIDE_BLOCKED_DIST)) {
                     avoid_state = AVOID_REVERSING;
                     state_until = now + REVERSE_HOLD_MS;
-                    MotorControl_QueueAutoMotion(MOTOR_ACTION_BACKWARD,
+                    MotorTask_QueueAutoMotion(MOTOR_ACTION_BACKWARD,
                                                  650U,
                                                  650U);
                     continue;
@@ -192,13 +192,13 @@ void AutonomousDrive_Task(void *argument)
 
                 avoid_state = AVOID_CRUISE;
                 commit_until = now + CORNER_COMMIT_MS;
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_FORWARD,
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_FORWARD,
                                              COMMIT_SPEED,
                                              COMMIT_SPEED);
                 continue;
             }
 
-            MotorControl_QueueAutoMotion(
+            MotorTask_QueueAutoMotion(
                 (turn_dir == 1U)
                 ? MOTOR_ACTION_TURN_LEFT
                 : MOTOR_ACTION_TURN_RIGHT,
@@ -216,9 +216,9 @@ void AutonomousDrive_Task(void *argument)
                 commit_until = 0U;
                 avoid_state = AVOID_REVERSING;
                 state_until = now + REVERSE_HOLD_MS;
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 650U, 650U);
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 650U, 650U);
             } else {
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_FORWARD,
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_FORWARD,
                                              COMMIT_SPEED,
                                              COMMIT_SPEED);
             }
@@ -280,11 +280,11 @@ void AutonomousDrive_Task(void *argument)
                 (right <= SIDE_BLOCKED_DIST)) {
                 avoid_state = AVOID_REVERSING;
                 state_until = now + REVERSE_HOLD_MS;
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 650U, 650U);
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_BACKWARD, 650U, 650U);
             } else {
                 avoid_state = AVOID_TURNING;
                 turn_started = now;
-                MotorControl_QueueAutoMotion(
+                MotorTask_QueueAutoMotion(
                     (turn_dir == 1U)
                     ? MOTOR_ACTION_TURN_LEFT
                     : MOTOR_ACTION_TURN_RIGHT,
@@ -292,7 +292,7 @@ void AutonomousDrive_Task(void *argument)
                     TURN_SPEED);
             }
         } else {
-            uint16_t base_pwm = MotorControl_GetSpeed();
+            uint16_t base_pwm = MotorTask_GetSpeed();
             uint16_t low_pwm =
                 (base_pwm > SIDE_CORRECT_PWM)
                 ? (uint16_t)(base_pwm - SIDE_CORRECT_PWM)
@@ -306,18 +306,18 @@ void AutonomousDrive_Task(void *argument)
                 (valid[2] != 0U) &&
                 (((uint32_t)left + SIDE_CENTER_DEADBAND) <
                  (uint32_t)right)) {
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_FORWARD,
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_FORWARD,
                                              high_pwm,
                                              low_pwm);
             } else if ((valid[1] != 0U) &&
                        (valid[2] != 0U) &&
                        (((uint32_t)right + SIDE_CENTER_DEADBAND) <
                         (uint32_t)left)) {
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_FORWARD,
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_FORWARD,
                                              low_pwm,
                                              high_pwm);
             } else {
-                MotorControl_QueueAutoMotion(MOTOR_ACTION_FORWARD,
+                MotorTask_QueueAutoMotion(MOTOR_ACTION_FORWARD,
                                              base_pwm,
                                              base_pwm);
             }
@@ -376,7 +376,7 @@ static void SendVehicleStatusOverCan(uint16_t front_distance,
                                      uint8_t front_valid)
 {
     MotorControlState motor_state;
-    MotorControl_GetState(&motor_state);
+    MotorTask_GetState(&motor_state);
 
     CanVehicleStatus_t status = {
         .speed_percent = PwmToSpeedPercent(motor_state.left_pwm,
