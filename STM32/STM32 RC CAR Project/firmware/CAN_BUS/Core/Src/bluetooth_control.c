@@ -1,7 +1,7 @@
 #include "bluetooth_control.h"
 
 #include "cmsis_os2.h"
-#include "motor_control.h"
+#include "motor_task.h"
 #include "usart.h"
 
 #define BT_RX_BUFFER_SIZE 16U
@@ -73,7 +73,7 @@ void BluetoothControl_Task(void *argument)
             osStatus_t status;
 
             bt_pop_count++;
-            status = MotorControl_QueueUserCommand(cmd);
+            status = MotorTask_SubmitUserCommand(cmd);
 
             if (status == osOK) {
                 bt_queue_put_count++;
