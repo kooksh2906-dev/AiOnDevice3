@@ -2,20 +2,22 @@
 
 void ledInit(LED *led)
 {
-    // DDR 레지스터는 PORT 레지스터보다 1 낮은 위치에 있다.
-    // *(led->port - 1)를 이용해 PORT에서 DDR로 접근한다.
-    // |= (1 << led->pin)을 이용해 선택한 핀만 출력 모드로 설정한다.
-    *(led->port - 1) |= (1 << led->pin);
+    /*
+     * ATmega128A의 Port D에서는 DDRD가 PORTD보다 한 주소 앞에 있다.
+     * PORT 포인터에서 1을 빼 DDR에 접근하고, 선택한 핀만 출력으로 설정한다.
+     * 이 주소 관계를 다른 MCU에 그대로 일반화할 수는 없다.
+     */
+    *(led->port - 1) |= (uint8_t)(1U << led->pin);
 }
 
 void ledOn(LED *led)
 {
-    // 해당 핀을 High로 설정해서 LED를 켠다.
-    *(led->port) |= (1 << led->pin);
+    // 다른 비트 상태를 유지하면서 선택한 핀만 High로 설정한다.
+    *(led->port) |= (uint8_t)(1U << led->pin);
 }
 
 void ledOff(LED *led)
 {
-    // 해당 핀을 Low로 설정해서 LED를 끈다.
-    *(led->port) &= ~(1 << led->pin);
+    // 반전 마스크를 사용해 선택한 핀만 Low로 설정한다.
+    *(led->port) &= (uint8_t)~(1U << led->pin);
 }

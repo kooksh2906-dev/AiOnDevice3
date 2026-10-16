@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
-uint8_t ledArr[] =
+// 시간 순서대로 출력할 LED 패턴을 Lookup Table로 정의한다.
+static const uint8_t ledArr[] =
 {
     0x00,
     0x80,   // 1000 0000
@@ -22,11 +22,12 @@ uint8_t ledArr[] =
     0x01    // 0000 0001
 };
 
-int main()
+int main(void)
 {
-    DDRD = 0xFF; // setting output mode all PORTD pin
+    // PORTD 전체를 출력 모드로 설정한다.
+    DDRD = 0xFF;
 
-    uint8_t arrSize = sizeof(ledArr) / sizeof(ledArr[0]);
+    const uint8_t arrSize = (uint8_t)(sizeof(ledArr) / sizeof(ledArr[0]));
 
     while (1)
     {
