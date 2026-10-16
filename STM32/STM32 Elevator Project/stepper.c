@@ -41,3 +41,64 @@ void motorStop(void)
     HAL_GPIO_WritePin(IN3_GPIO_PORT, IN3_GPIO_PIN, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(IN4_GPIO_PORT, IN4_GPIO_PIN, GPIO_PIN_RESET);
 }
+
+/* 승강 모터의 2ms 간격, 여자 인덱스 및 현재 이동 방향을 이 모듈에서 관리합니다. */
+static uint32_t last_motor_time = 0;
+static int8_t motor_step = 0;
+static uint8_t lift_direction = 0;
+
+void Lift_UpdateStep(uint8_t direction)
+{
+    if (HAL_GetTick() - last_motor_time < 2)
+    {
+        return;
+    }
+
+    last_motor_time = HAL_GetTick();
+    switch (direction)
+    {
+    case 1: /* 상승 */
+        motor_step++;
+        if (motor_step >= 8) motor_step = 0;
+        stepMotor(motor_step);
+        break;
+    case 2: /* 하강 */
+        motor_step--;
+        if (motor_step < 0) motor_step = 7;
+        stepMotor(motor_step);
+        break;
+    default:
+        motorStop();
+        break;
+    }
+}
+
+void Lift_Update(void)
+{
+    /* 기존 우선순위 유지: 상승 버튼이 눌려 있고 상단이 비어 있으면 상승. */
+    if (buttonGetPressed(0) && !Photo_IsTopBlocked())
+    {
+        lift_direction = 1;
+    }
+    else if (buttonGetPressed(1) && !Photo_IsBottomBlocked())
+    {
+        lift_direction = 2;
+    }
+    else
+    {
+        lift_direction = 0;
+    }
+
+    Lift_UpdateStep(lift_direction);
+}
+
+uint8_t Lift_GetDirection(void)
+{
+    return lift_direction;
+}
+
+void Lift_Stop(void)
+{
+    motorStop();
+    lift_direction = 0;
+}

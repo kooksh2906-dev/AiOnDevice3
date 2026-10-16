@@ -72,13 +72,6 @@ uint8_t EmergencyMsgflag = MSG_OFF;
 uint8_t RecoverMsgflag = MSG_OFF;
 uint8_t TestRunMsgflag = MSG_OFF;
 
-/* 모터, 방향, LED 제어에 필요한 비동기 틱(Tick) 및 상태 변수들 */
-uint32_t last_motor_time = 0;
-uint8_t lift_direction = 0;
-int8_t motor_step = 0;
-int8_t led_index = 0;
-uint32_t last_led_time = 0;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -145,67 +138,13 @@ int main(void)
 		    	  /* 키패드 및 LCD 비밀번호 입력 로직 지속 업데이트 */
 		          Password_Update();
 
-		          // 방향 입력 수신 처리 및 [인터록(안전) 원천 차단]
-		          if (buttonGetPressed(0) && !Photo_IsTopBlocked()) // UpLift
-		          {
-		              lift_direction = 1;
-		          }
-		          else if (buttonGetPressed(1) && !Photo_IsBottomBlocked()) // DownLift
-		          {
-		              lift_direction = 2;
-		          }
-		          else
-		          {
-		              lift_direction = 0;
-		          }
-
-		          // 모터 구동 처리 (2ms)
-		          if (HAL_GetTick() - last_motor_time >= 2)
-		          {
-		              last_motor_time = HAL_GetTick();
-		              switch (lift_direction)
-		              {
-		              case 1:
-		                  motor_step++;
-		                  if (motor_step >= 8) motor_step = 0;
-		                  stepMotor(motor_step);
-		                  break;
-		              case 2:
-		                  motor_step--;
-		                  if (motor_step < 0) motor_step = 7;
-		                  stepMotor(motor_step);
-		                  break;
-		              default:
-		                  motorStop();
-		                  break;
-		              }
-		          }
-
-		          // LED 시프트 디스플레이 처리 (100ms)
-		          if (HAL_GetTick() - last_led_time >= 100)
-		          {
-		              last_led_time = HAL_GetTick();
-		              if (lift_direction == 1)
-		              {
-		                  led_index++;
-		                  if (led_index >= 8) led_index = 0;
-		                  LED_Update(led_index);
-		              }
-		              else if (lift_direction == 2)
-		              {
-		                  if (led_index == 0) led_index = 7;
-		                  else led_index--;
-		                  LED_Update(led_index);
-		              }
-		              else
-		              {
-		                  LED_Update(-1);
-		              }
-		          }
+		          /* 버튼/리밋 센서를 읽고 승강 모터와 LED를 주기적으로 갱신합니다. */
+		          Lift_Update();
+		          LED_ShiftUpdate(Lift_GetDirection());
 
 		          // 오디오 경고 장치 및 도어 제어
 		          /* 하드웨어의 모든 부가 동작(소리, 문열림)을 논블로킹으로 동시 제어합니다. */
-		          Buzzer_Update(lift_direction);
+		          Buzzer_Update(Lift_GetDirection());
 		          process_door_input(&elevator_door);
 		          updateDoor(&elevator_door);
 		      }
@@ -220,10 +159,9 @@ int main(void)
 		          // [필수 방어코드] 하드웨어 즉시 셧다운 (모터 과열 방지)
 		          if(EmergencyMsgflag == MSG_OFF)
 		          {
-		              motorStop();              // 승강기 모터 정지
+		              Lift_Stop();              // 승강기 모터 즉시 정지 및 방향 초기화
 		              LED_Update(-1);           // LED 모두 끄기
 		              HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_RESET); // 부저 끄기
-		              lift_direction = 0;       // 방향 논리 초기화
 
 		              printf("\r\nEMERGENCY!");
 		              fflush(stdout);
