@@ -6,8 +6,8 @@
 
 typedef struct
 {
-    volatile uint8_t *port;
-    uint8_t pin;
+    volatile uint8_t *port; // Port which connected with LED
+    uint8_t pin;            // Pin number which connected with LED
 } LED;
 
 void ledInit(LED *led);

@@ -24,7 +24,7 @@ uint8_t ledArr[] =
 
 int main()
 {
-    DDRD = 0xFF;
+    DDRD = 0xFF; // setting output mode all PORTD pin
 
     uint8_t arrSize = sizeof(ledArr) / sizeof(ledArr[0]);
 

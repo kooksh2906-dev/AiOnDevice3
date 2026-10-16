@@ -3,7 +3,7 @@
 
 int main()
 {
-    LED led;
+    LED led;        // LED라는 구조를 가진 led 변수 선언
     led.port = &PORTD;
     led.pin = 0;
 
@@ -12,6 +12,9 @@ int main()
         led.pin = i;
         ledInit(&led);
     }
+
+    // ledInit(&led);
+    // DDRD = 0xFF;
 
     while (1)
     {

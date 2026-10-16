@@ -20,7 +20,7 @@ void ledInit()
 // Func that LED shifts left and right
 void ledShift(uint8_t i, uint8_t *data)
 {
-    *data = (1 << i) | (1 << (7 - i));
+    *data = (1 << i) | (1 << (7 - i)); // setting each left, right bit
 }
 
 int main()
@@ -34,7 +34,7 @@ int main()
         {
             ledShift(i, &ledData);
             GPIO_Output(ledData);
-            _delay_ms(1000);
+            _delay_ms(1000); // delay for 1 sec
         }
     }
 }
