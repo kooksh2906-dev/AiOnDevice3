@@ -34,7 +34,7 @@ PORTD에 연결된 8비트 LED Array Bar를 제어하며 GPIO 출력 레지스�
 - `VER5_Additional_Patterns/main.c`
 - `settings/register-hw-settings.md`
 
-## ATmega128A 데이터시트 재검토
+## 하드웨어 및 레지스터 전제
 
 - Port D는 PD0~PD7로 구성된 8-bit 양방향 GPIO이므로 `DDRD = 0xFF`와 `PORTD` 8-bit 패턴 출력 방식이 데이터시트와 일치합니다.
 - Register Summary에서 PORTD와 DDRD의 데이터 공간 주소는 각각 `$32`, `$31`입니다(I/O 주소 `$12`, `$11`). 따라서 원본 VER4의 `*(led->port - 1)`은 ATmega128A에서는 성립합니다.
@@ -50,5 +50,5 @@ PORTD에 연결된 8비트 LED Array Bar를 제어하며 GPIO 출력 레지스�
 ## 검증 범위
 
 - ATmega128A Datasheet Rev. 8151H-AVR-02/11의 General Digital I/O, Port D, Register Summary를 대조했습니다.
-- 이번 재검토에서는 코드 동작 원리와 레지스터 설정을 검증했으며 AVR-GCC 재빌드와 실물 보드 재검증은 수행하지 않았습니다.
+- 코드 동작 원리와 레지스터 설정을 확인했으며 AVR-GCC 재빌드와 실물 보드 동작 검증은 수행하지 않았습니다.
 
