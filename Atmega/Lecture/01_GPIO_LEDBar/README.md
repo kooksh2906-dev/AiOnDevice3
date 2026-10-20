@@ -34,6 +34,21 @@ PORTD에 연결된 8비트 LED Array Bar를 제어하며 GPIO 출력 레지스�
 - `VER5_Additional_Patterns/main.c`
 - `settings/register-hw-settings.md`
 
-## 방향 표기 주의
+## ATmega128A 데이터시트 재검토
 
-코드의 Left/Right는 비트가 MSB 또는 LSB 방향으로 이동한다는 의미입니다. LED Bar의 물리적인 좌우 방향은 PD0~PD7의 실제 배선 순서에 따라 반대로 보일 수 있습니다.
+- Port D는 PD0~PD7로 구성된 8-bit 양방향 GPIO이므로 `DDRD = 0xFF`와 `PORTD` 8-bit 패턴 출력 방식이 데이터시트와 일치합니다.
+- Register Summary에서 PORTD와 DDRD의 데이터 공간 주소는 각각 `$32`, `$31`입니다(I/O 주소 `$12`, `$11`). 따라서 원본 VER4의 `*(led->port - 1)`은 ATmega128A에서는 성립합니다.
+- 이 포인터 연산은 장치별 레지스터 배치에 의존하므로 다른 MCU에 일반화할 수 없습니다. 구조체에 `ddr` 주소를 직접 저장하는 `VER4_Improved_Explicit_DDR`를 권장 개선판으로 유지합니다.
+- PD0~PD7은 TWI, 외부 인터럽트, USART1, Timer 입력과 겸용됩니다. 해당 주변기능을 활성화하지 않고 Port D 전체를 GPIO로 사용하는 실습 환경을 전제로 합니다.
+- `PORTD` 전체 대입은 8개 핀을 모두 갱신하므로 LED Bar가 Port D 전체를 사용하는 구성에 적합합니다.
+
+## 방향 및 점등 논리 주의
+
+- 코드의 Left/Right는 비트가 MSB 또는 LSB 방향으로 이동한다는 의미입니다. LED Bar의 물리적인 좌우 방향은 PD0~PD7의 실제 배선 순서에 따라 반대로 보일 수 있습니다.
+- 출력 High에서 LED가 켜지는지 꺼지는지는 MCU가 아니라 외부 Active-High/Active-Low 결선에 따라 결정됩니다.
+
+## 검증 범위
+
+- ATmega128A Datasheet Rev. 8151H-AVR-02/11의 General Digital I/O, Port D, Register Summary를 대조했습니다.
+- 이번 재검토에서는 코드 동작 원리와 레지스터 설정을 검증했으며 AVR-GCC 재빌드와 실물 보드 재검증은 수행하지 않았습니다.
+
