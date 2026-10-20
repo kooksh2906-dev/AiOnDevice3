@@ -10,4 +10,8 @@ GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_Wr
    - `HAL_Delay()` 기반 Blocking 제어
    - `HAL_GetTick()` 기반 Non-Blocking 제어
    - 다중 LED 상태 구조체와 모듈 분리
+2. `02_Tact_Switch`
+   - PC13 Tact Switch의 Active-Low 입력 판독
+   - Level Polling과 Press Edge의 차이
+   - Blocking 및 Non-Blocking Debounce 비교
 
