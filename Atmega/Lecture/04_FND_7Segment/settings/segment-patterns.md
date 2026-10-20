@@ -28,3 +28,11 @@ bit 7  bit 6  bit 5  bit 4  bit 3  bit 2  bit 1  bit 0
 
 - Active-High에서 DP ON: 숫자 Pattern에 `0x80`을 OR합니다.
 - Active-Low에서는 전체 Pattern 반전 과정에 DP 상태가 함께 반영됩니다.
+
+## VER5 4-digit 출력 극성
+
+- FPGA SoC 예제의 Font는 표준형 `0x07`(7), `0x6F`(9)를 사용합니다.
+- VER5도 같은 표준 Font를 사용해 두 플랫폼의 자리 분리·Scan 구조를 직접 비교할 수 있게 합니다.
+- Segment가 Active-Low인 기본 설정에서는 `~font[digit]`의 하위 8-bit를 출력합니다.
+- Digit Select가 Active-Low이면 1·10·100·1000의 자리 Pattern은 각각 `0x0E`, `0x0D`, `0x0B`, `0x07`입니다.
+- `fnd4Init()`의 극성 인자를 바꾸면 Active-High Segment나 Digit Select 회로에도 같은 논리를 적용할 수 있습니다.
