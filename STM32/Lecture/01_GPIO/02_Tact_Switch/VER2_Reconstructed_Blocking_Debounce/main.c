@@ -37,7 +37,7 @@ int main(void)
                 stable_state = sampled_state;
 
                 /* Released -> Pressed로 확정될 때 한 번만 LED를 반전합니다. */
-                if (stable_state == GPIO_PIN_RESET)
+                if (stable_state == GPIO_PIN_SET)
                 {
                     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
                 }

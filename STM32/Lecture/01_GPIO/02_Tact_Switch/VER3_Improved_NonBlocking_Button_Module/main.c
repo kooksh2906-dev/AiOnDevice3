@@ -18,7 +18,7 @@ int main(void)
     buttonInit(&user_button,
                GPIOC,
                GPIO_PIN_13,
-               GPIO_PIN_RESET,
+               GPIO_PIN_SET,
                BUTTON_DEBOUNCE_MS);
 
     while (1)

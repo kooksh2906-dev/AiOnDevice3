@@ -19,10 +19,10 @@ int main(void)
     {
         GPIO_PinState button_state;
 
-        /* Pull-up 입력이므로 Low(GPIO_PIN_RESET)를 눌림으로 해석합니다. */
+        /* Board 외부 Pull-down 회로이므로 High(GPIO_PIN_SET)를 눌림으로 해석합니다. */
         button_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 
-        if (button_state == GPIO_PIN_RESET)
+        if (button_state == GPIO_PIN_SET)
         {
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
         }
