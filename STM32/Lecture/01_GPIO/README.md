@@ -14,4 +14,8 @@ GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_Wr
    - PC13 Tact Switch의 Active-Low 입력 판독
    - Level Polling과 Press Edge의 차이
    - Blocking 및 Non-Blocking Debounce 비교
+3. `03_GPIO_EXTI`
+   - PC13 Rising Edge와 EXTI15_10 Interrupt 처리
+   - 원본 Callback 보존 및 GPIO Pin 필터링
+   - ISR 최소화와 Main Loop 지연 처리 방식
 
