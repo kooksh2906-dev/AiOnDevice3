@@ -85,6 +85,8 @@ GPIO 사용량은 줄지만 한 Byte마다 두 번의 Enable Cycle이 필요합�
 
 VER2에는 실제 학습 기록을 그대로 보존하고, VER3에서 함수의 입력 형식과 맞도록 정정했습니다. 실제 LCD Module에서 원본과 정정본을 다시 비교 시험한 것은 아닙니다.
 
+또한 8-bit와 4-bit 원본의 0x0C 명령 주석은 Display OFF로 적혀 있지만, 해당 명령은 Display ON, Cursor OFF, Blink OFF 설정입니다. 원본 주석은 VER1·VER2에 보존하고 VER3에서 의미를 바로잡았습니다.
+
 ## 8. DDRAM Cursor Address
 
 16x2 LCD 기준 첫 번째 Row의 시작 Address는 0x00, 두 번째 Row의 시작 Address는 0x40으로 사용했습니다. Set DDRAM Address Command를 만들기 위해 Bit 7을 1로 설정합니다.
