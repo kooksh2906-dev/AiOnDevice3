@@ -2,7 +2,7 @@
 
 STM32F411RE의 GPIO를 출력, 입력 및 외부 인터럽트 방식으로 사용하는 학습 기록입니다.
 
-GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_WritePin()`, `HAL_GPIO_TogglePin()`의 역할을 확인합니다. 이후 Tact Switch 입력, EXTI 및 Character LCD 제어로 학습 범위를 확장합니다.
+GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_WritePin()`, `HAL_GPIO_TogglePin()`의 역할을 확인합니다. 이후 Tact Switch, Character LCD, SG-207 포토인터럽터 및 EXTI 실습으로 학습 범위를 확장합니다.
 
 ## 자료 보관 기준
 
@@ -22,8 +22,12 @@ GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_Wr
 3. `03_Character_LCD`
    - 8-bit 및 4-bit GPIO 병렬 Interface 비교
    - Command/Data 전송, Enable Pulse 및 DDRAM Cursor Address
-   - 실제 4-bit 초기화 코드 보존과 Bit 위치 불일치 정정
-4. `04_GPIO_EXTI`
+   - 4-bit 초기화 순서와 Nibble 전달
+4. `04_SG207_Photo_Interrupter`
+   - SG-207의 적외선 LED와 포토트랜지스터 동작 원리
+   - PC4 GPIO Input과 Active-Low Collector 출력
+   - `HAL_GPIO_ReadPin()` 기반 200 ms Polling 및 Debugger 관찰
+5. `05_GPIO_EXTI`
    - PC13 Rising Edge와 EXTI15_10 Interrupt 처리
    - 원본 Callback 보존 및 GPIO Pin 필터링
    - ISR 최소화와 Main Loop 지연 처리 방식
