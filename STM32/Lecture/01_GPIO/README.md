@@ -19,7 +19,11 @@ GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_Wr
    - PC13 User Button의 Active-High 입력 판독
    - Level Polling과 Press Edge의 차이
    - Blocking 및 Non-Blocking Debounce 비교
-3. `03_GPIO_EXTI`
+3. `03_Character_LCD`
+   - 8-bit 및 4-bit GPIO 병렬 Interface 비교
+   - Command/Data 전송, Enable Pulse 및 DDRAM Cursor Address
+   - 실제 4-bit 초기화 코드 보존과 Bit 위치 불일치 정정
+4. `04_GPIO_EXTI`
    - PC13 Rising Edge와 EXTI15_10 Interrupt 처리
    - 원본 Callback 보존 및 GPIO Pin 필터링
    - ISR 최소화와 Main Loop 지연 처리 방식
