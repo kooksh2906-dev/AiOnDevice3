@@ -65,6 +65,7 @@ Debugger의 Variables 창에서 `data`가 `0`과 `1`로 바뀌는 것을 확인�
 ## 6. 검증 상태
 
 - CubeMX PC4 `GPIO_Input`, `data` 변수, Polling 코드 및 Debugger의 0/1 관찰 화면을 원본 증거로 확인했습니다.
+- CubeIDE 형식 `main.c`는 HAL Stub을 이용한 C 문법 및 경고 검사를 통과했습니다.
 - SG-207 자료를 바탕으로 Pin 구성, 최대 정격, 전기·광학 특성 및 Active-Low 회로 동작을 검토했습니다.
 - STM32F411 Reference Manual과 HAL/LL User Manual을 바탕으로 `GPIOx_IDR`와 `HAL_GPIO_ReadPin()`의 동작을 확인했습니다.
 - STM32F411xC/xE 자료에서 PC4의 `FT` I/O 특성을 확인했습니다.

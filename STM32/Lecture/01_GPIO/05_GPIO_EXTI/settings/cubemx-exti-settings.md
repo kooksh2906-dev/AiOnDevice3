@@ -9,7 +9,7 @@
 | PC13 Pull | PC13 | Pull-up |
 | NVIC | EXTI line[15:10] interrupts | Enabled, Preemption Priority 0, Sub Priority 0 |
 
-`VER1_Original_Callback_Fragment`와 원본 Evidence는 위 설정을 수정하지 않고 보존합니다.
+`VER1_Original_Callback`와 원본 Evidence는 위 설정을 수정하지 않고 보존합니다.
 
 ## 2. Board 회로 기준 개선 설정
 

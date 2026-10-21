@@ -56,7 +56,7 @@ if (currTick - led->lastTick >= led->interval)
 ## 6. 검증 상태
 
 - 공식 Reference Manual과 HAL/LL User Manual을 바탕으로 GPIO 및 Time Base 동작을 정적 검토했습니다.
-- 개선 버전은 HAL Stub을 사용한 C 문법 검사를 수행할 수 있도록 구성했습니다.
+- 네 버전의 CubeIDE 형식 `main.c`와 개선 모듈은 HAL Stub을 사용한 C 문법 및 경고 검사를 수행할 수 있도록 구성했습니다.
 - 원본 `.ioc`와 전체 CubeIDE 프로젝트는 현재 보관본에 포함되지 않았습니다.
 - 이번 정리 과정에서는 CubeIDE 재빌드와 STM32F411RE 실물 보드 재시험을 수행하지 않았습니다.
 

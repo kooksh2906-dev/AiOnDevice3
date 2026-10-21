@@ -67,5 +67,5 @@ DMA 수신은 USART의 `RXNE` Event에 따라 `USART_DR`의 데이터를 SRAM Bu
 ## 검증 범위
 
 - 수업 코드, CubeMX 화면, STM32F411 Reference Manual 및 STM32F4 HAL/LL User Manual을 기준으로 정적 검토했습니다.
-- 코드 조각은 HAL Stub을 사용한 C 문법 검사를 수행합니다.
+- 각 버전의 CubeIDE 형식 `main.c`는 HAL Stub을 사용한 C 문법 및 경고 검사를 수행합니다.
 - 원본 `.ioc`와 전체 CubeIDE Project는 확인되지 않았으며, CubeIDE 재빌드와 실물 보드 재시험은 수행하지 않았습니다.

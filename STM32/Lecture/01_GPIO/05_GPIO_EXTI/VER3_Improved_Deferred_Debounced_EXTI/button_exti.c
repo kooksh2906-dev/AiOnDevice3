@@ -50,9 +50,3 @@ bool buttonExtiTakePressEvent(void)
 
     return event;
 }
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-    /* Callback에서는 Event 수집만 수행하고 응용 동작은 Main으로 넘깁니다. */
-    buttonExtiCaptureFromIsr(GPIO_Pin);
-}

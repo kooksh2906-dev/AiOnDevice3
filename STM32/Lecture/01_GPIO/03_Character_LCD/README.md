@@ -105,6 +105,6 @@ Row와 Column은 각각 0-1, 0-15 범위로 제한합니다.
 
 - 실제 학습 메일의 CubeMX Pinout, 배선 자료, 초기화 순서 및 코드 화면을 대조했습니다.
 - STM32F411 Reference Manual과 HAL/LL User Manual을 바탕으로 GPIO Output 및 HAL_GPIO_WritePin() 동작을 정적 검토했습니다.
-- 두 버전의 Driver Source는 HAL Stub을 이용한 C 문법 및 경고 검사를 통과했습니다.
+- 두 버전의 CubeIDE 형식 `main.c`와 LCD Driver Source는 HAL Stub을 이용한 C 문법 및 경고 검사를 통과했습니다.
 - 전체 .ioc와 CubeIDE 프로젝트는 현재 보관본에 포함되지 않았습니다.
 - 이번 정리 과정에서는 CubeIDE 재빌드와 STM32F411RE/LCD 실물 재시험을 수행하지 않았습니다.

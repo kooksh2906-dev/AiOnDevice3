@@ -59,6 +59,6 @@ Blocking 버전은 이해하기 쉽지만 입력 변화마다 20 ms 동안 다�
 ## 7. 검증 상태
 
 - 공식 Reference Manual, HAL/LL User Manual 및 NUCLEO-F411RE Board 회로도를 바탕으로 GPIO 입력, Pull 설정 및 `HAL_GPIO_ReadPin()` 동작을 정적 검토했습니다.
-- 모든 버전은 HAL Stub을 사용하여 C 문법 및 경고 검사를 수행할 수 있도록 구성했습니다.
+- 세 버전의 CubeIDE 형식 `main.c`와 개선 모듈은 HAL Stub을 사용하여 C 문법 및 경고 검사를 수행할 수 있도록 구성했습니다.
 - 원본 Tact Switch Polling 소스와 `.ioc`는 현재 보관 자료에서 확인되지 않아, 이후 EXTI 실습에 남아 있는 PC13/PA5 설정을 기반으로 복원했습니다.
 - 이번 정리 과정에서는 CubeIDE 재빌드와 STM32F411RE 실물 보드 재시험을 수행하지 않았습니다.

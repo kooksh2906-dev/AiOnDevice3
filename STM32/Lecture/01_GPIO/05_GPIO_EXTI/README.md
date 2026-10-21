@@ -16,7 +16,7 @@ STM32F411RE의 PC13 User Button 입력을 Polling하지 않고, GPIO Edge가 발
 
 | 버전 | 성격 | 주요 내용 |
 |---|---|---|
-| `VER1_Original_Callback_Fragment` | 원본 조각 보존 | 기록 화면에서 확인한 `HAL_GPIO_EXTI_Callback()` 함수 본문을 그대로 보존합니다. Callback 인자인 `GPIO_Pin`을 확인하지 않고 PA5를 Toggle합니다. |
+| `VER1_Original_Callback` | 원본 Callback 통합 | 기록 화면에서 확인한 `HAL_GPIO_EXTI_Callback()` 본문을 CubeIDE 형식 `main.c`의 `USER CODE BEGIN 4`에 배치했습니다. Callback 인자인 `GPIO_Pin`을 확인하지 않고 PA5를 Toggle합니다. |
 | `VER2_Reconstructed_Pin_Filtered_EXTI` | 복원·정정본 | CubeMX가 생성하는 Main Loop와 IRQ Handler 흐름을 최소 형태로 복원하고, Callback에서 `GPIO_PIN_13`을 확인합니다. |
 | `VER3_Improved_Deferred_Debounced_EXTI` | 개선·모듈화 | ISR에서는 Pin 확인, 시간 간격 검사 및 Event 저장만 수행합니다. LED Toggle은 Main Loop가 Event를 가져가 처리합니다. |
 
@@ -82,12 +82,12 @@ if (GPIO_Pin == GPIO_PIN_13)
 - HAL의 IRQ Handler가 Pending Bit를 처리한 뒤 사용자 `HAL_GPIO_EXTI_Callback()`을 호출합니다.
 - ISR에서는 긴 지연, 반복 처리 및 복잡한 응용 로직을 피하고 필요한 상태만 전달하는 편이 좋습니다.
 - Board의 외부 Pull-up/Pull-down 회로를 확인한 뒤 CubeMX 내부 Pull 설정을 결정해야 합니다.
-- 원본 코드 조각, 복원 정정본 및 개선 모듈을 분리하면 학습 당시 코드와 이후 개선 판단을 함께 설명할 수 있습니다.
+- 원본 Callback 로직, 복원 정정본 및 개선 모듈을 분리하면 학습 당시 코드와 이후 개선 판단을 함께 설명할 수 있습니다.
 
 ## 8. 검증 상태
 
 - Notion에 보관한 CubeMX 설정 및 Callback 화면을 원본 증거로 확인했습니다.
 - Reference Manual, HAL/LL User Manual 및 NUCLEO-F411RE Board 회로도를 바탕으로 EXTI 경로와 Pin 회로를 정적 검토했습니다.
-- 세 버전은 HAL Stub으로 C 문법 검사를 통과했습니다. VER2·VER3은 `-Wall -Wextra -Werror`를 적용했으며, VER1은 원본의 미사용 `GPIO_Pin` 인자를 보존하기 위해 해당 경고만 제외했습니다.
+- 세 버전의 CubeIDE 형식 `main.c`와 개선 모듈은 HAL Stub으로 C 문법 검사를 통과했습니다. VER2·VER3은 `-Wall -Wextra -Werror`를 적용했으며, VER1은 원본의 미사용 `GPIO_Pin` 인자를 보존하기 위해 해당 경고만 제외했습니다.
 - 원본 `.ioc`와 전체 CubeIDE 프로젝트는 현재 보관본에 포함되지 않았습니다.
 - 이번 정리 과정에서는 CubeIDE 재빌드와 STM32F411RE 실물 보드 재시험을 수행하지 않았습니다.
