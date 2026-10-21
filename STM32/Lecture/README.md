@@ -16,7 +16,9 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
 ## 학습 목차
 
 1. `01_GPIO`
-   - `01_LED`: Blocking 및 `HAL_GetTick()` 기반 Non-Blocking 제어
+   - LED, Tact Switch, Character LCD, SG-207 Photo Interrupter 및 GPIO EXTI
+2. `02_UART`
+   - Polling, Interrupt 및 DMA 기반 송수신 처리 방식 비교
 
-이후 Tact Switch, EXTI, Character LCD, UART, I2C, Timer 및 ADC 학습을 Peripheral 기준으로 추가합니다.
+이후 I2C, Timer 및 ADC 학습을 Peripheral 기준으로 추가합니다.
 
