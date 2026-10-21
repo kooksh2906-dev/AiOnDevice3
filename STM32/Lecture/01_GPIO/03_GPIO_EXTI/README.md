@@ -10,7 +10,7 @@ STM32F411RE의 PC13 User Button 입력을 Polling하지 않고, GPIO Edge가 발
 - NVIC: `EXTI line[15:10] interrupts` Enable, Preemption Priority 0
 - Callback: Pin 구분 없이 PA5 LED Toggle
 
-원본 전체 CubeIDE 프로젝트와 `.ioc`는 확인되지 않았지만, CubeMX 설정 화면 3장과 Callback 코드 화면 1장이 남아 있어 해당 자료를 원본 증거로 보존했습니다.
+원본 전체 CubeIDE 프로젝트와 `.ioc`는 확인되지 않았지만, CubeMX 설정 화면 3장과 Callback 코드 화면 1장을 바탕으로 설정과 코드를 분석했습니다. 원본 화면은 Notion 학습 기록에 보존하고, GitHub에는 코드와 설정 문서만 저장합니다.
 
 ## 2. 버전 구성
 
@@ -86,7 +86,7 @@ if (GPIO_Pin == GPIO_PIN_13)
 
 ## 8. 검증 상태
 
-- 보관된 CubeMX 설정 및 Callback 화면을 원본 증거로 확인했습니다.
+- Notion에 보관한 CubeMX 설정 및 Callback 화면을 원본 증거로 확인했습니다.
 - Reference Manual, HAL/LL User Manual 및 NUCLEO-F411RE Board 회로도를 바탕으로 EXTI 경로와 Pin 회로를 정적 검토했습니다.
 - 세 버전은 HAL Stub으로 C 문법 검사를 통과했습니다. VER2·VER3은 `-Wall -Wextra -Werror`를 적용했으며, VER1은 원본의 미사용 `GPIO_Pin` 인자를 보존하기 위해 해당 경고만 제외했습니다.
 - 원본 `.ioc`와 전체 CubeIDE 프로젝트는 현재 보관본에 포함되지 않았습니다.

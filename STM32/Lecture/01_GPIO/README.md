@@ -4,6 +4,11 @@ STM32F411RE의 GPIO를 출력, 입력 및 외부 인터럽트 방식으로 사�
 
 GPIO 출력 실습에서는 CubeMX가 생성한 초기화 코드와 `HAL_GPIO_WritePin()`, `HAL_GPIO_TogglePin()`의 역할을 확인합니다. 이후 Tact Switch 입력, EXTI 및 Character LCD 제어로 학습 범위를 확장합니다.
 
+## 자료 보관 기준
+
+- GitHub에는 학습 코드와 설정 문서를 저장합니다.
+- CubeMX 설정 및 원본 코드 캡처처럼 학습 과정을 보여 주는 이미지는 해당 Notion 학습 항목에 보존합니다.
+
 ## 학습 항목
 
 1. `01_LED`
