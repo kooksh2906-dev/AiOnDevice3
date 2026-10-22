@@ -30,6 +30,8 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
    - GPIO Trigger, TIM3 Input Capture 및 TIM11 1 us Time Base를 이용한 초음파 거리 측정
 6. `06_MG996R`
    - TIM3 CH1 50 Hz PWM과 USART2 Interrupt 명령을 이용한 Servo Motor 위치 제어
+7. `07_ULN2003`
+   - 28BYJ-48의 1상·2상·1-2상 여자와 GPIO Polling·TIM10 Interrupt 기반 Stepper Motor 제어
 
-이후 ULN2003, DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
+이후 DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
 
