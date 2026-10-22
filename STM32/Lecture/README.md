@@ -26,6 +26,8 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
    - I2C Protocol, PCF8574 기반 Character LCD 및 I2C·SPI·Ethernet 비교
 4. `04_TIMER`
    - TIM11 Base Timer Update Interrupt와 TIM3 PWM LED Duty 제어
+5. `05_HC_SR04`
+   - GPIO Trigger, TIM3 Input Capture 및 TIM11 1 us Time Base를 이용한 초음파 거리 측정
 
-이후 HC-SR04, MG996R, ULN2003, DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
+이후 MG996R, ULN2003, DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
 
