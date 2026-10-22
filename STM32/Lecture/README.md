@@ -22,6 +22,7 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
    - LED, Tact Switch, Character LCD, SG-207 Photo Interrupter 및 GPIO EXTI
 2. `02_UART`
    - Polling, Interrupt 및 DMA 기반 송수신 처리 방식 비교
+3. `03_I2C`
+   - I2C Protocol, PCF8574 기반 Character LCD 및 I2C·SPI·Ethernet 비교
 
-이후 I2C, Timer 및 ADC 학습을 Peripheral 기준으로 추가합니다.
-
+이후 Timer, HC-SR04, MG996R, ULN2003, DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
