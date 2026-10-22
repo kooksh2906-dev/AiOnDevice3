@@ -32,6 +32,8 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
    - TIM3 CH1 50 Hz PWM과 USART2 Interrupt 명령을 이용한 Servo Motor 위치 제어
 7. `07_ULN2003`
    - 28BYJ-48의 1상·2상·1-2상 여자와 GPIO Polling·TIM10 Interrupt 기반 Stepper Motor 제어
+8. `08_DHT11`
+   - PC4 양방향 GPIO, TIM11 1 us Counter와 40 bit Checksum 기반 온·습도 측정
 
-이후 DHT11, ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
+이후 ADC 및 Joystick 학습을 실제 학습 순서에 맞춰 추가합니다.
 
