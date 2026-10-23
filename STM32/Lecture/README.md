@@ -39,5 +39,7 @@ ATmega128A에서 레지스터를 직접 설정하며 익힌 주변장치 동작 
    - PC4 양방향 GPIO, TIM11 1 us Counter와 40 bit Checksum 기반 온·습도 측정
 10. `10_ADC_Joystick`
    - SZH-EK056의 ADC Polling·Interrupt와 2채널 Scan/Circular DMA 기반 X/Y 좌표 취득
+11. `11_FreeRTOS`
+   - 동일 우선순위 태스크의 공유변수 접근을 보호 없음·Mutex·Semaphore 방식으로 비교하고 임계영역 범위를 개선
 
-현재 보관된 STM32 기초 HW 제어 학습 목록은 직접 레지스터 LED 제어와 ADC Joystick까지 정리했습니다. 원본 `.ioc`, 생성 Driver와 전체 CubeIDE Project가 추가로 확보되면 각 항목의 재현 자료를 보완합니다.
+현재 보관된 STM32 학습 목록은 직접 레지스터 LED 제어, ADC Joystick 및 FreeRTOS 공유변수 동기화까지 정리했습니다. 원본 `.ioc`, 생성 Driver와 전체 CubeIDE Project가 추가로 확보되면 각 항목의 재현 자료를 보완합니다.
